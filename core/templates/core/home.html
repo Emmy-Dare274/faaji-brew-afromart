@@ -2,16 +2,68 @@
 {% load static %}
 
 {% block content %}
-<section class="hero-afromart">
-    <div class="container">
-        <p class="text-uppercase small fw-bold" style="color: var(--teal-light);">
-            Authentic West African Lifestyle
-        </p>
-        <h1 class="display-4">Bring Home a Piece of West Africa</h1>
-        <p class="lead">Ankara fabrics, spice kits, handmade jewellery and homeware, sourced with care and delivered worldwide.</p>
-        <a href="#" class="btn btn-teal btn-lg mt-3">Shop the Collection</a>
+<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4500">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
-</section>
+
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <!-- This gradient div is a placeholder standing in for a real
+                 photo, same technique as the wireframe. Once product
+                 photography is sourced, this becomes an <img> with
+                 class="hero-slide-img" so it fills the same fixed height
+                 without distorting, object-fit: -->
+            <div class="hero-slide-bg hero-slide-1 d-flex align-items-center justify-content-center">
+                <div class="container text-center hero-caption">
+                    <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal-light); letter-spacing: 0.1em;">
+                        Authentic West African Lifestyle
+                    </p>
+                    <h1 class="display-4">Bring Home a Piece of <span style="color: var(--teal-light);">West Africa</span></h1>
+                    <p class="lead">Ankara fabrics, spice kits, handmade jewellery and homeware, sourced with care and delivered worldwide.</p>
+                    <a href="#" class="btn btn-teal btn-lg mt-3">Shop the Collection</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <div class="hero-slide-bg hero-slide-2 d-flex align-items-center justify-content-center">
+                <div class="container text-center hero-caption">
+                    <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal-light); letter-spacing: 0.1em;">
+                        New This Season
+                    </p>
+                    <h1 class="display-4">Vivid Ankara, <span style="color: var(--teal-light);">Made to Move</span></h1>
+                    <p class="lead">Six yards of vibrant wax print fabric, enough for two full outfits.</p>
+                    <a href="#" class="btn btn-teal btn-lg mt-3">Shop Fabrics</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <div class="hero-slide-bg hero-slide-3 d-flex align-items-center justify-content-center">
+                <div class="container text-center hero-caption">
+                    <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal-light); letter-spacing: 0.1em;">
+                        Handmade With Meaning
+                    </p>
+                    <h1 class="display-4">Jewellery That <span style="color: var(--teal-light);">Tells a Story</span></h1>
+                    <p class="lead">Traditional waist beads, cufflinks, and wrist beads, handmade by artisans across West Africa.</p>
+                    <a href="#" class="btn btn-teal btn-lg mt-3">Shop Jewellery</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
 
 <div class="delivery-band">
     Free delivery on all orders over $60

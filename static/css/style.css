@@ -25,13 +25,14 @@ h1, h2, h3 {
     height: 42px;
     border-radius: 8px;
     background: linear-gradient(160deg, var(--teal-light), var(--teal) 60%, #0F4A42);
-    color: #fff;
+    color: #2b1e08;
     font-family: 'Cormorant Garamond', serif;
     font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 3px 0 #0B3A34;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
 .navbar-afromart {
@@ -49,11 +50,35 @@ h1, h2, h3 {
     color: #fff;
 }
 
-.hero-afromart {
-    background: radial-gradient(ellipse at top right, var(--indigo-mid), var(--indigo-deep) 60%);
+/* Ensures real photography has proper room to breathe
+   once sourced. */
+.hero-slide-bg {
+    min-height: 560px;
     color: #fff;
-    padding: 90px 0 70px;
-    text-align: center;
+}
+
+.hero-slide-img {
+    width: 100%;
+    height: 560px;
+    object-fit: cover;
+}
+
+.hero-caption {
+    max-width: 700px;
+}
+
+/* Three distinct gradient directions so each slide still feels
+   visually distinct from the others even before real photos exist. */
+.hero-slide-1 {
+    background: radial-gradient(ellipse at top right, var(--indigo-mid), var(--indigo-deep) 60%);
+}
+
+.hero-slide-2 {
+    background: radial-gradient(ellipse at top left, var(--indigo-mid), var(--indigo-deep) 65%);
+}
+
+.hero-slide-3 {
+    background: radial-gradient(ellipse at bottom right, var(--indigo-mid), var(--indigo-deep) 55%);
 }
 
 .delivery-band {

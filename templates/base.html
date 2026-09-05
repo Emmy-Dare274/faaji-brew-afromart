@@ -17,7 +17,7 @@
         <div class="container d-flex justify-content-between align-items-center">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'core:home' %}">
                 <span class="brand-monogram">F&B</span>
-                <span>Faaji & Brew AfroMart</span>
+                <span>Faaji & Brew <span style="color: var(--teal-light);">AfroMart</span></span>
             </a>
 
             <!-- Temporary auth-state check. Full navbar with search, -->
@@ -35,6 +35,8 @@
 
     {% block content %}
     {% endblock %}
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
