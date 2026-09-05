@@ -1,0 +1,26 @@
+<div class="card h-100 border-0 shadow-sm">
+    <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none text-dark">
+        {% with product.primary_image as image %}
+            {% if image %}
+                <img src="{{ image.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 160px; object-fit: cover;">
+            {% else %}
+                <div style="height: 160px; background: var(--indigo-deep);"></div>
+            {% endif %}
+        {% endwith %}
+        <div class="card-body pb-0">
+            <p class="fw-semibold mb-1">{{ product.name }}</p>
+            {% if show_description %}
+                <p class="small text-muted mb-2">{{ product.description|truncatewords:12 }}</p>
+            {% endif %}
+            {% if product.average_rating %}
+                <p class="small mb-2" style="color: var(--teal);">{{ product.average_rating|floatformat:1 }} / 5 ({{ product.review_count }})</p>
+            {% else %}
+                <p class="small text-muted mb-2">No reviews yet</p>
+            {% endif %}
+            <p class="fw-bold mb-2">${{ product.price }}</p>
+        </div>
+    </a>
+    <div class="px-3 pb-3">
+        <button class="btn btn-teal w-100" disabled>Add to Basket</button>
+    </div>
+</div>

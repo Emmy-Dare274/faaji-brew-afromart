@@ -47,3 +47,19 @@ def product_list(request, category_slug=None):
         "product_count": products.count(),
     }
     return render(request, "products/product_list.html", context)
+
+
+def product_detail(request, product_slug):
+
+    """ Shows full details for one product: images, variants, price,
+    and its current rating. Individual reviews are not listed yet. """
+
+    product = get_object_or_404(
+        Product.objects.with_rating(), slug=product_slug, is_active=True
+    )
+    variants = product.variants.all().order_by("variant_type", "value")
+    context = {
+        "product": product,
+        "variants": variants,
+    }
+    return render(request, "products/product_detail.html", context)

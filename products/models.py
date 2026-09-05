@@ -39,6 +39,7 @@ class Category(models.Model):
 
 
 class ProductQuerySet(models.QuerySet):
+    
     """Queries used in more than one place across the site live here,
     once, instead of being repeated in every view that needs them. """
 
@@ -65,14 +66,19 @@ class ProductQuerySet(models.QuerySet):
         return self.filter(category__slug=slug, is_active=True)
 
     def with_rating(self):
-        # Attaches an average_rating value to each product, calculated
-        # only from reviews that have been approved by staff.
+
+        # Both values come from the same annotation call, on purpose,
+        # so any template or view that needs a product's rating always
+        # gets its review count alongside it.
+
         return self.annotate(
-            average_rating=models.Avg(
-                "reviews__rating",
-                filter=models.Q(reviews__is_approved=True),
-            )
-        )
+        average_rating=models.Avg(
+            "reviews__rating", filter=models.Q(reviews__is_approved=True)
+        ),
+        review_count=models.Count(
+            "reviews", filter=models.Q(reviews__is_approved=True), distinct=True
+        ),
+    )
 
 
 class Product(models.Model):
