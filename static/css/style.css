@@ -1,0 +1,65 @@
+/* Brand colours, matching the approved wireframe palette. */
+:root {
+    --indigo-deep: #131B3F;
+    --indigo-mid: #202A5E;
+    --teal: #2A9D8F;
+    --teal-light: #3FC1B0;
+    --cream: #FAFAF8;
+    --ink: #1A1A1A;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+}
+
+h1, h2, h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+}
+
+/* 3D logo */
+.brand-monogram {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    background: linear-gradient(160deg, var(--teal-light), var(--teal) 60%, #0F4A42);
+    color: #fff;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 0 #0B3A34;
+}
+
+.navbar-afromart {
+    background: var(--ink);
+}
+
+.btn-teal {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+}
+
+.btn-teal:hover {
+    background: var(--teal-light);
+    color: #fff;
+}
+
+.hero-afromart {
+    background: radial-gradient(ellipse at top right, var(--indigo-mid), var(--indigo-deep) 60%);
+    color: #fff;
+    padding: 90px 0 70px;
+    text-align: center;
+}
+
+.delivery-band {
+    background: var(--teal);
+    color: #fff;
+    text-align: center;
+    padding: 14px 0;
+    font-weight: 600;
+}

@@ -3,20 +3,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Faaji & Brew AfroMart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Faaji & Brew AfroMart{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <nav>
-        {% if user.is_authenticated %}
-            <span>Hi, {{ user.username }}</span>
-            <a href="{% url 'account_logout' %}">Log out</a>
-        {% else %}
-            <a href="{% url 'account_login' %}">Log in</a>
-            <a href="{% url 'account_signup' %}">Register</a>
-        {% endif %}
+    <nav class="navbar navbar-dark navbar-afromart">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'core:home' %}">
+                <span class="brand-monogram">F&B</span>
+                <span>Faaji & Brew AfroMart</span>
+            </a>
+
+            <!-- Temporary auth-state check. Full navbar with search, -->
+            <div>
+                {% if user.is_authenticated %}
+                    <span class="text-white me-3">Hi, {{ user.username }}</span>
+                    <a class="btn btn-outline-light btn-sm" href="{% url 'account_logout' %}">Log out</a>
+                {% else %}
+                    <a class="btn btn-outline-light btn-sm me-2" href="{% url 'account_login' %}">Login</a>
+                    <a class="btn btn-teal btn-sm" href="{% url 'account_signup' %}">Register</a>
+                {% endif %}
+            </div>
+        </div>
     </nav>
 
     {% block content %}
     {% endblock %}
+
 </body>
 </html>

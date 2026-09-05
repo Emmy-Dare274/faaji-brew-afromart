@@ -163,6 +163,8 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
 
 # Tells whitenoise to compress static files and give them unique
 # hashed names, so browsers can cache them safely for a long time.
