@@ -88,3 +88,27 @@ h1, h2, h3 {
     padding: 14px 0;
     font-weight: 600;
 }
+
+/* Category quick-filter pills */
+.category-pill {
+    display: inline-block;
+    padding: 8px 18px;
+    border: 1px solid #ddd3c4;
+    border-radius: 5px;
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.category-pill:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+}
+
+.category-pill.active {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+}

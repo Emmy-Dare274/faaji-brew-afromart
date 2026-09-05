@@ -2,7 +2,58 @@
 
 {% block content %}
 <div class="container py-5">
-    <h1 class="mb-4">{% if category %}{{ category.name }}{% else %}All Products{% endif %}</h1>
+    <h1 class="text-center mb-4">{% if category %}{{ category.name }}{% else %}Products{% endif %}</h1>
+
+    <!-- Category quick-filter pills -->
+    
+    <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
+        <a href="{% url 'products:product_list' %}" class="category-pill {% if not category %}active{% endif %}">
+            All Products
+        </a>
+        {% for cat in all_categories %}
+        <a href="{% url 'products:product_list_by_category' cat.slug %}" class="category-pill {% if category.slug == cat.slug %}active{% endif %}">
+            {{ cat.name }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <form method="get" class="d-flex justify-content-between align-items-end flex-wrap gap-3 my-4">
+        <input type="hidden" name="q" value="{{ query }}">
+
+        <div>
+            <a href="{% url 'products:product_list' %}" class="fw-semibold text-decoration-none" style="color: var(--teal);">Products Home</a>
+            <span class="text-muted">| {{ product_count }} Product{{ product_count|pluralize }}</span>
+        </div>
+
+        <div class="d-flex align-items-end gap-2">
+            <div>
+                <label class="form-label small mb-1">Min price</label>
+                <input type="number" step="0.01" name="min_price" value="{{ min_price }}" class="form-control form-control-sm" style="width: 100px;">
+            </div>
+            <div>
+                <label class="form-label small mb-1">Max price</label>
+                <input type="number" step="0.01" name="max_price" value="{{ max_price }}" class="form-control form-control-sm" style="width: 100px;">
+            </div>
+            <button type="submit" class="btn btn-teal btn-sm">Filter</button>
+
+            <div>
+                <label class="form-label small mb-1 d-block">Sort by</label>
+                <select name="sort" class="form-select form-select-sm" onchange="this.form.submit();">
+                    <option value="">Default</option>
+                    <option value="price_asc" {% if current_sort == "price_asc" %}selected{% endif %}>Price (low to high)</option>
+                    <option value="price_desc" {% if current_sort == "price_desc" %}selected{% endif %}>Price (high to low)</option>
+                    <option value="rating_asc" {% if current_sort == "rating_asc" %}selected{% endif %}>Rating (low to high)</option>
+                    <option value="rating_desc" {% if current_sort == "rating_desc" %}selected{% endif %}>Rating (high to low)</option>
+                    <option value="name_asc" {% if current_sort == "name_asc" %}selected{% endif %}>Name (A-Z)</option>
+                    <option value="name_desc" {% if current_sort == "name_desc" %}selected{% endif %}>Name (Z-A)</option>
+                    <option value="category_asc" {% if current_sort == "category_asc" %}selected{% endif %}>Category (A-Z)</option>
+                    <option value="category_desc" {% if current_sort == "category_desc" %}selected{% endif %}>Category (Z-A)</option>
+                </select>
+            </div>
+        </div>
+    </form>
 
     <div class="row g-4">
         {% for product in products %}

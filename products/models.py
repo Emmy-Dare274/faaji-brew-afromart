@@ -48,6 +48,19 @@ class ProductQuerySet(models.QuerySet):
     def featured(self):
         return self.filter(is_featured=True, is_active=True)
 
+    def search(self, query):
+        return self.filter(
+            models.Q(name__icontains=query) | models.Q(description__icontains=query)
+        )
+
+    def price_range(self, min_price=None, max_price=None):
+        qs = self
+        if min_price:
+            qs = qs.filter(price__gte=min_price)
+        if max_price:
+            qs = qs.filter(price__lte=max_price)
+        return qs
+
     def by_category(self, slug):
         return self.filter(category__slug=slug, is_active=True)
 
