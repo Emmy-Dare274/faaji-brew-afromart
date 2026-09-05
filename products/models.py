@@ -6,6 +6,11 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 import uuid
 
 
+class CategoryQuerySet(models.QuerySet):
+    def active(self):
+        return self.filter(is_active=True)
+
+
 class Category(models.Model):
     """A shop category, for example Ankara Fabrics or Spices and Sauce
     Kits. Managed through the Django admin for now. A front end staff
@@ -16,6 +21,7 @@ class Category(models.Model):
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to="categories/", blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    objects = CategoryQuerySet.as_manager()
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -107,6 +113,13 @@ class Product(models.Model):
     @property
     def in_stock(self):
         return self.stock_quantity > 0
+
+    @property
+    def primary_image(self):
+        # Prefers whichever image staff marked as primary in the
+        # admin. Falls back to the first uploaded image if none was
+        # marked, so a template never has to handle that case itself.
+        return self.images.filter(is_primary=True).first() or self.images.first()
 
 
 class ProductImage(models.Model):

@@ -69,8 +69,70 @@
     Free delivery on all orders over $60
 </div>
 
-<!-- Category tiles, featured products, and testimonials sections
-     get added here once the products app has real models and data
-     to query. -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-4">
+            <p class="text-uppercase small fw-bold" style="color: var(--teal);">Shop by Category</p>
+            <h2>Every Corner of the Culture</h2>
+        </div>
+        <div class="row g-3">
+            {% for category in categories %}
+            <div class="col-6 col-md-3">
+                <a href="{% url 'products:product_list_by_category' category.slug %}" class="text-decoration-none text-dark">
+                    <div class="card h-100 border-0 shadow-sm">
+                        {% if category.image %}
+                            <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}" style="height: 140px; object-fit: cover;">
+                        {% else %}
+                            <div style="height: 140px; background: var(--indigo-deep);"></div>
+                        {% endif %}
+                        <div class="card-body">
+                            <p class="fw-semibold mb-0">{{ category.name }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <p class="text-muted">No categories added yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="py-5" style="background: #fff;">
+    <div class="container">
+        <div class="text-center mb-4">
+            <p class="text-uppercase small fw-bold" style="color: var(--teal);">Customer Favourites</p>
+            <h2>Featured Products</h2>
+        </div>
+        <div class="row g-4">
+            {% for product in featured_products %}
+            <div class="col-6 col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    {% with product.primary_image as image %}
+                        {% if image %}
+                            <img src="{{ image.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 160px; object-fit: cover;">
+                        {% else %}
+                            <div style="height: 160px; background: var(--indigo-deep);"></div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="card-body">
+                        <p class="fw-semibold mb-1">{{ product.name }}</p>
+                        <p class="small text-muted mb-2">{{ product.description|truncatewords:12 }}</p>
+                        {% if product.average_rating %}
+                            <p class="small mb-2" style="color: var(--teal);">{{ product.average_rating|floatformat:1 }} out of 5</p>
+                        {% else %}
+                            <p class="small text-muted mb-2">No reviews yet</p>
+                        {% endif %}
+                        <p class="fw-bold mb-2">${{ product.price }}</p>
+                        <button class="btn btn-teal w-100" disabled>Add to Basket</button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-muted">No featured products yet. Check the box on a product in the admin.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 
 {% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">{% if category %}{{ category.name }}{% else %}All Products{% endif %}</h1>
+
+    <div class="row g-4">
+        {% for product in products %}
+        <div class="col-6 col-md-3">
+            <div class="card h-100 border-0 shadow-sm">
+                {% with product.primary_image as image %}
+                    {% if image %}
+                        <img src="{{ image.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 160px; object-fit: cover;">
+                    {% else %}
+                        <div style="height: 160px; background: var(--indigo-deep);"></div>
+                    {% endif %}
+                {% endwith %}
+                <div class="card-body">
+                    <p class="fw-semibold mb-1">{{ product.name }}</p>
+                    <p class="fw-bold mb-0">${{ product.price }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">No products found{% if category %} in this category{% endif %}.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
