@@ -37,6 +37,9 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".herokuapp.com"]
 if "CODESPACE_NAME" in os.environ:
     ALLOWED_HOSTS.append(f"{os.environ.get('CODESPACE_NAME')}-8000.app.github.dev")
 
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 
 # Application definition
 
@@ -47,6 +50,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
+    "allauth",
+    "allauth.account",
     "core",
     "products",
     "basket",
@@ -55,6 +61,8 @@ INSTALLED_APPS = [
     "marketing",
 ]
 
+SITE_ID = 1
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",  # serves static files in production
@@ -62,16 +70,35 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "https://localhost:8000",
+    "https://*.herokuapp.com",
+]
+
+if "CODESPACE_NAME" in os.environ:
+    CSRF_TRUSTED_ORIGINS.append(
+        f"https://{os.environ.get('CODESPACE_NAME')}-8000.app.github.dev"
+    )
+
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
 
 ROOT_URLCONF = "afromart.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -149,8 +176,39 @@ STORAGES = {
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
+# Users can log in with either their username or their email address.
+ACCOUNT_LOGIN_METHODS = {"username", "email"}
+
+# Fields required on the signup form. The * marks a field as mandatory.
+ACCOUNT_SIGNUP_FIELDS = ["username*", "email*", "password1*", "password2*"]
+
+# New accounts must click a real confirmation link in their email
+# before they can log in. This only works because real Gmail SMTP is in use.
+
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+# Where allauth sends people after these actions succeed.
+LOGIN_REDIRECT_URL = "/"
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
+
+
+# EMAIL_HOST / EMAIL_PORT / etc.
+# settings with one MAILERS dictionary.
 MAILERS = {
     "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "OPTIONS": {
+            "host": "smtp.gmail.com",
+            "port": 587,
+            "use_tls": True,
+            "username": os.environ.get("EMAIL_HOST_USER"),
+            "password": os.environ.get("EMAIL_HOST_PASS"),
+        },
     },
 }
+
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
+
+
+
+

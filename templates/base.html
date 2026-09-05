@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Faaji & Brew AfroMart</title>
+</head>
+<body>
+    <nav>
+        {% if user.is_authenticated %}
+            <span>Hi, {{ user.username }}</span>
+            <a href="{% url 'account_logout' %}">Log out</a>
+        {% else %}
+            <a href="{% url 'account_login' %}">Log in</a>
+            <a href="{% url 'account_signup' %}">Register</a>
+        {% endif %}
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
