@@ -169,11 +169,21 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # Tells whitenoise to compress static files and give them unique
 # hashed names, so browsers can cache them safely for a long time.
 STORAGES = {
+    # ImageField and FileField use for anything uploaded
+    # through the admin or a form, category images, product photos,
+    # and so on. FileSystemStorage is fine for local development, but
+    # Heroku's filesystem is temporary and wipes on every deploy, so
+    # this is a placeholder until Cloudinary is wired in properly
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration

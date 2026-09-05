@@ -24,6 +24,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ["category", "is_featured", "is_active"]
     search_fields = ["name", "sku"]
     prepopulated_fields = {"slug": ("name",)}
+    readonly_fields = ["sku"]
     inlines = [ProductImageInline, ProductVariantInline]
 
 

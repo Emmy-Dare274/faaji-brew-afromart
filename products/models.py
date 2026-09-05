@@ -3,6 +3,8 @@ from django.conf import settings
 from django.utils.text import slugify
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+import uuid
+
 
 class Category(models.Model):
     """A shop category, for example Ankara Fabrics or Spices and Sauce
@@ -64,7 +66,7 @@ class Product(models.Model):
     )
     name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=210, unique=True, blank=True)
-    sku = models.CharField(max_length=30, unique=True)
+    sku = models.CharField(max_length=30, unique=True, blank=True)
     description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     stock_quantity = models.PositiveIntegerField(default=0)
@@ -84,7 +86,23 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
+        if not self.sku:
+            self.sku = self._generate_sku()
         super().save(*args, **kwargs)
+
+    def _generate_sku(self):
+        
+        """ Builds a SKU: a short category prefix plus a
+        random code. The while loop is a defensive check against the
+        extremely unlikely case of a collision, so a duplicate SKU error
+        can never actually reach the database. """
+
+        prefix = slugify(self.category.name)[:3].upper()
+        while True:
+            candidate = f"{prefix}-{uuid.uuid4().hex[:6].upper()}"
+            if not Product.objects.filter(sku=candidate).exists():
+                return candidate
+    
 
     @property
     def in_stock(self):
