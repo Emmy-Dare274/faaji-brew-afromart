@@ -25,39 +25,127 @@
         </div>
         {% endfor %}
     </div>
-    <nav class="navbar navbar-dark navbar-afromart">
-        <div class="container d-flex justify-content-between align-items-center">
-            <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'core:home' %}">
-                <span class="brand-monogram">F&B</span>
-                <span>Faaji & Brew <span style="color: var(--teal-light);">AfroMart</span></span>
-            </a>
-            <form action="{% url 'products:product_list' %}" method="get" class="flex-grow-1 mx-4" style="max-width: 420px;">
-                <div class="input-group">
-                    <input type="search" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Search for fabrics, spices, beads...">
-                    <button type="submit" class="btn btn-teal" aria-label="Search">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </div>
-            </form>
-
-            <!-- Temporary auth-state check. Full navbar with search, -->
-            <div>
-                <a href="{% url 'basket:basket_detail' %}" class="text-white text-decoration-none me-3">
-                    <i class="bi bi-basket3"></i> ${{ basket_total|floatformat:2 }} ({{ basket_item_count }})
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-afromart">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'core:home' %}">
+                    <span class="brand-monogram">F&B</span>
+                    <span>Faaji & Brew <span style="color: var(--teal-light);">AfroMart</span></span>
                 </a>
-                {% if user.is_authenticated %}
-                    <span class="text-white me-3">Hi, {{ user.username }}</span>
-                    <a class="btn btn-outline-light btn-sm" href="{% url 'account_logout' %}">Log out</a>
-                {% else %}
-                    <a class="btn btn-outline-light btn-sm me-2" href="{% url 'account_login' %}">Login</a>
-                    <a class="btn btn-teal btn-sm" href="{% url 'account_signup' %}">Register</a>
-                {% endif %}
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavCollapse" aria-controls="mainNavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                <div class="collapse navbar-collapse" id="mainNavCollapse">
+                        <form action="{% url 'products:product_list' %}" method="get" class="flex-grow-1 mx-lg-4 my-3 my-lg-0" style="max-width: 420px;">
+                            <div class="input-group">
+                                <input type="search" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Search for fabrics, spices, beads...">
+                                <button type="submit" class="btn btn-teal" aria-label="Search">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </form>
+
+                    <div class="d-flex align-items-center">
+                        <!-- Genuine placeholders, not fake functionality. These
+                            go live once the profiles app (wishlist, accounts)
+                            is built, they are not meant to work yet. -->
+                        <a href="#" class="text-white text-decoration-none me-3" title="Coming soon">
+                            <i class="bi bi-heart"></i> Favorites
+                        </a>
+                        <a href="#" class="text-white text-decoration-none me-3" title="Coming soon">
+                            <i class="bi bi-person"></i> My Account
+                        </a>
+
+                        {% if user.is_authenticated %}
+                            <span class="text-white me-3">Hi, {{ user.username }}</span>
+                            <a class="btn btn-outline-light btn-sm me-3" href="{% url 'account_logout' %}">Log out</a>
+                        {% else %}
+                            <a class="btn btn-outline-light btn-sm me-2" href="{% url 'account_login' %}">Login</a>
+                            <a class="btn btn-teal btn-sm me-3" href="{% url 'account_signup' %}">Register</a>
+                        {% endif %}
+
+                        <a href="{% url 'basket:basket_detail' %}" class="text-white text-decoration-none">
+                            <i class="bi bi-basket3"></i> ${{ basket_total|floatformat:2 }} ({{ basket_item_count }})
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+    <nav class="category-bar">
+        <div class="container d-flex flex-wrap align-items-center gap-4 py-2">
+            <a href="{% url 'core:home' %}" class="text-white text-decoration-none">Home</a>
+            <a href="{% url 'products:category_overview' %}" class="text-white text-decoration-none">Category</a>
+            <a href="{% url 'products:product_list' %}" class="text-white text-decoration-none">Products</a>
+            {% for cat in nav_categories %}
+            <a href="{% url 'products:product_list_by_category' cat.slug %}" class="text-white text-decoration-none">{{ cat.name }}</a>
+            {% endfor %}
+            <div class="nav-dropdown">
+                <a href="{% url 'products:special_offers' %}" class="text-white text-decoration-none">Special Offers &#9662;</a>
+                <div class="nav-dropdown-menu">
+                    <a href="{% url 'products:special_offers' %}">All Special Offers</a>
+                    {% for cat in nav_categories %}
+                    <a href="{% url 'products:special_offers' %}?category={{ cat.slug }}">{{ cat.name }} Offers</a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </nav>
 
     {% block content %}
     {% endblock %}
+
+    <div class="footer-social-band">
+    <div class="container">
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <span class="brand-monogram">F&B</span>
+            <p class="mb-0 small" style="max-width: 320px; color: #cfc7da;">Authentic West African fabrics, spices, homeware and jewellery, delivered worldwide.</p>
+        </div>
+        <div class="footer-social-icons">
+            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" aria-label="TikTok"><i class="bi bi-tiktok"></i></a>
+            <a href="#" aria-label="X"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+        </div>
+    </div>
+</div>
+
+<footer class="footer-legal">
+    <div class="container">
+        <div class="row g-4 mb-3 pt-4">
+            <div class="col-6 col-md-4">
+                <h6 class="text-white text-uppercase small fw-bold mb-3">Shop</h6>
+                <ul class="list-unstyled">
+                    {% for cat in nav_categories %}
+                    <li class="mb-2"><a href="{% url 'products:product_list_by_category' cat.slug %}" class="footer-link">{{ cat.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-6 col-md-4">
+                <h6 class="text-white text-uppercase small fw-bold mb-3">Customer Service</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#" class="footer-link">Delivery &amp; Returns</a></li>
+                    <li class="mb-2"><a href="{% url 'basket:basket_detail' %}" class="footer-link">Track My Order</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">Contact Us</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-md-4">
+                <h6 class="text-white text-uppercase small fw-bold mb-3">Company</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#" class="footer-link">Our Story</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">Terms of Use</a></li>
+                    <li class="mb-2"><a href="#" class="footer-link">Privacy Policy</a></li>
+                    <li class="mb-2"><a href="#" target="_blank" rel="noopener noreferrer" class="footer-link">Facebook Business Page</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom d-flex flex-wrap justify-content-between gap-2 py-3">
+            <span>&copy; 2026 Faaji &amp; Brew AfroMart. All rights reserved.</span>
+            <span style="color: var(--teal-light); font-weight: 600;">www.faajibrewafromart.com</span>
+        </div>
+    </div>
+</footer>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

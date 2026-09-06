@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row g-5 align-items-center mb-5">
+        <div class="col-md-6">
+            {% load static %}
+            <img src="{% static 'img/hero/Our-story-image-000001.jpg' %}" alt="Faaji & Brew Palace" class="w-100" style="height: 380px; object-fit: cover; border-radius: 4px;">
+        </div>
+        <div class="col-md-6">
+            <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal);">From the Same Kitchen</p>
+            <h1 class="mb-3">Born from Faaji &amp; Brew Palace</h1>
+            <p>Faaji &amp; Brew Palace opened its doors as a West African fine dining restaurant, built around the idea that a meal could carry culture as well as flavour. Almost from the first month, guests started asking where they could buy the fabrics hanging on the walls, the spices behind the day's specials, and the beads our staff wore on quieter evenings.</p>
+            <p>AfroMart grew out of answering that question properly. We now work directly with small makers, weavers, and traders across West Africa, buying at fair prices and shipping worldwide.</p>
+            <p>Every product on this site comes with a short note on where it is from and who made it, because that context is part of what you are paying for.</p>
+            <a href="{% url 'products:product_list' %}" class="btn btn-outline-dark">Shop the Collection</a>
+        </div>
+    </div>
+
+    <div class="text-center mb-4">
+        <p class="text-uppercase small fw-bold" style="color: var(--teal);">Why Shop With Us</p>
+        <h2>Built on Trust</h2>
+    </div>
+    <div class="row g-4 text-center">
+        <div class="col-6 col-md-3">
+            <div class="card h-100 border-0 shadow-sm p-3">
+                <div class="fs-2 mb-2">🌍</div>
+                <p class="fw-semibold mb-1">Verified Artisan Sourcing</p>
+                <p class="small text-muted mb-0">Every maker we work with is vetted directly.</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card h-100 border-0 shadow-sm p-3">
+                <div class="fs-2 mb-2">🔒</div>
+                <p class="fw-semibold mb-1">Secure Payments</p>
+                <p class="small text-muted mb-0">Every transaction runs through Stripe.</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card h-100 border-0 shadow-sm p-3">
+                <div class="fs-2 mb-2">📦</div>
+                <p class="fw-semibold mb-1">Order Tracking</p>
+                <p class="small text-muted mb-0">Track every order from packed to delivered.</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card h-100 border-0 shadow-sm p-3">
+                <div class="fs-2 mb-2">↩</div>
+                <p class="fw-semibold mb-1">Easy Returns</p>
+                <p class="small text-muted mb-0">14 days to return anything that isn't right.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

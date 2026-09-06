@@ -63,3 +63,38 @@ def product_detail(request, product_slug):
         "variants": variants,
     }
     return render(request, "products/product_detail.html", context)
+
+
+def category_overview(request):
+
+    """The dedicated page the 'Category' nav item points to, kept
+    separate from the homepage's own category rail so it can grow
+    on its own later without touching the homepage."""
+
+    categories = Category.objects.active()
+    return render(request, "products/category_overview.html", {"categories": categories})
+
+
+def special_offers(request):
+
+    """ Special offers, optionally narrowed to one category via the
+    navbar dropdown. Reuses the same product grid template as the
+    rest of the catalogue, one template, not two."""
+    
+    products = Product.objects.filter(is_active=True, is_featured=True).with_rating()
+    selected_category = None
+    category_slug = request.GET.get("category")
+    if category_slug:
+        selected_category = get_object_or_404(Category, slug=category_slug, is_active=True)
+        products = products.filter(category=selected_category)
+
+    context = {
+        "category": selected_category,
+        "products": products,
+        "all_categories": Category.objects.active(),
+        "query": "", "min_price": "", "max_price": "", "current_sort": "",
+        "product_count": products.count(),
+        "page_title": f"{selected_category.name} Special Offers" if selected_category else "Special Offers",
+    }
+    return render(request, "products/product_list.html", context)
+

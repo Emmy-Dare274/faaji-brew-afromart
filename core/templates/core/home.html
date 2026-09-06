@@ -17,13 +17,16 @@
                  class="hero-slide-img" so it fills the same fixed height
                  without distorting, object-fit: -->
             <div class="hero-slide-bg hero-slide-1 d-flex align-items-center justify-content-center">
-                <div class="container text-center hero-caption">
+                <div class="hero-caption">
                     <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal-light); letter-spacing: 0.1em;">
                         Authentic West African Lifestyle
                     </p>
                     <h1 class="display-4">Bring Home a Piece of <span style="color: var(--teal-light);">West Africa</span></h1>
                     <p class="lead">Ankara fabrics, spice kits, handmade jewellery and homeware, sourced with care and delivered worldwide.</p>
-                    <a href="#" class="btn btn-teal btn-lg mt-3">Shop the Collection</a>
+                    <div class="d-flex gap-3 justify-content-center mt-3">
+                        <a href="{% url 'products:product_list' %}" class="btn btn-teal btn-lg">Shop the Collection</a>
+                        <a href="{% url 'core:our_story' %}" class="btn btn-outline-light btn-lg">Our Story</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -32,11 +35,11 @@
             <div class="hero-slide-bg hero-slide-2 d-flex align-items-center justify-content-center">
                 <div class="container text-center hero-caption">
                     <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal-light); letter-spacing: 0.1em;">
-                        New This Season
+                        Straight From the Spice Rack
                     </p>
-                    <h1 class="display-4">Vivid Ankara, <span style="color: var(--teal-light);">Made to Move</span></h1>
-                    <p class="lead">Six yards of vibrant wax print fabric, enough for two full outfits.</p>
-                    <a href="#" class="btn btn-teal btn-lg mt-3">Shop Fabrics</a>
+                    <h1 class="display-4">Flavors Worth <span style="color: var(--teal-light);">Crossing an Ocean For</span></h1>
+                    <p class="lead">Pre-measured spice kits and sauce blends for jollof, suya, and every native dish worth getting right.</p>
+                    <a href="{% url 'products:product_list_by_category' 'spices-sauce-kits' %}" class="btn btn-teal btn-lg mt-3">Shop Spice Kits</a>
                 </div>
             </div>
         </div>
@@ -75,25 +78,31 @@
             <p class="text-uppercase small fw-bold" style="color: var(--teal);">Shop by Category</p>
             <h2>Every Corner of the Culture</h2>
         </div>
-        <div class="row g-3">
-            {% for category in categories %}
-            <div class="col-6 col-md-3">
-                <a href="{% url 'products:product_list_by_category' category.slug %}" class="text-decoration-none text-dark">
+        <div class="position-relative">
+            <button class="rail-arrow rail-arrow-left" onclick="scrollCategoryRail(-1)" aria-label="Scroll left">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <div class="category-rail" id="categoryRail">
+                {% for category in categories %}
+                <a href="{% url 'products:product_list_by_category' category.slug %}" class="category-rail-card text-decoration-none text-dark">
                     <div class="card h-100 border-0 shadow-sm">
                         {% if category.image %}
-                            <img src="{{ category.image.url }}" class="card-img-top product-photo" alt="{{ category.name }}" style="height: 140px;">
+                            <img src="{{ category.image.url }}" class="card-img-top product-photo" alt="{{ category.name }}" style="height: 240px;">
                         {% else %}
-                            <div style="height: 140px; background: var(--indigo-deep);"></div>
+                            <div style="height: 240px; background: var(--indigo-deep);"></div>
                         {% endif %}
-                        <div class="card-body">
-                            <p class="fw-semibold mb-0">{{ category.name }}</p>
+                        <div class="card-body text-center">
+                            <p class="fw-semibold fs-5 mb-0">{{ category.name }}</p>
                         </div>
                     </div>
                 </a>
+                {% empty %}
+                <p class="text-muted">No categories added yet.</p>
+                {% endfor %}
             </div>
-            {% empty %}
-            <p class="text-muted">No categories added yet.</p>
-            {% endfor %}
+            <button class="rail-arrow rail-arrow-right" onclick="scrollCategoryRail(1)" aria-label="Scroll right">
+                <i class="bi bi-chevron-right"></i>
+            </button>
         </div>
     </div>
 </section>
@@ -116,4 +125,23 @@
     </div>
 </section>
 
+<section class="py-5" style="background: var(--indigo-deep); color: #fff;">
+    <div class="container text-center">
+        <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal-light);">From the Same Kitchen</p>
+        <h2 class="text-white mb-3">Born from Faaji &amp; Brew Palace</h2>
+        <p class="mb-4" style="max-width: 640px; margin-left: auto; margin-right: auto; color: #cfc7da;">
+            AfroMart began inside our restaurant, when guests kept asking where to buy the fabrics on our walls and the spices in our kitchen.
+        </p>
+        <a href="{% url 'core:our_story' %}" class="btn btn-outline-light">Read Our Full Story</a>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function scrollCategoryRail(direction) {
+        document.getElementById("categoryRail").scrollBy({ left: direction * 280, behavior: "smooth" });
+    }
+</script>
 {% endblock %}

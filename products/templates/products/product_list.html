@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container py-5">
-    <h1 class="text-center mb-4">{% if category %}{{ category.name }}{% else %}Products{% endif %}</h1>
+    <h1 class="text-center mb-4">{% if page_title %}{{ page_title }}{% elif category %}{{ category.name }}{% else %}Products{% endif %}</h1>
 
     <!-- Category quick-filter pills -->
 

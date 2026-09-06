@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-4">Shop by Category</h1>
+    <div class="row g-4">
+        {% for category in categories %}
+        <div class="col-6 col-md-4">
+            <a href="{% url 'products:product_list_by_category' category.slug %}" class="text-decoration-none text-dark">
+                <div class="card h-100 border-0 shadow-sm">
+                    {% if category.image %}
+                        <img src="{{ category.image.url }}" class="card-img-top product-photo" alt="{{ category.name }}" style="height: 180px;">
+                    {% else %}
+                        <div style="height: 180px; background: var(--indigo-deep);"></div>
+                    {% endif %}
+                    <div class="card-body text-center">
+                        <p class="fw-semibold mb-0">{{ category.name }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <p class="text-muted">No categories yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -39,6 +39,12 @@ h1, h2, h3 {
     background: var(--ink);
 }
 
+.navbar-afromart {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+}
+
 .btn-teal {
     background: var(--teal);
     color: #fff;
@@ -50,12 +56,43 @@ h1, h2, h3 {
     color: #fff;
 }
 
+.nav-dropdown { position: relative; }
+
+.nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    min-width: 200px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    z-index: 20;
+    padding: 6px 0;
+}
+
+.nav-dropdown-menu a {
+    display: block;
+    color: var(--ink);
+    padding: 9px 16px;
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+
+.nav-dropdown-menu a:hover {
+    background: var(--cream);
+    color: var(--teal);
+}
+
+.nav-dropdown:hover .nav-dropdown-menu {
+    display: block;
+}
+
 /* Ensures real photography has proper room to breathe
    once sourced. */
-.hero-slide-bg {
+/* .hero-slide-bg {
     min-height: 560px;
     color: #fff;
-}
+} */
 
 .hero-slide-img {
     width: 100%;
@@ -67,26 +104,46 @@ h1, h2, h3 {
     max-width: 700px;
 }
 
-/* Three distinct gradient directions so each slide still feels
-   visually distinct from the others even before real photos exist. */
-.hero-slide-1 {
-    background: radial-gradient(ellipse at top right, var(--indigo-mid), var(--indigo-deep) 60%);
+.hero-slide-bg {
+    min-height: 720px;
+    color: #fff;
+    position: relative;
+    background-size: cover;
+    background-position: center;
 }
 
-.hero-slide-2 {
-    background: radial-gradient(ellipse at top left, var(--indigo-mid), var(--indigo-deep) 65%);
+/* mobile override */
+@media (max-width: 768px) {
+    .hero-slide-bg {
+        min-height: 520px;
+    }
 }
 
-.hero-slide-3 {
-    background: radial-gradient(ellipse at bottom right, var(--indigo-mid), var(--indigo-deep) 55%);
+/* Real photos need a dark overlay for the headline text to stay
+   readable*/
+.hero-slide-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(19, 27, 63, 0.55), rgba(19, 27, 63, 0.8));
 }
+
+.hero-slide-bg .container {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-slide-1 { background-image: url('/static/img/hero/homepage-slider-hero-section-image-1.jpg'); }
+.hero-slide-2 { background-image: url('/static/img/hero/homepage-slider-hero-section-image-2.jpg'); }
+.hero-slide-3 { background-image: url('/static/img/hero/homepage-slider-hero-section-image-3.jpg'); }
 
 .delivery-band {
     background: var(--teal);
-    color: #fff;
+    color: var(--ink);
     text-align: center;
-    padding: 14px 0;
-    font-weight: 600;
+    padding: 16px 0;
+    font-weight: 700;
+    letter-spacing: 0.03em;
 }
 
 /* Category quick-filter pills */
@@ -113,6 +170,43 @@ h1, h2, h3 {
     border-color: var(--ink);
 }
 
+.category-rail {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 8px;
+}
+
+.category-rail::-webkit-scrollbar {
+    display: none;
+}
+
+.category-rail-card {
+    flex: 0 0 260px;
+}
+
+.rail-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    z-index: 2;
+}
+
+.rail-arrow-left { left: -16px; }
+.rail-arrow-right { right: -16px; }
+
+@media (max-width: 768px) {
+    .category-rail-card { flex: 0 0 200px; }
+    .rail-arrow { display: none; }
+}
+
 .thumb-nav {
     width: 70px;
     height: 70px;
@@ -134,4 +228,59 @@ h1, h2, h3 {
 .product-photo {
     object-fit: contain;
     background: #F3EFE6;
+}
+
+.category-bar {
+    background: var(--indigo-mid);
+}
+
+.category-bar a:hover {
+    color: var(--teal-light) !important;
+}
+
+.footer-social-band {
+    background: #241a2e;
+    padding: 26px 0;
+}
+
+.footer-social-icons {
+    display: flex;
+    gap: 20px;
+    font-size: 1.4rem;
+}
+
+.footer-social-icons a {
+    color: #fff;
+}
+
+.footer-social-icons a:hover {
+    color: var(--teal-light);
+}
+
+.footer-legal {
+    background: var(--ink);
+    color: #9f95ac;
+    padding-bottom: 20px;
+}
+
+.footer-link {
+    color: #9f95ac;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.footer-link:hover {
+    color: var(--teal-light);
+}
+
+.footer-bottom {
+    border-top: 1px solid #322842;
+    font-size: 0.78rem;
+    color: #655c72;
+}
+
+.footer-social-icons {
+    display: flex;
+    gap: 26px;
+    font-size: 1.4rem;
 }
