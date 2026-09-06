@@ -180,9 +180,10 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # Tells whitenoise to compress static files and give them unique
 # hashed names, so browsers can cache them safely for a long time.
 STORAGES = {
-    # ImageField and FileField use for anything uploaded
-    # through the admin or a form, category images, product photos,
-    # and so on. FileSystemStorage is fine for local development.
+    # Every uploaded image, category photos, product photos, and so
+    # on, goes to Cloudinary in every environment, local development
+    # included, so nothing depends on Heroku's disk, which resets
+    # on every deploy.
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
