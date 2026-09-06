@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "cloudinary_storage",
     "django.contrib.staticfiles",
+    "cloudinary",
     "django.contrib.sites",
     "allauth",
     "allauth.account",
@@ -62,6 +64,12 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -102,9 +110,11 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "basket.context_processors.basket_context",
             ],
         },
     },
@@ -171,11 +181,9 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STORAGES = {
     # ImageField and FileField use for anything uploaded
     # through the admin or a form, category images, product photos,
-    # and so on. FileSystemStorage is fine for local development, but
-    # Heroku's filesystem is temporary and wipes on every deploy, so
-    # this is a placeholder until Cloudinary is wired in properly
+    # and so on. FileSystemStorage is fine for local development.
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",

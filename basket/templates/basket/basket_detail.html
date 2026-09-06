@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Your Basket</h1>
+
+    {% if basket.items.all %}
+        {% for item in basket.items.all %}
+        <div class="d-flex align-items-center gap-3 border-bottom py-3">
+            {% with item.product.primary_image as image %}
+                {% if image %}
+                    <img src="{{ image.image.url }}" alt="{{ item.product.name }}" class="product-photo" style="width: 80px; height: 80px;">
+                {% else %}
+                    <div style="width: 80px; height: 80px; background: var(--indigo-deep);"></div>
+                {% endif %}
+            {% endwith %}
+            <div class="flex-grow-1">
+                <p class="fw-semibold mb-1">{{ item.product.name }}</p>
+                {% if item.variant %}<p class="small text-muted mb-1">{{ item.variant.get_variant_type_display }}: {{ item.variant.value }}</p>{% endif %}
+                <form method="post" action="{% url 'basket:update_basket_item' item.id %}" class="d-flex align-items-center gap-2">
+                    {% csrf_token %}
+                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control form-control-sm" style="width: 70px;">
+                    <button type="submit" class="btn btn-sm btn-outline-dark">Update</button>
+                </form>
+            </div>
+            <p class="fw-bold mb-0" style="width: 90px;">${{ item.line_total|floatformat:2 }}</p>
+            <form method="post" action="{% url 'basket:remove_basket_item' item.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+            </form>
+        </div>
+        {% endfor %}
+
+        <div class="bg-white border p-4 mt-4" style="max-width: 400px; margin-left: auto;">
+            <div class="d-flex justify-content-between fw-bold border-top pt-2 mb-3">
+                <span>Total</span>
+                <span>${{ basket.total|floatformat:2 }}</span>
+            </div>
+            <button class="btn btn-teal w-100 mb-2" disabled>Secure Checkout</button>
+            <a href="{% url 'products:product_list' %}" class="btn btn-outline-dark w-100">Keep Shopping</a>
+            <p class="small text-muted mt-2 mb-0">Checkout isn't built yet. This button activates once the checkout app exists.</p>
+        </div>
+    {% else %}
+        <p class="text-muted">Your basket is empty.</p>
+        <a href="{% url 'products:product_list' %}" class="btn btn-teal">Start Shopping</a>
+    {% endif %}
+</div>
+{% endblock %}

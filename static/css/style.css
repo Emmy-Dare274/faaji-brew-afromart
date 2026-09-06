@@ -112,3 +112,26 @@ h1, h2, h3 {
     color: #fff;
     border-color: var(--ink);
 }
+
+.thumb-nav {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    background: #F3EFE6;
+    cursor: pointer;
+    opacity: 0.6;
+    border: 2px solid transparent;
+    transition: opacity 0.15s ease, border-color 0.15s ease;
+}
+
+.thumb-nav.active {
+    opacity: 1;
+    border-color: var(--teal);
+}
+
+/* Shared treatment for every real product or category photo, so
+   nothing is cropped.*/
+.product-photo {
+    object-fit: contain;
+    background: #F3EFE6;
+}

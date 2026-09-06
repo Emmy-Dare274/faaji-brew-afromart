@@ -1,0 +1,12 @@
+{% load product_extras %}
+<p class="small mb-2">
+{% if product.average_rating %}
+    {% for _ in product.average_rating|star_range %}<i class="bi bi-star-fill" style="color: var(--teal);"></i>{% endfor %}{% for _ in product.average_rating|empty_star_range %}<i class="bi bi-star" style="color: #ccc;"></i>{% endfor %}
+    <span class="text-muted">({{ product.average_rating|floatformat:1 }})</span>
+{% else %}
+    <span class="text-muted">No reviews yet</span>
+{% endif %}
+{% if product.units_sold > 0 %}
+    <span class="text-muted"> &middot; {{ product.units_sold }} sold</span>
+{% endif %}
+</p>

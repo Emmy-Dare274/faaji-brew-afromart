@@ -2,7 +2,7 @@
     <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none text-dark">
         {% with product.primary_image as image %}
             {% if image %}
-                <img src="{{ image.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 160px; object-fit: cover;">
+                <img src="{{ image.image.url }}" class="card-img-top product-photo" alt="{{ product.name }}" style="height: 160px;">
             {% else %}
                 <div style="height: 160px; background: var(--indigo-deep);"></div>
             {% endif %}
@@ -13,7 +13,7 @@
                 <p class="small text-muted mb-2">{{ product.description|truncatewords:12 }}</p>
             {% endif %}
             {% if product.average_rating %}
-                <p class="small mb-2" style="color: var(--teal);">{{ product.average_rating|floatformat:1 }} / 5 ({{ product.review_count }})</p>
+                <p class="small mb-2" style="color: var(--teal);">{% include "products/_star_rating.html" with product=product %} ({{ product.review_count }})</p>
             {% else %}
                 <p class="small text-muted mb-2">No reviews yet</p>
             {% endif %}
@@ -21,6 +21,12 @@
         </div>
     </a>
     <div class="px-3 pb-3">
-        <button class="btn btn-teal w-100" disabled>Add to Basket</button>
+        <form method="post" action="{% url 'basket:add_to_basket' product.slug %}">
+            {% csrf_token %}
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="btn btn-teal w-100" {% if not product.in_stock %}disabled{% endif %}>
+                {% if product.in_stock %}Add to Basket{% else %}Out of Stock{% endif %}
+            </button>
+        </form>
     </div>
 </div>

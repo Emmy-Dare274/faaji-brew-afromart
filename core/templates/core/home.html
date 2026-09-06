@@ -81,7 +81,7 @@
                 <a href="{% url 'products:product_list_by_category' category.slug %}" class="text-decoration-none text-dark">
                     <div class="card h-100 border-0 shadow-sm">
                         {% if category.image %}
-                            <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}" style="height: 140px; object-fit: cover;">
+                            <img src="{{ category.image.url }}" class="card-img-top product-photo" alt="{{ category.name }}" style="height: 140px;">
                         {% else %}
                             <div style="height: 140px; background: var(--indigo-deep);"></div>
                         {% endif %}

@@ -11,18 +11,34 @@
 
     <div class="row g-5">
         <div class="col-md-6">
-            {% with product.primary_image as image %}
-                {% if image %}
-                    <img src="{{ image.image.url }}" alt="{{ product.name }}" class="img-fluid w-100" style="height: 420px; object-fit: cover;">
-                {% else %}
-                    <div style="height: 420px; background: var(--indigo-deep);"></div>
+            <div id="productCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3500">
+                <div class="carousel-inner">
+                    {% for image in product.images.all %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <img src="{{ image.image.url }}" alt="{{ image.alt_text|default:product.name }}" class="d-block w-100 product-photo" style="height: 420px;">
+                    </div>
+                    {% empty %}
+                    <div class="carousel-item active">
+                        <div style="height: 420px; background: var(--indigo-deep);"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if product.images.count > 1 %}
+                <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
                 {% endif %}
-            {% endwith %}
+            </div>
 
             {% if product.images.count > 1 %}
             <div class="d-flex gap-2 mt-2">
                 {% for image in product.images.all %}
-                <img src="{{ image.image.url }}" alt="{{ image.alt_text|default:product.name }}" style="width: 70px; height: 70px; object-fit: cover;">
+                <img src="{{ image.image.url }}" alt="{{ image.alt_text|default:product.name }}"
+                    data-bs-target="#productCarousel" data-bs-slide-to="{{ forloop.counter0 }}"
+                    class="thumb-nav {% if forloop.first %}active{% endif %}">
                 {% endfor %}
             </div>
             {% endif %}
@@ -32,7 +48,8 @@
             <h1 class="mb-2">{{ product.name }}</h1>
 
             {% if product.average_rating %}
-                <p class="mb-2" style="color: var(--teal);">{{ product.average_rating|floatformat:1 }} / 5 &middot; {{ product.review_count }} review{{ product.review_count|pluralize }}</p>
+                {% include "products/_star_rating.html" with product=product %}
+                <p class="text-muted small mb-2">{{ product.review_count }} review{{ product.review_count|pluralize }}</p>
             {% else %}
                 <p class="text-muted mb-2">No reviews yet</p>
             {% endif %}
@@ -46,23 +63,46 @@
                 <p class="mb-3 text-danger"><i class="bi bi-x-circle-fill"></i> Out of stock</p>
             {% endif %}
 
-            {% regroup variants by variant_type as variant_groups %}
-            {% for group in variant_groups %}
-            <div class="mb-3">
-                <label class="form-label fw-semibold">{{ group.grouper|title }}</label>
-                <select class="form-select" style="max-width: 220px;">
-                    {% for variant in group.list %}
-                    <option {% if variant.stock_quantity == 0 %}disabled{% endif %}>
-                        {{ variant.value }}{% if variant.stock_quantity == 0 %} (out of stock){% endif %}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            {% endfor %}
+            <form method="post" action="{% url 'basket:add_to_basket' product.slug %}">
+                {% csrf_token %}
 
-            <button class="btn btn-teal btn-lg" disabled>Add to Basket</button>
-            <p class="small text-muted mt-2">Basket functionality isn't built yet. This button activates once the basket app exists.</p>
+                {% if variants %}
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Options</label>
+                    <select name="variant_id" class="form-select" style="max-width: 260px;">
+                        {% for variant in variants %}
+                        <option value="{{ variant.id }}" {% if variant.stock_quantity == 0 %}disabled{% endif %}>
+                            {{ variant.get_variant_type_display }}: {{ variant.value }}{% if variant.stock_quantity == 0 %} (out of stock){% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Quantity</label>
+                    <input type="number" name="quantity" value="1" min="1" class="form-control" style="width: 100px;">
+                </div>
+
+                <button type="submit" class="btn btn-teal btn-lg" {% if not product.in_stock %}disabled{% endif %}>
+                    {% if product.in_stock %}Add to Basket{% else %}Out of Stock{% endif %}
+                </button>
+            </form>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var carousel = document.getElementById("productCarousel");
+    if (!carousel) return;
+    carousel.addEventListener("slide.bs.carousel", function (e) {
+        document.querySelectorAll(".thumb-nav").forEach(function (thumb, i) {
+            thumb.classList.toggle("active", i === e.to);
+        });
+    });
+});
+</script>
 {% endblock %}
