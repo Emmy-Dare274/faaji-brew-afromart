@@ -1,12 +1,61 @@
 {% extends "base.html" %}
+
 {% block title %}Order Confirmed | Faaji & Brew AfroMart{% endblock %}
 {% block meta_description %}Your Faaji & Brew AfroMart order has been confirmed.{% endblock %}
 
 {% block content %}
-<div class="container py-5 text-center">
-    <h1 class="mb-3">Thank you!</h1>
-    <p class="mb-1">Your order <strong>{{ order.order_number }}</strong> has been placed.</p>
-    <p class="mb-4">A confirmation email will be sent to {{ order.email }}.</p>
-    <a href="{% url 'products:product_list' %}" class="btn btn-teal">Keep Shopping</a>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 text-center mb-4">
+            <p class="mb-2" style="font-size: 3rem;">🎉</p>
+            <h1 class="mb-3">Thank you, {{ order.full_name }}!</h1>
+            <p class="mb-1">Your order <strong>{{ order.order_number }}</strong> is confirmed.</p>
+            <p class="mb-0 text-muted">A confirmation email is on its way to {{ order.email }} 📬</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm p-3 p-md-4 mb-4">
+                <h2 class="h5 mb-3">Order Summary</h2>
+                {% for item in order.lineitems.all %}
+                <div class="d-flex justify-content-between align-items-start py-2 border-bottom">
+                    <div>
+                        <p class="mb-0 fw-semibold">{{ item.product.name }}{% if item.variant %} &middot; {{ item.variant.value }}{% endif %}</p>
+                        <p class="mb-0 small text-muted">Qty {{ item.quantity }} &times; ${{ item.price_at_purchase }}</p>
+                    </div>
+                    <p class="mb-0 fw-semibold flex-shrink-0 ms-3">${{ item.lineitem_total }}</p>
+                </div>
+                {% endfor %}
+
+                <div class="d-flex justify-content-between pt-3">
+                    <span>Subtotal</span>
+                    <span>${{ order.order_total }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Delivery</span>
+                    <span>{% if order.delivery_cost %}${{ order.delivery_cost }}{% else %}Free 🚚{% endif %}</span>
+                </div>
+                <div class="d-flex justify-content-between fw-bold fs-5 pt-2 mt-2 border-top">
+                    <span>Total</span>
+                    <span>${{ order.grand_total }}</span>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm p-3 p-md-4 mb-4">
+                <h2 class="h5 mb-3">Shipping To</h2>
+                <p class="mb-0">{{ order.full_name }}</p>
+                <p class="mb-0">{{ order.address_line1 }}{% if order.address_line2 %}, {{ order.address_line2 }}{% endif %}</p>
+                <p class="mb-0">{{ order.town_or_city }}, {{ order.postcode }}</p>
+                <p class="mb-0">{{ order.country }}</p>
+            </div>
+
+            <p class="text-center text-muted small mb-4">Once it arrives, we'd love to hear what you think — you can leave a review from the product page ⭐</p>
+
+            <div class="text-center">
+                <a href="{% url 'products:product_list' %}" class="btn btn-teal btn-lg">Keep Shopping</a>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

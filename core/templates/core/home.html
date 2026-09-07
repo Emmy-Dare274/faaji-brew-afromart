@@ -1,7 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
+{% load product_extras %}
+
 {% block title %}Faaji & Brew AfroMart | Authentic West African Fabrics, Spices & Homeware{% endblock %}
 {% block meta_description %}Shop authentic Ankara fabrics, spices, beads, jewellery, and homeware from West Africa, sourced directly from makers and shipped worldwide.{% endblock %}
-{% load static %}
 
 {% block content %}
 <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4500">
@@ -139,6 +141,54 @@
         </div>
     </div>
 </section>
+
+<section class="py-5" style="background: #f5f2ef;">
+    <div class="container">
+        <div class="text-center mb-4">
+            <p class="text-uppercase small fw-bold" style="color: var(--teal);">What Customers Say</p>
+            <h2>Real Reviews, Real Customers</h2>
+        </div>
+        {% if testimonials %}
+        <div id="testimonialCarousel" class="carousel slide carousel-dark" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-inner">
+                {% for review in testimonials %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="text-center mx-auto" style="max-width: 640px;">
+                        <p class="mb-2">
+                            {% for _ in review.rating|star_range %}<i class="bi bi-star-fill" style="color: var(--teal);"></i>{% endfor %}{% for _ in review.rating|empty_star_range %}<i class="bi bi-star" style="color: #ccc;"></i>{% endfor %}
+                        </p>
+                        <p class="fs-5 fst-italic mb-3">&ldquo;{{ review.body }}&rdquo;</p>
+                        <p class="fw-semibold mb-0">{{ review.user.username }}</p>
+                        <p class="small text-muted">Verified buyer of {{ review.product.name }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if testimonials|length > 1 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </button>
+            {% endif %}
+        </div>
+        {% else %}
+        <p class="text-center text-muted mb-0">No featured reviews yet — approve and feature a review from the moderation queue to show it here.</p>
+        {% endif %}
+    </div>
+</section>
+
+<section class="py-4" style="background: var(--teal);">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between gap-3 text-center text-md-start">
+        <div>
+            <p class="text-uppercase small fw-bold mb-1 text-white" style="letter-spacing: 0.08em;">Also From Us</p>
+            <h3 class="mb-0 text-white h4">Hungry? Visit Faaji &amp; Brew Palace in Ikeja, Lagos.</h3>
+        </div>
+        <a href="https://www.facebook.com/share/17QgB9TWdd/" target="_blank" rel="noopener noreferrer nofollow" class="btn btn-outline-light flex-shrink-0">Find Us on Facebook</a>
+    </div>
+</section>
+
 <div class="newsletter-band">
     <div class="container text-center">
         <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal-light);">Stay in the Loop</p>

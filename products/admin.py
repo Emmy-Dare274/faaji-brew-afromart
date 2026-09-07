@@ -33,6 +33,7 @@ class ProductAdmin(admin.ModelAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ["product", "user", "rating", "is_approved", "is_featured"]
     list_filter = ["is_approved", "is_featured"]
+    list_editable = ["is_featured"]
     actions = ["approve_reviews"]
 
     @admin.action(description="Approve selected reviews")
