@@ -181,20 +181,17 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # Tells whitenoise to compress static files and give them unique
 # hashed names, so browsers can cache them safely for a long time.
 STORAGES = {
-    # Every uploaded image, category photos, product photos, and so
-    # on, goes to Cloudinary in every environment, local development
-    # included, so nothing depends on Heroku's disk, which resets
-    # on every deploy.
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "afromart.storage.ForgivingManifestStaticFilesStorage",
     },
 }
 
+STATICFILES_STORAGE = "afromart.storage.ForgivingManifestStaticFilesStorage"
+
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-WHITENOISE_MANIFEST_STRICT = False
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
