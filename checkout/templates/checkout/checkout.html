@@ -16,16 +16,30 @@
                     {% endif %}
                 </div>
                 {% endfor %}
-                <button type="submit" class="btn btn-teal btn-lg">Continue to Payment</button>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-teal btn-lg">Continue to Payment</button>
+                    <a href="{% url 'products:product_list' %}" class="btn btn-outline-dark btn-lg">Keep Shopping</a>
+                </div>
             </form>
         </div>
         <div class="col-md-5">
             <div class="bg-white border p-4">
                 <h5 class="mb-3">Order Summary</h5>
                 {% for item in basket.items.all %}
-                <div class="d-flex justify-content-between small mb-2">
-                    <span>{{ item.quantity }} x {{ item.product.name }}</span>
-                    <span>${{ item.line_total|floatformat:2 }}</span>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    {% with item.product.primary_image as image %}
+                        {% if image %}
+                            <img src="{{ image.image.url }}" alt="{{ item.product.name }}" style="width: 50px; height: 50px; object-fit: contain; background: #f5f2ea; flex-shrink: 0;">
+                        {% else %}
+                            <div style="width: 50px; height: 50px; background: var(--indigo-deep); flex-shrink: 0;"></div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="flex-grow-1 small">
+                        <div>{{ item.product.name }}</div>
+                        {% if item.variant %}<div class="text-muted">{{ item.variant }}</div>{% endif %}
+                        <div class="text-muted">Qty: {{ item.quantity }}</div>
+                    </div>
+                    <div class="small fw-semibold">${{ item.line_total|floatformat:2 }}</div>
                 </div>
                 {% endfor %}
                 <div class="d-flex justify-content-between fw-bold border-top pt-2 mt-2">

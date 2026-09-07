@@ -29,12 +29,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function populateMiniCart(data) {
-        var itemHtml =
-            '<img src="' + data.product_image + '" alt="' + data.product_name + '">' +
-            '<div><p class="fw-semibold mb-0 small">' + data.product_name + '</p>' +
-            (data.variant ? '<p class="text-muted small mb-0">' + data.variant + '</p>' : '') +
-            '<p class="text-muted small mb-0">Qty: ' + data.quantity + '</p></div>';
-        document.getElementById("miniCartItem").innerHTML = itemHtml;
+        document.getElementById("miniCartAddedMsg").textContent = "Added " + data.added_product_name + " to your basket";
+        document.getElementById("miniCartCountLabel").textContent = "Your Basket (" + data.basket_item_count + ")";
+
+        var itemsHtml = data.items.map(function (item) {
+            return '<div class="mini-cart-item">' +
+                '<img src="' + item.product_image + '" alt="' + item.product_name + '">' +
+                '<div><p class="fw-semibold mb-0 small">' + item.product_name + '</p>' +
+                (item.variant ? '<p class="text-muted small mb-0">' + item.variant + '</p>' : '') +
+                '<p class="text-muted small mb-0">Qty: ' + item.quantity + ' &middot; $' + item.line_total + '</p></div>' +
+                '</div>';
+        }).join('');
+        document.getElementById("miniCartItems").innerHTML = itemsHtml;
         document.getElementById("miniCartTotal").textContent = "$" + data.basket_total;
 
         var noteEl = document.getElementById("miniCartDeliveryNote");

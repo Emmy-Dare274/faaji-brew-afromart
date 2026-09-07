@@ -47,19 +47,26 @@ def add_to_basket(request, product_slug):
     add_item(basket, product, variant, quantity)
 
     if is_ajax:
-        image = product.primary_image
+        items_data = []
+        for basket_item in basket.items.all():
+            item_image = basket_item.product.primary_image
+            items_data.append({
+                "product_name": basket_item.product.name,
+                "product_image": item_image.image.url if item_image else "",
+                "quantity": basket_item.quantity,
+                "variant": str(basket_item.variant) if basket_item.variant else "",
+                "line_total": f"{basket_item.line_total:.2f}",
+            })
         return JsonResponse({
             "success": True,
-            "product_name": product.name,
-            "product_image": image.image.url if image else "",
-            "quantity": quantity,
-            "variant": str(variant) if variant else "",
+            "added_product_name": product.name,
+            "items": items_data,
             "basket_total": f"{basket.total:.2f}",
             "basket_item_count": basket.item_count,
             "amount_to_free_delivery": f"{basket.amount_to_free_delivery:.2f}",
             "qualifies_for_free_delivery": basket.qualifies_for_free_delivery,
         })
-
+    
     messages.success(request, f"Added {product.name} to your basket.")
     return redirect("basket:basket_detail")
 

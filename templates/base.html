@@ -69,10 +69,11 @@
                             </a>
                             <div id="miniCartDropdown" class="mini-cart-dropdown">
                                 <div class="mini-cart-header">
-                                    <span><i class="bi bi-check-circle-fill" style="color: var(--teal);"></i> Added to your basket</span>
+                                    <span><i class="bi bi-check-circle-fill" style="color: var(--teal);"></i> <span id="miniCartAddedMsg">Added to your basket</span></span>
                                     <button type="button" class="mini-cart-close" aria-label="Close">&times;</button>
                                 </div>
-                                <div id="miniCartItem" class="mini-cart-item"></div>
+                                <p class="small fw-semibold text-uppercase mb-2" id="miniCartCountLabel">Your Basket</p>
+                                <div id="miniCartItems" class="mini-cart-items"></div>
                                 <div id="miniCartDeliveryNote" class="free-delivery-banner"></div>
                                 <div class="d-flex justify-content-between fw-bold border-top pt-2 mb-3">
                                     <span>Total</span>

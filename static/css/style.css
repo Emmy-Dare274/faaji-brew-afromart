@@ -201,6 +201,12 @@ h1, h2, h3 {
     color: #999;
 }
 
+.mini-cart-items {
+    max-height: 240px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+}
+
 .mini-cart-item {
     display: flex;
     gap: 10px;
