@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load product_extras %}
 {% block title %}{{ product.name }} | Faaji & Brew AfroMart{% endblock %}
 {% block meta_description %}{{ product.description|striptags|truncatechars:155 }}{% endblock %}
 {% block og_title %}{{ product.name }}{% endblock %}
@@ -96,6 +97,57 @@
                     {% if product.in_stock %}Add to Basket{% else %}Out of Stock{% endif %}
                 </button>
             </form>
+        </div>
+    </div>
+</div>
+
+    <hr class="my-5">
+    <div class="row g-5">
+        <div class="col-lg-8">
+            <h2 class="h4 mb-4">Customer Reviews</h2>
+            {% for review in approved_reviews %}
+            <div class="border-bottom pb-3 mb-3">
+                <p class="small mb-1">
+                    {% for _ in review.rating|star_range %}<i class="bi bi-star-fill" style="color: var(--teal);"></i>{% endfor %}{% for _ in review.rating|empty_star_range %}<i class="bi bi-star" style="color: #ccc;"></i>{% endfor %}
+                </p>
+                <p class="fw-semibold mb-1">{{ review.title }}</p>
+                <p class="mb-1">{{ review.body }}</p>
+                <p class="small text-muted mb-0">{{ review.user.username }} &middot; {{ review.created_at|date:"d M Y" }}</p>
+            </div>
+            {% empty %}
+            <p class="text-muted">No reviews yet — be the first to share your thoughts.</p>
+            {% endfor %}
+        </div>
+
+        <div class="col-lg-4">
+            {% if request.user.is_authenticated %}
+                {% if user_review %}
+                    <h3 class="h5 mb-3">Your Review</h3>
+                    {% if not user_review.is_approved %}
+                    <p class="small text-muted mb-2"><i class="bi bi-clock-history"></i> Awaiting approval</p>
+                    {% endif %}
+                    <form method="post" action="{% url 'products:edit_review' user_review.id %}" class="mb-2">
+                        {% csrf_token %}
+                        {{ review_form.as_p }}
+                        <button type="submit" class="btn btn-teal btn-sm">Save Changes</button>
+                    </form>
+                    <form method="post" action="{% url 'products:delete_review' user_review.id %}" onsubmit="return confirm('Delete your review?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Delete Review</button>
+                    </form>
+                {% elif has_purchased %}
+                    <h3 class="h5 mb-3">Write a Review</h3>
+                    <form method="post" action="{% url 'products:add_review' product.slug %}">
+                        {% csrf_token %}
+                        {{ review_form.as_p }}
+                        <button type="submit" class="btn btn-teal">Submit Review</button>
+                    </form>
+                {% else %}
+                    <p class="text-muted small">Purchase this product to leave a review.</p>
+                {% endif %}
+            {% else %}
+                <p class="text-muted small"><a href="{% url 'account_login' %}?next={{ request.path }}">Log in</a> to write a review.</p>
+            {% endif %}
         </div>
     </div>
 </div>
