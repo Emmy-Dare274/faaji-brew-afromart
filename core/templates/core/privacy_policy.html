@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy | Faaji & Brew AfroMart{% endblock %}
+{% block meta_description %}How Faaji & Brew AfroMart collects, uses, and protects your personal data, and your rights under GDPR.{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal);">Legal</p>
+            <h1 class="mb-4">Privacy Policy</h1>
+            <p class="text-muted">Last updated: September 2026</p>
+
+            <p>Faaji &amp; Brew AfroMart ("we", "us") is the data controller for the personal
+            data described below. This policy explains what we collect, why, and the rights
+            you have over it under the General Data Protection Regulation (GDPR).</p>
+
+            <h2 class="h4 mt-5">1. What we collect</h2>
+            <ul>
+                <li><strong>Account details</strong> &mdash; username, email address, and a
+                securely hashed password when you register.</li>
+                <li><strong>Order &amp; delivery details</strong> &mdash; full name, delivery
+                address, and country, so we can fulfil and ship your order.</li>
+                <li><strong>Order history</strong> &mdash; the products, quantities, and totals
+                for orders you've placed, so you can view them again in your account.</li>
+                <li><strong>Wishlist &amp; reviews</strong> &mdash; products you've saved, and
+                any review text or star rating you choose to submit.</li>
+                <li><strong>Newsletter email</strong> &mdash; only if you sign up, and only
+                after you confirm via the link we send you (double opt-in). You can unsubscribe
+                at any time.</li>
+            </ul>
+
+            <h2 class="h4 mt-5">2. What we don't collect</h2>
+            <p>We never see or store your card number, expiry date, or CVC. Card payments are
+            handled entirely by Stripe, our PCI-DSS-certified payment processor &mdash; we only
+            ever receive a payment reference from them, never the card details themselves.</p>
+
+            <h2 class="h4 mt-5">3. Why we process your data</h2>
+            <ul>
+                <li><strong>To perform our contract with you</strong> &mdash; taking and
+                fulfilling orders, sending order confirmation emails, handling returns.</li>
+                <li><strong>With your consent</strong> &mdash; sending newsletter emails, which
+                you opt into and can withdraw consent for at any time.</li>
+                <li><strong>Legitimate interest</strong> &mdash; keeping the Site secure and
+                working properly (for example, keeping you logged in between pages).</li>
+            </ul>
+
+            <h2 class="h4 mt-5">4. Cookies</h2>
+            <p>The Site currently uses only <strong>strictly necessary cookies</strong>: one to
+            keep you logged in, one to remember your basket, and one that protects forms from
+            cross-site request forgery. None of these are used for advertising or tracking, and
+            under GDPR/ePrivacy rules, strictly necessary cookies don't require consent. We still
+            show a cookie notice on your first visit for transparency, and if the Site ever adds
+            optional cookies (analytics or advertising), that banner is where you'd be asked to
+            opt in first &mdash; nothing optional will load before you say yes. You can change
+            your choice at any time using "Manage Cookie Preferences" in the footer.</p>
+
+            <h2 class="h4 mt-5">5. Who we share data with</h2>
+            <ul>
+                <li><strong>Stripe</strong> &mdash; to process payments.</li>
+                <li><strong>Neon &amp; Heroku</strong> &mdash; our database and hosting
+                providers, who store data on our behalf under their own data processing terms.</li>
+                <li><strong>Cloudinary</strong> &mdash; hosts our product photography only; it
+                does not receive or store your personal data.</li>
+            </ul>
+            <p>We don't sell your data to anyone.</p>
+
+            <h2 class="h4 mt-5">6. How long we keep it</h2>
+            <p>Account and order data is kept for as long as your account is active, so your
+            order history stays available to you. If you delete your account, we remove your
+            personal details, keeping only what we're legally required to retain (for example,
+            transaction records for tax purposes).</p>
+
+            <h2 class="h4 mt-5">7. Your rights</h2>
+            <p>Under GDPR you have the right to access, correct, or delete your personal data,
+            restrict or object to how we use it, and receive a copy of it in a portable format.
+            To exercise any of these, email
+            <a href="mailto:emmy4toz2010@gmail.com">emmy4toz2010@gmail.com</a>. If you're not
+            satisfied with our response, you can complain to Ireland's Data Protection
+            Commission at <a href="https://www.dataprotection.ie" target="_blank" rel="noopener noreferrer">dataprotection.ie</a>.</p>
+
+            <h2 class="h4 mt-5">8. Contact</h2>
+            <p>Questions about this policy or your data? Email
+            <a href="mailto:emmy4toz2010@gmail.com">emmy4toz2010@gmail.com</a>.</p>
+
+            <p class="mt-5"><a href="{% url 'core:terms_of_use' %}">See also our Terms of Use &rarr;</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
