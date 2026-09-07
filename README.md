@@ -18,15 +18,17 @@ An e-commerce app created for the purpose of meeting the assessment criteria of 
 3. [Features](#features)
    - [Existing Features](#existing-features)
    - [Future Features](#future-features)
-4. [Data Model](#data-model)
-5. [Agile Methodology](#agile-methodology)
-6. [Technologies Used](#technologies-used)
-7. [Testing](#testing)
-8. [Validation](#validation)
-9. [Deployment](#deployment)
-   - [Local Development](#local-development)
-   - [Heroku Deployment](#heroku-deployment)
-10. [Credits](#credits)
+4. [Marketing](#marketing)
+   - [Facebook Business Page](#facebook-business-page)
+5. [Data Model](#data-model)
+6. [Agile Methodology](#agile-methodology)
+7. [Technologies Used](#technologies-used)
+8. [Testing](#testing)
+9. [Validation](#validation)
+10. [Deployment](#deployment)
+    - [Local Development](#local-development)
+    - [Heroku Deployment](#heroku-deployment)
+11. [Credits](#credits)
 
 ---
 
@@ -72,4 +74,19 @@ All wireframes were created before development began to define the page structur
 
 #### 404 Page
 ![404 Page Wireframe](docs/wireframes/12_404_page.jpeg)
+
+
+---
+
+## Marketing
+
+### Facebook Business Page
+
+A real Facebook Business Page was created for Faaji & Brew AfroMart as part of the site's marketing strategy, linking back to the live store from the page's intro, about section, and posts.
+
+[View the Facebook Business Page](https://www.facebook.com/share/17QgB9TWdd/)
+
+![Facebook Business Page](docs/marketing/facebook-business-page.jpg)
+
+The page is also linked from the site's footer, under the social icons and the Company column, opening in a new tab.
 
