@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Checkout</h1>
+    <div class="row g-5">
+        <div class="col-md-7">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-teal btn-lg">Continue to Payment</button>
+            </form>
+        </div>
+        <div class="col-md-5">
+            <div class="bg-white border p-4">
+                <h5 class="mb-3">Order Summary</h5>
+                {% for item in basket.items.all %}
+                <div class="d-flex justify-content-between small mb-2">
+                    <span>{{ item.quantity }} x {{ item.product.name }}</span>
+                    <span>${{ item.line_total|floatformat:2 }}</span>
+                </div>
+                {% endfor %}
+                <div class="d-flex justify-content-between fw-bold border-top pt-2 mt-2">
+                    <span>Total</span>
+                    <span>${{ basket.total|floatformat:2 }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

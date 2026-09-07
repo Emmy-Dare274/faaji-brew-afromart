@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Payment</h1>
+    <p>Order <strong>{{ order.order_number }}</strong>, total <strong>${{ order.grand_total|floatformat:2 }}</strong></p>
+    <div class="col-md-6">
+        <form id="payment-form">
+            <div id="card-element" class="form-control mb-3" style="height: 50px; padding-top: 14px;"></div>
+            <div id="card-errors" class="text-danger small mb-3" role="alert"></div>
+            <button id="submit-payment" class="btn btn-teal btn-lg" type="submit">Pay ${{ order.grand_total|floatformat:2 }}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe("{{ stripe_public_key }}");
+    var elements = stripe.elements();
+    var card = elements.create("card");
+    card.mount("#card-element");
+
+    card.addEventListener("change", function (event) {
+        document.getElementById("card-errors").textContent = event.error ? event.error.message : "";
+    });
+
+    document.getElementById("payment-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        document.getElementById("submit-payment").disabled = true;
+
+        stripe.confirmCardPayment("{{ client_secret }}", {
+            payment_method: { card: card }
+        }).then(function (result) {
+            if (result.error) {
+                document.getElementById("card-errors").textContent = result.error.message;
+                document.getElementById("submit-payment").disabled = false;
+            } else if (result.paymentIntent.status === "succeeded") {
+                window.location.href = "{% url 'checkout:checkout_success' order.order_number %}";
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -32,13 +32,17 @@
         {% endfor %}
 
         <div class="bg-white border p-4 mt-4" style="max-width: 400px; margin-left: auto;">
+            {% if basket.qualifies_for_free_delivery %}
+            <div class="free-delivery-banner qualified">You've unlocked free delivery!</div>
+            {% else %}
+            <div class="free-delivery-banner">Spend ${{ basket.amount_to_free_delivery|floatformat:2 }} more to get free delivery!</div>
+            {% endif %}
             <div class="d-flex justify-content-between fw-bold border-top pt-2 mb-3">
                 <span>Total</span>
                 <span>${{ basket.total|floatformat:2 }}</span>
             </div>
-            <button class="btn btn-teal w-100 mb-2" disabled>Secure Checkout</button>
+            <a href="{% url 'checkout:checkout' %}" class="btn btn-teal w-100 mb-2"><i class="bi bi-lock-fill"></i> Secure Checkout</a>
             <a href="{% url 'products:product_list' %}" class="btn btn-outline-dark w-100">Keep Shopping</a>
-            <p class="small text-muted mt-2 mb-0">Checkout isn't built yet. This button activates once the checkout app exists.</p>
         </div>
     {% else %}
         <p class="text-muted">Your basket is empty.</p>

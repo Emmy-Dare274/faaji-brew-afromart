@@ -63,9 +63,25 @@
                             <a class="btn btn-teal btn-sm me-3" href="{% url 'account_signup' %}">Register</a>
                         {% endif %}
 
-                        <a href="{% url 'basket:basket_detail' %}" class="text-white text-decoration-none">
-                            <i class="bi bi-basket3"></i> ${{ basket_total|floatformat:2 }} ({{ basket_item_count }})
-                        </a>
+                        <div class="position-relative">
+                            <a href="{% url 'basket:basket_detail' %}" class="text-white text-decoration-none">
+                                <i class="bi bi-basket3"></i> $<span id="navBasketTotal">{{ basket_total|floatformat:2 }}</span> (<span id="navBasketCount">{{ basket_item_count }}</span>)
+                            </a>
+                            <div id="miniCartDropdown" class="mini-cart-dropdown">
+                                <div class="mini-cart-header">
+                                    <span><i class="bi bi-check-circle-fill" style="color: var(--teal);"></i> Added to your basket</span>
+                                    <button type="button" class="mini-cart-close" aria-label="Close">&times;</button>
+                                </div>
+                                <div id="miniCartItem" class="mini-cart-item"></div>
+                                <div id="miniCartDeliveryNote" class="free-delivery-banner"></div>
+                                <div class="d-flex justify-content-between fw-bold border-top pt-2 mb-3">
+                                    <span>Total</span>
+                                    <span id="miniCartTotal"></span>
+                                </div>
+                                <a href="{% url 'checkout:checkout' %}" class="btn btn-teal w-100 mb-2"><i class="bi bi-lock-fill"></i> Go To Secure Checkout</a>
+                                <a href="{% url 'basket:basket_detail' %}" class="btn btn-outline-dark w-100 btn-sm">View Basket</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -160,5 +176,6 @@
     {% block extra_js %}{% endblock %}
     <script src="{% static 'js/site.js' %}"></script>
     <script src="{% static 'js/wishlist.js' %}"></script>
+    <script src="{% static 'js/basket.js' %}"></script>
 </body>
 </html>

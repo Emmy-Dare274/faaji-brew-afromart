@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 
 from products.models import Product, ProductVariant
 from .services import get_or_create_basket, add_item, update_quantity
@@ -27,22 +28,38 @@ def basket_detail(request):
 def add_to_basket(request, product_slug):
     product = get_object_or_404(Product, slug=product_slug, is_active=True)
     quantity = _safe_quantity(request.POST.get("quantity"))
+    is_ajax = request.headers.get("x-requested-with") == "XMLHttpRequest"
 
     variant_id = request.POST.get("variant_id")
     variant = None
     if variant_id and variant_id.isdigit():
         variant = get_object_or_404(ProductVariant, id=variant_id, product=product)
 
-    # Defensive check: never let a basket claim more stock than
-    # actually exists, whether that is a genuine mistake or someone
-    # tampering with the form directly.
     available = variant.stock_quantity if variant else product.stock_quantity
     if available < quantity:
-        messages.error(request, f"Sorry, only {available} of {product.name} left in stock.")
+        error_msg = f"Sorry, only {available} of {product.name} left in stock."
+        if is_ajax:
+            return JsonResponse({"success": False, "error": error_msg}, status=400)
+        messages.error(request, error_msg)
         return redirect("products:product_detail", product_slug=product.slug)
 
     basket = get_or_create_basket(request)
     add_item(basket, product, variant, quantity)
+
+    if is_ajax:
+        image = product.primary_image
+        return JsonResponse({
+            "success": True,
+            "product_name": product.name,
+            "product_image": image.image.url if image else "",
+            "quantity": quantity,
+            "variant": str(variant) if variant else "",
+            "basket_total": f"{basket.total:.2f}",
+            "basket_item_count": basket.item_count,
+            "amount_to_free_delivery": f"{basket.amount_to_free_delivery:.2f}",
+            "qualifies_for_free_delivery": basket.qualifies_for_free_delivery,
+        })
+
     messages.success(request, f"Added {product.name} to your basket.")
     return redirect("basket:basket_detail")
 

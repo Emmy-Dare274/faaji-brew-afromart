@@ -24,7 +24,7 @@
         </div>
     </a>
     <div class="px-3 pb-3">
-        <form method="post" action="{% url 'basket:add_to_basket' product.slug %}">
+        <form method="post" action="{% url 'basket:add_to_basket' product.slug %}" class="add-to-basket-form">
             {% csrf_token %}
             <input type="hidden" name="quantity" value="1">
             <button type="submit" class="btn btn-teal w-100" {% if not product.in_stock %}disabled{% endif %}>

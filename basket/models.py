@@ -1,6 +1,10 @@
 from django.db import models
 from django.conf import settings
 from products.models import Product, ProductVariant
+from decimal import Decimal
+
+FREE_DELIVERY_THRESHOLD = Decimal("60.00")
+STANDARD_DELIVERY_COST = Decimal("4.99")
 
 
 class Basket(models.Model):
@@ -30,6 +34,15 @@ class Basket(models.Model):
     @property
     def item_count(self):
         return sum(item.quantity for item in self.items.all())
+
+    @property
+    def amount_to_free_delivery(self):
+        remaining = FREE_DELIVERY_THRESHOLD - self.total
+        return remaining if remaining > 0 else Decimal("0.00")
+
+    @property
+    def qualifies_for_free_delivery(self):
+        return self.total >= FREE_DELIVERY_THRESHOLD
 
 
 class BasketItem(models.Model):

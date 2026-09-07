@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db import models
 
 from products.models import Product, ProductVariant
+from basket.models import FREE_DELIVERY_THRESHOLD, STANDARD_DELIVERY_COST
 
 
 class Order(models.Model):
@@ -60,11 +61,11 @@ class Order(models.Model):
         method. Decimal is used throughout, deliberately not float, since 
         mixing the two in real money calculations risks the kind of silent 
         rounding errors floats are known for."""
-        
+
         self.order_total = sum(
             (item.lineitem_total for item in self.lineitems.all()), Decimal("0.00")
         )
-        self.delivery_cost = Decimal("0.00") if self.order_total >= 60 else Decimal("4.99")
+        self.delivery_cost = Decimal("0.00") if self.order_total >= FREE_DELIVERY_THRESHOLD else STANDARD_DELIVERY_COST
         self.grand_total = self.order_total + self.delivery_cost
         self.save(update_fields=["order_total", "delivery_cost", "grand_total"])
 
