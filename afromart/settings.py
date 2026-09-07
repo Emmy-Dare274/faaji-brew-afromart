@@ -116,6 +116,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "basket.context_processors.basket_context",
                 "products.context_processors.nav_categories",
+                "profiles.context_processors.wishlist_context",
             ],
         },
     },

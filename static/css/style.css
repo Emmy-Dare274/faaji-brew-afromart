@@ -128,13 +128,16 @@ h1, h2, h3 {
 .hero-slide-2 { background-image: url('/static/img/hero/homepage-slider-hero-section-image-2.jpg'); }
 .hero-slide-3 { background-image: url('/static/img/hero/homepage-slider-hero-section-image-3.jpg'); }
 
+/* Delivery hero */
 .delivery-band {
     background: var(--teal);
     color: var(--ink);
     text-align: center;
-    padding: 16px 0;
-    font-weight: 700;
-    letter-spacing: 0.03em;
+    padding: 22px 0;
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
 }
 
 /* Category quick-filter pills */
@@ -214,6 +217,52 @@ h1, h2, h3 {
     border-color: var(--teal);
 }
 
+/* Wishlist */
+.wishlist-heart-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: var(--ink);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.wishlist-heart-btn:hover {
+    transform: scale(1.08);
+}
+
+.wishlist-heart-btn.active {
+    color: #e0455f;
+}
+/* page arrow scrow */
+.scroll-top-btn {
+    position: fixed;
+    bottom: 26px;
+    right: 26px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    z-index: 1050;
+    display: none;
+}
+
+.scroll-top-btn.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Shared treatment for every real product or category photo, so
    nothing is cropped.*/
 .product-photo {
@@ -274,4 +323,25 @@ h1, h2, h3 {
     display: flex;
     gap: 26px;
     font-size: 1.4rem;
+}
+
+/* Mobile text sizes */
+@media (max-width: 576px) {
+    .hero-caption h1.display-4 {
+        font-size: 1.85rem;
+    }
+    .hero-caption .lead {
+        font-size: 0.95rem;
+    }
+    .delivery-band {
+        font-size: 0.85rem;
+        padding: 14px 0;
+        letter-spacing: 0.03em;
+    }
+    h2 {
+        font-size: 1.5rem;
+    }
+    .category-rail-card {
+        flex: 0 0 160px;
+    }
 }

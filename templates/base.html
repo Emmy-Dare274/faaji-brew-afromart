@@ -46,10 +46,10 @@
 
                     <div class="d-flex align-items-center">
                         <!-- Genuine placeholders, not fake functionality. These
-                            go live once the profiles app (wishlist, accounts)
-                            is built, they are not meant to work yet. -->
-                        <a href="#" class="text-white text-decoration-none me-3" title="Coming soon">
-                            <i class="bi bi-heart"></i> Favorites
+                            go live once the profiles app (wishlist - done, accounts - pending)
+                            is built. Wishlist working now. -->
+                        <a href="{% url 'profiles:wishlist_detail' %}" class="text-white text-decoration-none me-3">
+                            <i class="bi bi-heart"></i> Favorites (<span id="wishlistCount">{{ wishlist_count }}</span>)
                         </a>
                         <a href="#" class="text-white text-decoration-none me-3" title="Coming soon">
                             <i class="bi bi-person"></i> My Account
@@ -76,16 +76,16 @@
             <a href="{% url 'core:home' %}" class="text-white text-decoration-none">Home</a>
             <a href="{% url 'products:category_overview' %}" class="text-white text-decoration-none">Category</a>
             <a href="{% url 'products:product_list' %}" class="text-white text-decoration-none">Products</a>
-            {% for cat in nav_categories %}
+            {% for cat in nav_categories %}{% if cat.show_in_main_nav %}
             <a href="{% url 'products:product_list_by_category' cat.slug %}" class="text-white text-decoration-none">{{ cat.name }}</a>
-            {% endfor %}
+            {% endif %}{% endfor %}
             <div class="nav-dropdown">
                 <a href="{% url 'products:special_offers' %}" class="text-white text-decoration-none">Special Offers &#9662;</a>
                 <div class="nav-dropdown-menu">
                     <a href="{% url 'products:special_offers' %}">All Special Offers</a>
-                    {% for cat in nav_categories %}
-                    <a href="{% url 'products:special_offers' %}?category={{ cat.slug }}">{{ cat.name }} Offers</a>
-                    {% endfor %}
+                    {% for cat in nav_categories %}{% if not cat.show_in_main_nav %}
+                    <a href="{% url 'products:special_offers' %}?category={{ cat.slug }}">{{ cat.name }}</a>
+                    {% endif %}{% endfor %}
                 </div>
             </div>
         </div>
@@ -146,6 +146,9 @@
         </div>
     </div>
 </footer>
+    <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Scroll to top">
+        <i class="bi bi-arrow-up"></i>
+    </button>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -157,5 +160,7 @@
         });
     </script>
     {% block extra_js %}{% endblock %}
+    <script src="{% static 'js/site.js' %}"></script>
+    <script src="{% static 'js/wishlist.js' %}"></script>
 </body>
 </html>

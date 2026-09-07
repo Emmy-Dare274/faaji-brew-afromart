@@ -21,6 +21,10 @@ class Category(models.Model):
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to="categories/", blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    show_in_main_nav = models.BooleanField(
+        default=True,
+        help_text="Checked: shows directly in the main nav. Unchecked: only appears in the Special Offers dropdown.",
+    )
     objects = CategoryQuerySet.as_manager()
 
     class Meta:

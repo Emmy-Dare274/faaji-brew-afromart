@@ -1,4 +1,7 @@
-<div class="card h-100 border-0 shadow-sm">
+<div class="card h-100 border-0 shadow-sm position-relative">
+    <div class="position-absolute top-0 end-0 p-2" style="z-index: 2;">
+        {% include "products/_wishlist_heart.html" with product=product %}
+    </div>
     <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none text-dark">
         {% with product.primary_image as image %}
             {% if image %}

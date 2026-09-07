@@ -45,7 +45,10 @@
         </div>
 
         <div class="col-md-6">
-            <h1 class="mb-2">{{ product.name }}</h1>
+            <div class="d-flex justify-content-between align-items-start">
+                <h1 class="mb-2">{{ product.name }}</h1>
+                {% include "products/_wishlist_heart.html" with product=product %}
+            </div>
 
             {% if product.average_rating %}
                 {% include "products/_star_rating.html" with product=product %}

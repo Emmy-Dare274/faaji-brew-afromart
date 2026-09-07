@@ -1,0 +1,7 @@
+<form method="post" action="{% url 'profiles:toggle_wishlist' product.slug %}" class="wishlist-form" data-product-slug="{{ product.slug }}">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.path }}">
+    <button type="submit" class="wishlist-heart-btn {% if product.id in wishlist_item_ids %}active{% endif %}" aria-label="Save to favourites">
+        <i class="bi {% if product.id in wishlist_item_ids %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+    </button>
+</form>

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Your Favourites</h1>
+    <div class="row g-4" id="wishlistGrid">
+        {% for product in products %}
+        <div class="col-6 col-md-3" data-product-slug="{{ product.slug }}">
+            {% include "products/_product_card.html" with product=product %}
+        </div>
+        {% empty %}
+        <p class="text-muted">You haven't saved anything yet. Tap the heart on any product to save it here.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

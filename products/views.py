@@ -77,11 +77,11 @@ def category_overview(request):
 
 def special_offers(request):
 
-    """ Special offers, optionally narrowed to one category via the
-    navbar dropdown. Reuses the same product grid template as the
-    rest of the catalogue, one template, not two."""
+    """A shuffled, discovery-style listing rather than a fixed
+    curated one. Narrowing to a category (from the navbar dropdown)
+    keeps the same random order, just scoped to that category."""
     
-    products = Product.objects.filter(is_active=True, is_featured=True).with_rating()
+    products = Product.objects.filter(is_active=True).with_rating().order_by("?")
     selected_category = None
     category_slug = request.GET.get("category")
     if category_slug:
