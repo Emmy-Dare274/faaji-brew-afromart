@@ -121,15 +121,35 @@
 </section>
 
 <section class="py-5" style="background: var(--indigo-deep); color: #fff;">
-    <div class="container text-center">
-        <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal-light);">From the Same Kitchen</p>
-        <h2 class="text-white mb-3">Born from Faaji &amp; Brew Palace</h2>
-        <p class="mb-4" style="max-width: 640px; margin-left: auto; margin-right: auto; color: #cfc7da;">
-            AfroMart began inside our restaurant, when guests kept asking where to buy the fabrics on our walls and the spices in our kitchen.
-        </p>
-        <a href="{% url 'core:our_story' %}" class="btn btn-outline-light">Read Our Full Story</a>
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-md-6">
+                <img src="{% static 'img/story/our-story-homepage.01.jpg' %}" alt="Shoppers browsing at Faaji &amp; Brew AfroMart" class="w-100" style="height: 320px; object-fit: cover; border-radius: 4px;">
+            </div>
+            <div class="col-md-6">
+                <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal-light);">From the Same Kitchen</p>
+                <h2 class="text-white mb-3">Born from Faaji &amp; Brew Palace</h2>
+                <p class="mb-4" style="color: #cfc7da;">
+                    AfroMart began inside our restaurant, when guests kept asking where to buy the fabrics on our walls and the spices in our kitchen.
+                </p>
+                <a href="{% url 'core:our_story' %}" class="btn btn-outline-light">Read Our Full Story</a>
+            </div>
+        </div>
     </div>
 </section>
+<div class="newsletter-band">
+    <div class="container text-center">
+        <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal-light);">Stay in the Loop</p>
+        <h2 class="text-white mb-2">Get New Arrivals First</h2>
+        <p class="mb-4" style="color: #cfc7da;">One email a month, new products and stories from the diaspora, nothing else.</p>
+        <form method="post" action="{% url 'marketing:newsletter_signup' %}" class="d-flex justify-content-center gap-2 newsletter-form" style="max-width: 480px; margin: 0 auto;">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <input type="email" name="email" required class="form-control" placeholder="you@example.com" style="height: 50px;">
+            <button type="submit" class="btn btn-teal flex-shrink-0" style="height: 50px;">Subscribe</button>
+        </form>
+    </div>
+</div>
 
 {% endblock %}
 

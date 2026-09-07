@@ -20,7 +20,9 @@ def newsletter_signup(request):
         messages.info(request, message)
         return redirect(next_url)
 
-    form = NewsletterSignupForm(request.POST)
+    form_data = request.POST.copy()
+    form_data["email"] = email
+    form = NewsletterSignupForm(form_data)
     if not form.is_valid():
         messages.error(request, "Please enter a valid email address.")
         return redirect(next_url)

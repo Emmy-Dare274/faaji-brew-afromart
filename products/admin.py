@@ -14,7 +14,8 @@ class ProductVariantInline(admin.TabularInline):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ["name", "is_active"]
+    list_display = ["name", "is_active", "show_in_main_nav"]
+    list_editable = ["show_in_main_nav"]
     prepopulated_fields = {"slug": ("name",)}
 
 

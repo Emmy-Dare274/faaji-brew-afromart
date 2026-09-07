@@ -45,17 +45,42 @@ h1, h2, h3 {
     z-index: 1030;
 }
 
+/* Global button lift style. Applies to every Bootstrap button on the site, not just
+   one, so Add to Basket, Subscribe, Filter, and category pills all
+   share the same feel. */
+.btn {
+    transition: transform 0.15s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* cards */
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: perspective(700px) rotateX(3deg) translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Button  */
+
 .btn-teal {
     background: var(--teal);
-    color: #fff;
+    color: var(--ink);
     border: none;
+    font-weight: 600;
 }
 
 .btn-teal:hover {
     background: var(--teal-light);
-    color: #fff;
+    color: var(--ink);
 }
 
+/* Navs */
 .nav-dropdown { position: relative; }
 
 .nav-dropdown-menu {
@@ -123,8 +148,8 @@ h1, h2, h3 {
     position: relative;
     z-index: 1;
 }
-
-.hero-slide-1 { background-image: url('/static/img/hero/homepage-slider-hero-section-image-1.jpg'); }
+/* Hero sliders */
+.hero-slide-1 { background-image: url('/static/img/hero/homepage-slider-section01.jpg'); }
 .hero-slide-2 { background-image: url('/static/img/hero/homepage-slider-hero-section-image-2.jpg'); }
 .hero-slide-3 { background-image: url('/static/img/hero/homepage-slider-hero-section-image-3.jpg'); }
 
@@ -264,7 +289,7 @@ h1, h2, h3 {
 }
 /* Newsletter */
 .newsletter-band {
-    background: var(--indigo-deep);
+    background: linear-gradient(rgba(26, 26, 26, 0.72), rgba(26, 26, 26, 0.72)), linear-gradient(135deg, var(--indigo-mid), var(--indigo-deep));
     padding: 60px 0;
 }
 
@@ -331,6 +356,12 @@ h1, h2, h3 {
 }
 
 /* Mobile text sizes */
+@media (max-width: 400px) {
+    .newsletter-form {
+        flex-wrap: wrap;
+    }
+}
+
 @media (max-width: 576px) {
     .hero-caption h1.display-4 {
         font-size: 1.85rem;

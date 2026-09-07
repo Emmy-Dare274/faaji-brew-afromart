@@ -94,20 +94,6 @@
     {% block content %}
     {% endblock %}
 
-    <div class="newsletter-band">
-    <div class="container text-center">
-        <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal-light);">Stay in the Loop</p>
-        <h2 class="text-white mb-2">Get New Arrivals First</h2>
-        <p class="mb-4" style="color: #cfc7da;">One email a month, new products and stories from the diaspora, nothing else.</p>
-        <form method="post" action="{% url 'marketing:newsletter_signup' %}" class="d-flex flex-wrap justify-content-center gap-2" style="max-width: 440px; margin: 0 auto;">
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{{ request.path }}">
-            <input type="email" name="email" required class="form-control" placeholder="you@example.com" style="max-width: 260px;">
-            <button type="submit" class="btn btn-teal">Subscribe</button>
-        </form>
-    </div>
-</div>
-
 <footer class="footer-legal">
     <div class="container">
         <div class="row g-4 mb-3 pt-4">
