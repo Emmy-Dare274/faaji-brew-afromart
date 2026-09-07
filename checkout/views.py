@@ -3,6 +3,10 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+
+from .webhook_handler import StripeWH_Handler
 
 from basket.services import get_or_create_basket
 from .forms import OrderForm
@@ -63,3 +67,26 @@ def checkout_success(request, order_number):
 
     messages.success(request, f"Order successfully placed. Your order number is {order.order_number}.")
     return render(request, "checkout/checkout_success.html", {"order": order})
+
+
+@csrf_exempt
+def webhook(request):
+    """Stripe posts here directly, with no CSRF token, since it's
+    not a browser submitting a form, that's exactly what
+    csrf_exempt is for."""
+    payload = request.body
+    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
+
+    try:
+        event = stripe.Webhook.construct_event(payload, sig_header, settings.STRIPE_WEBHOOK_SECRET)
+    except ValueError:
+        return HttpResponse(status=400)
+    except stripe.SignatureVerificationError:
+        return HttpResponse(status=400)
+
+    handler = StripeWH_Handler(request)
+    event_map = {
+        "payment_intent.succeeded": handler.handle_payment_intent_succeeded,
+    }
+    event_handler = event_map.get(event["type"], handler.handle_event)
+    return event_handler(event)
