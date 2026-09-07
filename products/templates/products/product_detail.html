@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% block title %}{{ product.name }} | Faaji & Brew AfroMart{% endblock %}
+{% block meta_description %}{{ product.description|striptags|truncatechars:155 }}{% endblock %}
+{% block og_title %}{{ product.name }}{% endblock %}
+{% block og_description %}{{ product.description|striptags|truncatechars:155 }}{% endblock %}
+{% block og_image %}{% if product.primary_image %}<meta property="og:image" content="{{ product.primary_image.image.url }}">{% endif %}{% endblock %}
 
 {% block content %}
 <div class="container py-5">

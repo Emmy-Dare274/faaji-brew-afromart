@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Terms of Use | Faaji & Brew AfroMart{% endblock %}
+{% block meta_description %}The terms and conditions for shopping with Faaji & Brew AfroMart: accounts, orders, payment, delivery, returns, and reviews.{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal);">Legal</p>
+            <h1 class="mb-4">Terms of Use</h1>
+            <p class="text-muted">Last updated: September 2026</p>
+
+            <p>These terms apply whenever you browse, create an account on, or place an
+            order through Faaji &amp; Brew AfroMart (the "Site"). By using the Site you agree
+            to them. If you don't agree, please don't use the Site.</p>
+
+            <h2 class="h4 mt-5">1. Who we are</h2>
+            <p>Faaji &amp; Brew AfroMart is a business-to-consumer (B2C) online retailer selling
+            authentic West African fabrics, spices, jewellery, homeware, and traditional wear,
+            sourced directly from makers and traders across West Africa. We are the retail
+            extension of Faaji &amp; Brew Palace.</p>
+
+            <h2 class="h4 mt-5">2. Accounts</h2>
+            <p>You can browse products and build a basket without an account. Registration is
+            required to complete checkout, so we have somewhere to send order confirmations
+            and so you can view your order history. You're responsible for keeping your login
+            details confidential and for anything that happens under your account.</p>
+
+            <h2 class="h4 mt-5">3. Orders, pricing &amp; payment</h2>
+            <p>Prices are shown in USD and include any tax already factored into the listed
+            price. Placing an order is an offer to buy; we confirm acceptance by email once
+            payment succeeds. Occasionally a product's stock or price may change between
+            browsing and checkout &mdash; if that happens before payment is taken, we'll let you
+            know before completing the order.</p>
+            <p>Payments are processed securely by Stripe. We never see or store your full card
+            number, expiry date, or CVC &mdash; those go directly to Stripe, which is independently
+            certified to the PCI-DSS standard used across the payments industry.</p>
+
+            <h2 class="h4 mt-5">4. Delivery</h2>
+            <p>We deliver worldwide to the address you provide at checkout. Delivery estimates
+            shown on the Site are our best expectation, not a guarantee, since international
+            shipping can be affected by customs and carrier delays outside our control.</p>
+
+            <h2 class="h4 mt-5">5. Returns &amp; refunds</h2>
+            <p>You have 14 days from delivery to return an item that isn't right for you,
+            unused and in its original packaging, for a full refund of the item price. Contact
+            us at <a href="mailto:emmy4toz2010@gmail.com">emmy4toz2010@gmail.com</a> to start a
+            return.</p>
+
+            <h2 class="h4 mt-5">6. Product reviews</h2>
+            <p>If you've purchased a product, you may leave a written review and star rating on
+            its product page. Reviews must be your own genuine experience of the product &mdash;
+            we don't allow offensive, defamatory, or unrelated content, and reviews may be
+            moderated or removed by staff where they break these rules. You can edit or delete
+            your own review at any time from the product page.</p>
+
+            <h2 class="h4 mt-5">7. Intellectual property</h2>
+            <p>Product photography, written descriptions, and the AfroMart brand and logo
+            belong to Faaji &amp; Brew AfroMart or the artisans we source from, and may not be
+            reused without permission.</p>
+
+            <h2 class="h4 mt-5">8. Limitation of liability</h2>
+            <p>We provide the Site "as is" and aren't liable for losses that fall outside what's
+            reasonably foreseeable from using it, except where liability can't be limited by
+            law (for example, for fraud or for death or personal injury caused by our
+            negligence).</p>
+
+            <h2 class="h4 mt-5">9. Changes to these terms</h2>
+            <p>We may update these terms as the Site grows. The "Last updated" date at the top
+            of this page will always reflect the current version.</p>
+
+            <h2 class="h4 mt-5">10. Contact</h2>
+            <p>Questions about these terms? Email us at
+            <a href="mailto:emmy4toz2010@gmail.com">emmy4toz2010@gmail.com</a>.</p>
+
+            <p class="mt-5"><a href="{% url 'core:privacy_policy' %}">See also our Privacy Policy &rarr;</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

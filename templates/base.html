@@ -6,6 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Faaji & Brew AfroMart{% endblock %}</title>
 
+    <meta name="description" content="{% block meta_description %}Faaji & Brew AfroMart: authentic West African fabrics, spices, beads, and homeware, sourced directly from makers and shipped worldwide.{% endblock %}">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    <!-- Mete tags -->
+    <meta property="og:site_name" content="Faaji & Brew AfroMart">
+    <meta property="og:title" content="{% block og_title %}Faaji & Brew AfroMart{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Authentic West African fabrics, spices, beads, and homeware, sourced directly from makers and shipped worldwide.{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    {% block og_image %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/hero/homepage-slider-hero-section-image-1.jpg' %}">{% endblock %}
+    <meta name="twitter:card" content="summary_large_image">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
@@ -149,21 +160,36 @@
                 <h6 class="text-white text-uppercase small fw-bold mb-3">Company</h6>
                 <ul class="list-unstyled">
                     <li class="mb-2"><a href="{% url 'core:our_story' %}" class="footer-link">Our Story</a></li>
-                    <li class="mb-2"><a href="#" class="footer-link">Terms of Use</a></li>
-                    <li class="mb-2"><a href="#" class="footer-link">Privacy Policy</a></li>
+                    <li class="mb-2"><a href="{% url 'core:terms_of_use' %}" class="footer-link">Terms of Use</a></li>
+                    <li class="mb-2"><a href="{% url 'core:privacy_policy' %}" class="footer-link">Privacy Policy</a></li>
                     <li class="mb-2"><a href="https://www.facebook.com/share/17QgB9TWdd/" target="_blank" rel="noopener noreferrer nofollow" class="footer-link">Facebook Business Page</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom d-flex flex-wrap justify-content-between gap-2 py-3">
             <span>&copy; 2026 Faaji &amp; Brew AfroMart. All rights reserved. By Emmanuel Oluwadare</span>
-            <span style="color: var(--teal-light); font-weight: 600;">www.faajibrewafromart.com</span>
+            <span class="d-flex align-items-center gap-3">
+                <button type="button" id="manageCookiesBtn" class="btn btn-link btn-sm p-0 footer-link text-decoration-underline">Manage Cookie Preferences</button>
+                <span style="color: var(--teal-light); font-weight: 600;">www.faajibrewafromart.com</span>
+            </span>
         </div>
     </div>
 </footer>
+<!-- cookie consent -->
+<div id="cookieConsentBanner" class="cookie-consent-banner" role="dialog" aria-label="Cookie preferences" hidden>
+    <div class="container d-flex flex-wrap align-items-center justify-content-between gap-3 py-3">
+        <p class="mb-0 small">
+            We use strictly necessary cookies to keep you logged in and remember your basket.
+            We don't use these for advertising or tracking. Read our
+            <a href="{% url 'core:privacy_policy' %}" class="footer-link text-decoration-underline">Privacy Policy</a>.
+        </p>
+        <div class="d-flex gap-2 flex-shrink-0">
+            <button type="button" id="cookieEssentialOnlyBtn" class="btn btn-outline-light btn-sm">Essential Only</button>
+            <button type="button" id="cookieAcceptAllBtn" class="btn btn-teal btn-sm">Accept All</button>
+        </div>
+    </div>
+</div>
     <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Scroll to top">
-        <i class="bi bi-arrow-up"></i>
-    </button>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -178,5 +204,6 @@
     <script src="{% static 'js/site.js' %}"></script>
     <script src="{% static 'js/wishlist.js' %}"></script>
     <script src="{% static 'js/basket.js' %}"></script>
+    <script src="{% static 'js/cookie-consent.js' %}"></script>
 </body>
 </html>

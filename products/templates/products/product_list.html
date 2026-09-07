@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block title %}{% if page_title %}{{ page_title }}{% elif category %}{{ category.name }}{% elif query %}Search results for "{{ query }}"{% else %}Shop All Products{% endif %} | Faaji & Brew AfroMart{% endblock %}
+{% block meta_description %}{% if page_title %}{{ page_title }} at Faaji & Brew AfroMart — authentic West African products at limited-time prices.{% elif category %}Shop {{ category.name }} at Faaji & Brew AfroMart, sourced directly from West African makers and shipped worldwide.{% elif query %}Search results for "{{ query }}" at Faaji & Brew AfroMart.{% else %}Browse the full Faaji & Brew AfroMart catalogue: fabrics, spices, beads, jewellery, homeware, and traditional wear.{% endif %}{% endblock %}
+
 
 {% block content %}
 <div class="container py-5">
