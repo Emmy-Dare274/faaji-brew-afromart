@@ -192,11 +192,9 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": "afromart.storage.NonStrictManifestStaticFilesStorage",
     },
 }
-
-STATICFILES_STORAGE = "afromart.storage.NonStrictManifestStaticFilesStorage"
 
 
 MEDIA_URL = "/media/"
