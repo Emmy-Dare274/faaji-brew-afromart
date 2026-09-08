@@ -228,8 +228,20 @@ h1, h2, h3 {
     flex-shrink: 0;
 }
 
-/* Deliberately its own bright colour, not the site's teal, since the
-   entire point of this banner is to grab attention on its own, not
+@media (max-width: 576px) {
+    .mini-cart-dropdown {
+        position: fixed;
+        top: auto;
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+        width: auto;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+}
+
+/* Deliberately its own bright colour, to grab attention on its own, not
    blend into the rest of the page. */
 .free-delivery-banner {
     background: #F5C518;
@@ -391,11 +403,21 @@ h1, h2, h3 {
     padding: 60px 0;
 }
 
-/* Shared treatment for every real product or category photo, so
+/* PRODUCT PHOTO: shared treatment for every real product or category photo, so
    nothing is cropped.*/
 .product-photo {
     object-fit: contain;
     background: #F3EFE6;
+}
+
+.product-main-image {
+    height: 420px;
+}
+
+@media (max-width: 576px) {
+    .product-main-image {
+        height: 280px;
+    }
 }
 
 .category-bar {
@@ -454,7 +476,7 @@ h1, h2, h3 {
 }
 
 /* Mobile text sizes */
-@media (max-width: 400px) {
+@media (max-width: 576px) {
     .newsletter-form {
         flex-wrap: wrap;
     }

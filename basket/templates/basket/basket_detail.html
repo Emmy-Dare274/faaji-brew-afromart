@@ -8,28 +8,32 @@
 
     {% if basket.items.all %}
         {% for item in basket.items.all %}
-        <div class="d-flex align-items-center gap-3 border-bottom py-3">
-            {% with item.product.primary_image as image %}
-                {% if image %}
-                    <img src="{{ image.image.url }}" alt="{{ item.product.name }}" class="product-photo" style="width: 80px; height: 80px;">
-                {% else %}
-                    <div style="width: 80px; height: 80px; background: var(--indigo-deep);"></div>
-                {% endif %}
-            {% endwith %}
-            <div class="flex-grow-1">
-                <p class="fw-semibold mb-1">{{ item.product.name }}</p>
-                {% if item.variant %}<p class="small text-muted mb-1">{{ item.variant.get_variant_type_display }}: {{ item.variant.value }}</p>{% endif %}
-                <form method="post" action="{% url 'basket:update_basket_item' item.id %}" class="d-flex align-items-center gap-2">
+        <div class="d-flex flex-wrap align-items-center gap-3 border-bottom py-3">
+            <div class="d-flex align-items-center gap-3 flex-grow-1" style="min-width: 220px;">
+                {% with item.product.primary_image as image %}
+                    {% if image %}
+                        <img src="{{ image.image.url }}" alt="{{ item.product.name }}" class="product-photo flex-shrink-0" style="width: 80px; height: 80px;">
+                    {% else %}
+                        <div class="flex-shrink-0" style="width: 80px; height: 80px; background: var(--indigo-deep);"></div>
+                    {% endif %}
+                {% endwith %}
+                <div>
+                    <p class="fw-semibold mb-1">{{ item.product.name }}</p>
+                    {% if item.variant %}<p class="small text-muted mb-1">{{ item.variant.get_variant_type_display }}: {{ item.variant.value }}</p>{% endif %}
+                    <form method="post" action="{% url 'basket:update_basket_item' item.id %}" class="d-flex align-items-center gap-2">
+                        {% csrf_token %}
+                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control form-control-sm" style="width: 70px;">
+                        <button type="submit" class="btn btn-sm btn-outline-dark">Update</button>
+                    </form>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-3 ms-auto">
+                <p class="fw-bold mb-0 text-end" style="min-width: 70px;">${{ item.line_total|floatformat:2 }}</p>
+                <form method="post" action="{% url 'basket:remove_basket_item' item.id %}">
                     {% csrf_token %}
-                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control form-control-sm" style="width: 70px;">
-                    <button type="submit" class="btn btn-sm btn-outline-dark">Update</button>
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
                 </form>
             </div>
-            <p class="fw-bold mb-0" style="width: 90px;">${{ item.line_total|floatformat:2 }}</p>
-            <form method="post" action="{% url 'basket:remove_basket_item' item.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
-            </form>
         </div>
         {% endfor %}
 
