@@ -5,8 +5,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.urls import reverse
 
+from basket.services import get_or_create_basket, add_item
+from checkout.models import Order
 from products.models import Product
-from .models import WishList, WishListItem
+from .forms import ProfileForm
+from .models import UserProfile, WishList, WishListItem
 
 
 @login_required
@@ -49,3 +52,61 @@ def toggle_wishlist(request, product_slug):
         f"Added {product.name} to your favourites." if wishlisted else f"Removed {product.name} from your favourites.",
     )
     return redirect(request.POST.get("next") or "core:home")
+
+@login_required
+def my_account(request):
+
+    """ View and edit saved default delivery details. The profile
+    is created on first visit if it doesn't exist yet, rather than
+    requiring a signal or a data migration for existing users. """
+
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your details have been updated.")
+            return redirect("profiles:my_account")
+    else:
+        form = ProfileForm(instance=profile)
+
+    recent_orders = request.user.orders.all()[:3]
+    return render(request, "profiles/my_account.html", {"form": form, "recent_orders": recent_orders})
+
+
+@login_required
+def order_history(request):
+    orders = request.user.orders.all().prefetch_related("lineitems__product", "lineitems__variant")
+    return render(request, "profiles/order_history.html", {"orders": orders})
+
+
+@login_required
+@require_POST
+def reorder(request, order_number):
+
+    """ Adds every item from a past order back into the current
+    basket in one go. Skips anything that's since been discontinued
+    or sold out rather than failing the whole reorder, and tells the
+    customer exactly what was skipped and why. """
+
+    order = get_object_or_404(Order, order_number=order_number, user=request.user)
+    basket = get_or_create_basket(request)
+
+    added, skipped = 0, []
+    for item in order.lineitems.all():
+        if item.product.is_active and item.product.in_stock:
+            add_item(basket, item.product, item.variant, item.quantity)
+            added += 1
+        else:
+            skipped.append(item.product.name)
+
+    if added:
+        messages.success(
+            request,
+            f"Added {added} item{'s' if added != 1 else ''} from order {order.order_number} to your basket.",
+        )
+    if skipped:
+        messages.warning(request, f"Couldn't add (no longer available): {', '.join(skipped)}.")
+
+    return redirect("basket:basket_detail")

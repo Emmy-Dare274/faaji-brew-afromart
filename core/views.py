@@ -1,7 +1,11 @@
-from django.shortcuts import render
+from django.conf import settings
+from django.contrib import messages
+from django.core.mail import EmailMessage
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from products.models import Category, Product, Review
+from .forms import ContactForm
 
 
 def home(request):
@@ -47,3 +51,37 @@ def robots_txt(request):
         "core/robots.txt", {"domain": request.build_absolute_uri("/")[:-1]}
     )
     return HttpResponse(content, content_type="text/plain")
+
+def delivery_returns(request):
+    return render(request, "core/delivery_returns.html")
+
+
+def faq(request):
+    return render(request, "core/faq.html")
+
+
+def contact_us(request):
+
+    """ A real contact form, it sends an actual email through the same 
+    SMTP backend that already sends order confirmations and newsletter 
+    emails, straight to the business inbox. """
+
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            email = EmailMessage(
+                subject=f"AfroMart contact form message from {form.cleaned_data['name']}",
+                body=(
+                    f"From: {form.cleaned_data['name']} <{form.cleaned_data['email']}>\n\n"
+                    f"{form.cleaned_data['message']}"
+                ),
+                to=[settings.DEFAULT_FROM_EMAIL],
+                reply_to=[form.cleaned_data["email"]],
+            )
+            email.send()
+            messages.success(request, "Thanks for reaching out — we'll get back to you soon.")
+            return redirect("core:contact_us")
+    else:
+        form = ContactForm()
+
+    return render(request, "core/contact_us.html", {"form": form})

@@ -1,6 +1,29 @@
 from django.db import models
 from django.conf import settings
+from django_countries.fields import CountryField
 from products.models import Product
+
+
+class UserProfile(models.Model):
+
+    """ Saved default delivery details, so a returning customer
+    doesn't have to retype their address at every checkout. Filled
+    in automatically the first time someone completes an order, and
+    editable any time from My Account. """
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
+    )
+    default_full_name = models.CharField(max_length=100, blank=True)
+    default_phone_number = models.CharField(max_length=30, blank=True)
+    default_address_line1 = models.CharField(max_length=150, blank=True)
+    default_address_line2 = models.CharField(max_length=150, blank=True)
+    default_town_or_city = models.CharField(max_length=100, blank=True)
+    default_postcode = models.CharField(max_length=20, blank=True)
+    default_country = CountryField(blank=True, blank_label="Select country")
+
+    def __str__(self):
+        return f"Profile for {self.user.username}"
 
 
 class WishList(models.Model):

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Contact Us | Faaji & Brew AfroMart{% endblock %}
+{% block meta_description %}Get in touch with Faaji & Brew AfroMart — our address, phone number, and a contact form that reaches us directly.{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal);">Customer Service</p>
+        <h1>Get in Touch</h1>
+    </div>
+
+    <div class="row g-5 align-items-stretch mb-5">
+        <div class="col-lg-6">
+            <img src="{% static 'img/contact/contact-us.jpg' %}" alt="A Faaji & Brew AfroMart team member at the store counter" class="w-100 h-100" style="aspect-ratio: 3 / 2; object-fit: cover; border-radius: 4px;">
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm p-3 p-md-4 h-100">
+                <h2 class="h5 mb-3">Visit or Reach Us</h2>
+                <p class="mb-3"><i class="bi bi-geo-alt-fill" style="color: var(--teal);"></i> 14B Adeola Odeku Street, Victoria Island, Lagos, Nigeria</p>
+                <p class="mb-3"><i class="bi bi-telephone-fill" style="color: var(--teal);"></i> +234 1 234 5678</p>
+                <p class="mb-3"><i class="bi bi-envelope-fill" style="color: var(--teal);"></i> <a href="mailto:emmy4toz2010@gmail.com">emmy4toz2010@gmail.com</a></p>
+                <p class="mb-4"><i class="bi bi-clock-fill" style="color: var(--teal);"></i> Monday &ndash; Saturday, 9am &ndash; 6pm WAT</p>
+                <div class="ratio ratio-4x3">
+                    <iframe src="https://maps.google.com/maps?q=Victoria%20Island%2C%20Lagos%2C%20Nigeria&z=14&output=embed" style="border:0; border-radius: 4px;" loading="lazy" title="Map of Victoria Island, Lagos"></iframe>
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Victoria+Island%2C+Lagos%2C+Nigeria" target="_blank" rel="noopener noreferrer" class="small mt-2">Open in Google Maps &rarr;</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm p-3 p-md-4">
+                <h2 class="h5 mb-3">Send Us a Message</h2>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-teal">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

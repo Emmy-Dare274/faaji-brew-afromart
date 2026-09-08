@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Order History | Faaji & Brew AfroMart{% endblock %}
+{% block meta_description %}View your past Faaji & Brew AfroMart orders and reorder your favourites in one click.{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Order History</h1>
+
+    {% for order in orders %}
+    <div class="card border-0 shadow-sm p-3 p-md-4 mb-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3 pb-3 border-bottom">
+            <div>
+                <p class="mb-0 fw-semibold">Order {{ order.order_number }}</p>
+                <p class="mb-0 small text-muted">{{ order.created_at|date:"d M Y" }} &middot; {{ order.get_status_display }}</p>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <p class="mb-0 fw-bold">${{ order.grand_total }}</p>
+                <form method="post" action="{% url 'profiles:reorder' order.order_number %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-dark btn-sm">Reorder</button>
+                </form>
+            </div>
+        </div>
+        {% for item in order.lineitems.all %}
+        <div class="d-flex flex-wrap justify-content-between align-items-center py-2 gap-2">
+            <div>
+                <a href="{% url 'products:product_detail' item.product.slug %}" class="text-decoration-none" style="color: var(--ink);">
+                    <span class="fw-semibold">{{ item.product.name }}</span>{% if item.variant %} &middot; {{ item.variant.value }}{% endif %}
+                </a>
+                <p class="mb-0 small text-muted">Qty {{ item.quantity }} &times; ${{ item.price_at_purchase }}</p>
+            </div>
+            <a href="{% url 'products:product_detail' item.product.slug %}#reviews" class="small flex-shrink-0">Leave a Review</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% empty %}
+    <p class="text-muted">You haven't placed any orders yet. <a href="{% url 'products:product_list' %}">Start shopping</a>.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Delivery & Returns | Faaji & Brew AfroMart{% endblock %}
+{% block meta_description %}Delivery times, costs, and our 14-day return policy for Faaji & Brew AfroMart orders.{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal);">Customer Service</p>
+            <h1 class="mb-4">Delivery &amp; Returns</h1>
+
+            <h2 class="h4 mt-4">Delivery</h2>
+            <p>We ship worldwide from our West African suppliers to your door.</p>
+            <ul>
+                <li><strong>Free delivery</strong> on orders over $60.</li>
+                <li><strong>Standard delivery</strong> costs $4.99 on orders under $60.</li>
+                <li>Estimated delivery time is 5&ndash;10 business days internationally, depending on your country and customs processing.</li>
+            </ul>
+            <p>You'll get an email confirmation the moment your order is placed, and you can see your full order history any time from <a href="{% url 'profiles:order_history' %}">My Account</a>.</p>
+
+            <h2 class="h4 mt-5">Returns</h2>
+            <p>You have <strong>14 days from delivery</strong> to return an item that isn't right for you, unused and in its original packaging, for a full refund of the item price.</p>
+            <p>To start a return, email us at <a href="mailto:emmy4toz2010@gmail.com">emmy4toz2010@gmail.com</a> with your order number and we'll take it from there.</p>
+
+            <p class="mt-5"><a href="{% url 'core:faq' %}">See our full FAQ &rarr;</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

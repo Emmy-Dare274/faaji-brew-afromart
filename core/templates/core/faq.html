@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}FAQs | Faaji & Brew AfroMart{% endblock %}
+{% block meta_description %}Answers to common questions about ordering, delivery, returns, and reviews at Faaji & Brew AfroMart.{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <p class="text-uppercase small fw-bold mb-2" style="color: var(--teal);">Customer Service</p>
+            <h1 class="mb-4">Frequently Asked Questions</h1>
+
+            <div class="accordion" id="faqAccordion">
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            What payment methods do you accept?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">We accept all major debit and credit cards through Stripe, our secure payment processor. We never see or store your card details.</div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            Do you ship internationally?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Yes, we ship worldwide. Delivery is free on orders over $60, or $4.99 otherwise. See <a href="{% url 'core:delivery_returns' %}">Delivery &amp; Returns</a> for details.</div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            How do I track my order?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Go to <a href="{% url 'profiles:order_history' %}">My Account &rarr; Order History</a> to see every order you've placed, its status, and what was in it.</div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                            What is your return policy?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">You have 14 days from delivery to return an unused item in its original packaging for a full refund. Email <a href="mailto:emmy4toz2010@gmail.com">emmy4toz2010@gmail.com</a> to start a return.</div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                            How do I leave a product review?
+                        </button>
+                    </h2>
+                    <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Once you've purchased a product, a review form appears on that product's page while you're signed in. Reviews are checked by our team before they go live, which usually takes a day or two.</div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                            Are your products authentic?
+                        </button>
+                    </h2>
+                    <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Yes. Every product is sourced directly from West African makers and traders, the same suppliers behind our sister restaurant, Faaji &amp; Brew Palace.</div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+                            I still have a question &mdash; how do I reach you?
+                        </button>
+                    </h2>
+                    <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Head to our <a href="{% url 'core:contact_us' %}">Contact Us</a> page, or email <a href="mailto:emmy4toz2010@gmail.com">emmy4toz2010@gmail.com</a> directly.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

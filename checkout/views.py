@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .webhook_handler import StripeWH_Handler
 
 from basket.services import get_or_create_basket
+from profiles.models import UserProfile
 from .forms import OrderForm
 from .models import Order
 from .services import create_order_from_basket
@@ -32,6 +33,19 @@ def checkout(request):
         if form.is_valid():
             order = create_order_from_basket(request.user, basket, form.cleaned_data)
 
+            UserProfile.objects.update_or_create(
+                user=request.user,
+                defaults={
+                    "default_full_name": form.cleaned_data["full_name"],
+                    "default_phone_number": form.cleaned_data["phone_number"],
+                    "default_address_line1": form.cleaned_data["address_line1"],
+                    "default_address_line2": form.cleaned_data["address_line2"],
+                    "default_town_or_city": form.cleaned_data["town_or_city"],
+                    "default_postcode": form.cleaned_data["postcode"],
+                    "default_country": form.cleaned_data["country"],
+                },
+            )
+
             intent = stripe.PaymentIntent.create(
                 amount=int(order.grand_total * 100),
                 currency="usd",
@@ -48,7 +62,21 @@ def checkout(request):
             return render(request, "checkout/checkout_payment.html", context)
         messages.error(request, "Please correct the errors below.")
     else:
-        form = OrderForm(initial={"email": request.user.email, "full_name": request.user.username})
+        initial = {"email": request.user.email, "full_name": request.user.username}
+        try:
+            profile = request.user.profile
+            initial.update({
+                "full_name": profile.default_full_name or request.user.username,
+                "phone_number": profile.default_phone_number,
+                "address_line1": profile.default_address_line1,
+                "address_line2": profile.default_address_line2,
+                "town_or_city": profile.default_town_or_city,
+                "postcode": profile.default_postcode,
+                "country": profile.default_country,
+            })
+        except UserProfile.DoesNotExist:
+            pass
+        form = OrderForm(initial=initial)
 
     return render(request, "checkout/checkout.html", {"form": form, "basket": basket})
 
@@ -71,9 +99,7 @@ def checkout_success(request, order_number):
 
 @csrf_exempt
 def webhook(request):
-    """Stripe posts here directly, with no CSRF token, since it's
-    not a browser submitting a form, that's exactly what
-    csrf_exempt is for."""
+    """Stripe posts here directly, with no CSRF token."""
     payload = request.body
     sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
 

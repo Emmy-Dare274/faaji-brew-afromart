@@ -76,7 +76,6 @@ def product_detail(request, product_slug):
         has_purchased = Order.objects.filter(
             user=request.user, lineitems__product=product
         ).exists()
-        approved_reviews = approved_reviews.exclude(user=request.user)
 
     context = {
         "product": product,

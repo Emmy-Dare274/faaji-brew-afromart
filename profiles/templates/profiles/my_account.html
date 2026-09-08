@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}My Account | Faaji & Brew AfroMart{% endblock %}
+{% block meta_description %}Manage your saved delivery details and view your recent Faaji & Brew AfroMart orders.{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">My Account</h1>
+    <div class="row g-5">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm p-3 p-md-4">
+                <h2 class="h5 mb-2">Your Details</h2>
+                <p class="text-muted small mb-3">Saved here automatically every time you complete an order — or fill it in yourself so checkout is quicker next time.</p>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-teal">Save Details</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm p-3 p-md-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h5 mb-0">Recent Orders</h2>
+                    <a href="{% url 'profiles:order_history' %}" class="small">View all</a>
+                </div>
+                {% for order in recent_orders %}
+                <div class="d-flex justify-content-between py-2 border-bottom">
+                    <div>
+                        <p class="mb-0 small fw-semibold">{{ order.order_number|truncatechars:16 }}</p>
+                        <p class="mb-0 small text-muted">{{ order.created_at|date:"d M Y" }}</p>
+                    </div>
+                    <p class="mb-0 small fw-semibold">${{ order.grand_total }}</p>
+                </div>
+                {% empty %}
+                <p class="text-muted small mb-0">No orders yet. <a href="{% url 'products:product_list' %}">Start shopping</a>.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
