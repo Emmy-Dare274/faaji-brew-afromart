@@ -1,0 +1,4 @@
+{% load allauth %}
+<button type="{{ attrs.type|default:'submit' }}" class="btn btn-teal {{ attrs.class }}">
+    {% slot %}{% endslot %}
+</button>

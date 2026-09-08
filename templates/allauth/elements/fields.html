@@ -1,0 +1,10 @@
+{% load allauth %}
+{% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+{% if form.non_field_errors %}
+{% element alert level="danger" %}
+    {{ form.non_field_errors|striptags }}
+{% endelement %}
+{% endif %}
+{% for field in form.visible_fields %}
+{% element field field=field %}{% endelement %}
+{% endfor %}

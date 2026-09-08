@@ -1,0 +1,4 @@
+{% load allauth %}
+<div class="alert alert-{{ attrs.level|default:'info' }}" role="alert">
+    {% slot %}{% endslot %}
+</div>

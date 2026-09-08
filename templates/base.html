@@ -122,8 +122,10 @@
     </nav>
 
     <main class="site-main">
+    {% block content_before %}{% endblock %}
     {% block content %}
     {% endblock %}
+    {% block content_after %}{% endblock %}
     </main>
 
 <footer class="footer-legal">
