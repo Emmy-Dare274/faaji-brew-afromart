@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "cloudinary",
     "django.contrib.sites",
     "django.contrib.sitemaps",
+    "django_countries",
     "allauth",
     "allauth.account",
     "core",
@@ -65,6 +66,11 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
+
+# Puts AfroMart's actual customer base up front in the country
+# dropdown instead of making everyone scroll to it alphabetically.
+COUNTRIES_FIRST = ["NG", "GH", "IE", "GB", "US"]
+
 
 CLOUDINARY_STORAGE = {
     "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),

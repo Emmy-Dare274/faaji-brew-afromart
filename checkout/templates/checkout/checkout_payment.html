@@ -1,15 +1,55 @@
 {% extends "base.html" %}
 
+{% block title %}Payment | Faaji & Brew AfroMart{% endblock %}
+{% block meta_description %}Complete your Faaji & Brew AfroMart payment securely via Stripe.{% endblock %}
+
 {% block content %}
 <div class="container py-5">
     <h1 class="mb-4">Payment</h1>
-    <p>Order <strong>{{ order.order_number }}</strong>, total <strong>${{ order.grand_total|floatformat:2 }}</strong></p>
-    <div class="col-md-6">
-        <form id="payment-form">
-            <div id="card-element" class="form-control mb-3" style="height: 50px; padding-top: 14px;"></div>
-            <div id="card-errors" class="text-danger small mb-3" role="alert"></div>
-            <button id="submit-payment" class="btn btn-teal btn-lg" type="submit">Pay ${{ order.grand_total|floatformat:2 }}</button>
-        </form>
+    <div class="row g-5">
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm p-3 p-md-4">
+                <p class="text-muted small mb-3"><i class="bi bi-lock-fill"></i> Payments are processed securely by Stripe. We never see or store your card details.</p>
+                <form id="payment-form">
+                    {% csrf_token %}
+                    <label class="form-label fw-semibold">Card details</label>
+                    <div id="card-element" class="form-control mb-3" style="height: 50px; padding-top: 14px;"></div>
+                    <div id="card-errors" class="text-danger small mb-3" role="alert"></div>
+                    <button id="submit-payment" class="btn btn-teal btn-lg w-100" type="submit">
+                        <span id="payBtnSpinner" class="spinner-border spinner-border-sm me-2 d-none" role="status" aria-hidden="true"></span>
+                        <span id="payBtnText">Pay ${{ order.grand_total|floatformat:2 }}</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm p-3 p-md-4">
+                <h2 class="h5 mb-3">Order Summary</h2>
+                <p class="text-muted small mb-3">Order {{ order.order_number }}</p>
+                {% for item in order.lineitems.all %}
+                <div class="d-flex justify-content-between align-items-start py-2 border-bottom">
+                    <div>
+                        <p class="mb-0 fw-semibold small">{{ item.product.name }}{% if item.variant %} &middot; {{ item.variant.value }}{% endif %}</p>
+                        <p class="mb-0 small text-muted">Qty {{ item.quantity }} &times; ${{ item.price_at_purchase }}</p>
+                    </div>
+                    <p class="mb-0 fw-semibold small flex-shrink-0 ms-3">${{ item.lineitem_total }}</p>
+                </div>
+                {% endfor %}
+                <div class="d-flex justify-content-between pt-3">
+                    <span>Subtotal</span>
+                    <span>${{ order.order_total }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Delivery</span>
+                    <span>{% if order.delivery_cost %}${{ order.delivery_cost }}{% else %}Free{% endif %}</span>
+                </div>
+                <div class="d-flex justify-content-between fw-bold fs-5 pt-2 mt-2 border-top">
+                    <span>Total</span>
+                    <span>${{ order.grand_total }}</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -28,15 +68,25 @@
 
     document.getElementById("payment-form").addEventListener("submit", function (event) {
         event.preventDefault();
-        document.getElementById("submit-payment").disabled = true;
+
+        var submitBtn = document.getElementById("submit-payment");
+        var spinner = document.getElementById("payBtnSpinner");
+        var btnText = document.getElementById("payBtnText");
+
+        submitBtn.disabled = true;
+        spinner.classList.remove("d-none");
+        btnText.textContent = "Processing payment\u2026";
 
         stripe.confirmCardPayment("{{ client_secret }}", {
             payment_method: { card: card }
         }).then(function (result) {
             if (result.error) {
                 document.getElementById("card-errors").textContent = result.error.message;
-                document.getElementById("submit-payment").disabled = false;
+                submitBtn.disabled = false;
+                spinner.classList.add("d-none");
+                btnText.textContent = "Pay ${{ order.grand_total|floatformat:2 }}";
             } else if (result.paymentIntent.status === "succeeded") {
+                btnText.textContent = "Payment confirmed \u2014 redirecting\u2026";
                 window.location.href = "{% url 'checkout:checkout_success' order.order_number %}";
             }
         });

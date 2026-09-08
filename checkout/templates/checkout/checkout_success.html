@@ -47,13 +47,14 @@
                 <p class="mb-0">{{ order.full_name }}</p>
                 <p class="mb-0">{{ order.address_line1 }}{% if order.address_line2 %}, {{ order.address_line2 }}{% endif %}</p>
                 <p class="mb-0">{{ order.town_or_city }}, {{ order.postcode }}</p>
-                <p class="mb-0">{{ order.country }}</p>
+                <p class="mb-0">{{ order.country.name }}</p>
             </div>
 
             <p class="text-center text-muted small mb-4">Once it arrives, we'd love to hear what you think — you can leave a review from the product page ⭐</p>
 
-            <div class="text-center">
+            <div class="text-center d-flex flex-wrap gap-2 justify-content-center">
                 <a href="{% url 'products:product_list' %}" class="btn btn-teal btn-lg">Keep Shopping</a>
+                <a href="{% url 'products:special_offers' %}" class="btn btn-outline-dark btn-lg"><i class="bi bi-gift"></i> Check Latest Deals</a>
             </div>
         </div>
     </div>

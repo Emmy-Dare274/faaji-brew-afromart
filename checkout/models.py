@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.db import models
+from django_countries.fields import CountryField
 
 from products.models import Product, ProductVariant
 from basket.models import FREE_DELIVERY_THRESHOLD, STANDARD_DELIVERY_COST
@@ -33,7 +34,7 @@ class Order(models.Model):
     address_line2 = models.CharField(max_length=150, blank=True)
     town_or_city = models.CharField(max_length=100)
     postcode = models.CharField(max_length=20)
-    country = models.CharField(max_length=60)
+    country = CountryField(blank_label="Select country")
 
     order_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     delivery_cost = models.DecimalField(max_digits=8, decimal_places=2, default=0)
