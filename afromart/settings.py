@@ -196,6 +196,11 @@ STORAGES = {
     },
 }
 
+# django-cloudinary-storage's own collectstatic override reads this
+# legacy attribute directly rather than the STORAGES dict above, so
+# both have to exist and stay in sync.
+STATICFILES_STORAGE = "afromart.storage.NonStrictManifestStaticFilesStorage"
+
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
