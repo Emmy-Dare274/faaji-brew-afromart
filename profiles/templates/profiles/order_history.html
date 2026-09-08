@@ -24,11 +24,20 @@
         </div>
         {% for item in order.lineitems.all %}
         <div class="d-flex flex-wrap justify-content-between align-items-center py-2 gap-2">
-            <div>
-                <a href="{% url 'products:product_detail' item.product.slug %}" class="text-decoration-none" style="color: var(--ink);">
-                    <span class="fw-semibold">{{ item.product.name }}</span>{% if item.variant %} &middot; {{ item.variant.value }}{% endif %}
-                </a>
-                <p class="mb-0 small text-muted">Qty {{ item.quantity }} &times; ${{ item.price_at_purchase }}</p>
+            <div class="d-flex align-items-center gap-2">
+                {% with item.product.primary_image as image %}
+                    {% if image %}
+                        <img src="{{ image.image.url }}" alt="{{ item.product.name }}" style="width: 50px; height: 50px; object-fit: contain; background: #f5f2ea; flex-shrink: 0;">
+                    {% else %}
+                        <div style="width: 50px; height: 50px; background: var(--indigo-deep); flex-shrink: 0;"></div>
+                    {% endif %}
+                {% endwith %}
+                <div>
+                    <a href="{% url 'products:product_detail' item.product.slug %}" class="text-decoration-none" style="color: var(--ink);">
+                        <span class="fw-semibold">{{ item.product.name }}</span>{% if item.variant %} &middot; {{ item.variant.value }}{% endif %}
+                    </a>
+                    <p class="mb-0 small text-muted">Qty {{ item.quantity }} &times; ${{ item.price_at_purchase }}</p>
+                </div>
             </div>
             <a href="{% url 'products:product_detail' item.product.slug %}#reviews" class="small flex-shrink-0">Leave a Review</a>
         </div>
