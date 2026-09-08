@@ -196,7 +196,7 @@ STORAGES = {
     },
 }
 
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+STATICFILES_STORAGE = "afromart.storage.NonStrictManifestStaticFilesStorage"
 
 
 MEDIA_URL = "/media/"
