@@ -19,7 +19,7 @@ def product_list(request, category_slug=None):
     keyword, price range, and sorted by the chosen field."""
 
     category = None
-    products = Product.objects.filter(is_active=True).with_rating()
+    products = Product.objects.filter(is_active=True).with_rating().prefetch_related("images")
 
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug, is_active=True)
@@ -64,12 +64,12 @@ def product_list(request, category_slug=None):
 def product_detail(request, product_slug):
 
     """ Shows full details for one product: images, variants, price,
-    current rating, other customers' approved reviews, and — for a
-    signed-in shopper — their own review (if they've left one) or a
+    current rating, other customers' approved reviews, and - for a
+    signed-in shopper - their own review (if they've left one) or a
     form to write one (if they've bought the product). """
 
     product = get_object_or_404(
-        Product.objects.with_rating(), slug=product_slug, is_active=True
+        Product.objects.with_rating().prefetch_related("images"), slug=product_slug, is_active=True
     )
     variants = product.variants.all().order_by("variant_type", "value")
 
@@ -109,7 +109,7 @@ def special_offers(request):
     curated one. Narrowing to a category (from the navbar dropdown)
     keeps the same random order, just scoped to that category."""
     
-    products = Product.objects.filter(is_active=True).with_rating().order_by("?")
+    products = Product.objects.filter(is_active=True).with_rating().prefetch_related("images").order_by("?")
     selected_category = None
     category_slug = request.GET.get("category")
     if category_slug:
@@ -235,7 +235,7 @@ def staff_product_list(request):
     """ Every product, active or not - staff need to see inactive
     ones too in order to reactivate them. """
 
-    products = Product.objects.select_related("category").order_by("-created_at")
+    products = Product.objects.select_related("category").prefetch_related("images").order_by("-created_at")
     query = request.GET.get("q", "")
     if query:
         products = products.filter(name__icontains=query)

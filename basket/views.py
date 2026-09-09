@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.db.models import prefetch_related_objects
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
@@ -21,6 +22,7 @@ def _safe_quantity(raw_value, default=1):
 
 def basket_detail(request):
     basket = get_or_create_basket(request)
+    prefetch_related_objects([basket], "items__product__images", "items__variant")
     return render(request, "basket/basket_detail.html", {"basket": basket})
 
 
@@ -48,6 +50,7 @@ def add_to_basket(request, product_slug):
 
     if is_ajax:
         items_data = []
+        prefetch_related_objects([basket], "items__product__images")
         for basket_item in basket.items.all():
             item_image = basket_item.product.primary_image
             items_data.append({

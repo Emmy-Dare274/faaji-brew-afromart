@@ -140,10 +140,15 @@ class Product(models.Model):
 
     @property
     def primary_image(self):
-        # Prefers whichever image staff marked as primary in the
-        # admin. Falls back to the first uploaded image if none was
-        # marked, so a template never has to handle that case itself.
-        return self.images.filter(is_primary=True).first() or self.images.first()
+        # Iterates the already-fetched images instead of calling
+        # .filter() on the related manager, which would issue a brand
+        # new query even when the caller has prefetched images —
+        # .filter() never uses the prefetch cache, only .all() does.
+        images = list(self.images.all())
+        for image in images:
+            if image.is_primary:
+                return image
+        return images[0] if images else None
 
 
 class ProductImage(models.Model):

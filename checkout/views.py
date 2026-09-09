@@ -2,6 +2,7 @@ import stripe
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import prefetch_related_objects
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -23,6 +24,7 @@ def checkout(request):
     actually enforces registration at checkout, not just a UI
     suggestion."""
     basket = get_or_create_basket(request)
+    prefetch_related_objects([basket], "items__product__images", "items__variant")
 
     if not basket.items.exists():
         messages.error(request, "Your basket is empty, add something before checking out.")

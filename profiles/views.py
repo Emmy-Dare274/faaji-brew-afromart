@@ -77,7 +77,7 @@ def my_account(request):
 
 @login_required
 def order_history(request):
-    orders = request.user.orders.all().prefetch_related("lineitems__product", "lineitems__variant")
+    orders = request.user.orders.all().prefetch_related("lineitems__product__images", "lineitems__variant")
     return render(request, "profiles/order_history.html", {"orders": orders})
 
 
