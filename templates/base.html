@@ -65,8 +65,8 @@
 
                         {% if user.is_authenticated %}
                             {% if user.is_staff %}
-                                <a href="{% url 'products:review_moderation' %}" class="text-white text-decoration-none me-3">
-                                    <i class="bi bi-shield-check"></i> Moderate Reviews
+                                <a href="{% url 'products:staff_dashboard' %}" class="text-white text-decoration-none me-3">
+                                    <i class="bi bi-shield-check"></i> Staff Dashboard
                                 </a>
                             {% endif %}
                             <span class="text-white me-3">Hi, {{ user.username }}</span>

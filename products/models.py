@@ -13,8 +13,8 @@ class CategoryQuerySet(models.QuerySet):
 
 class Category(models.Model):
     """A shop category, for example Ankara Fabrics or Spices and Sauce
-    Kits. Managed through the Django admin for now. A front end staff
-    management page comes later, once the basic catalogue works."""
+    Kits. Manageable by staff from the front end (see products/staff
+    views), as well as through the Django admin."""
 
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=110, unique=True, blank=True)

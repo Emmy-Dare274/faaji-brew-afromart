@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Dashboard | Faaji & Brew AfroMart{% endblock %}
+{% block meta_description %}Staff tools for managing products, categories, and reviews.{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Staff Dashboard</h1>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4 h-100">
+                <h2 class="h5 mb-2"><i class="bi bi-box-seam"></i> Products</h2>
+                <p class="text-muted small mb-3">Add, edit, and deactivate products, including photos and variants.</p>
+                <a href="{% url 'products:staff_product_list' %}" class="btn btn-teal">Manage Products</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4 h-100">
+                <h2 class="h5 mb-2"><i class="bi bi-tags"></i> Categories</h2>
+                <p class="text-muted small mb-3">Add, edit, and organize shop categories.</p>
+                <a href="{% url 'products:staff_category_list' %}" class="btn btn-teal">Manage Categories</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4 h-100">
+                <h2 class="h5 mb-2"><i class="bi bi-chat-square-text"></i> Reviews</h2>
+                <p class="text-muted small mb-3">Approve or reject pending customer reviews.</p>
+                <a href="{% url 'products:review_moderation' %}" class="btn btn-teal">Moderate Reviews</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

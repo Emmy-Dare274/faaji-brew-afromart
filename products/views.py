@@ -1,12 +1,17 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.views.decorators.http import require_POST
 
-from checkout.models import Order
+from checkout.models import Order, OrderLineItem
 from core.decorators import staff_required
-from .forms import ReviewForm
-from .models import Category, Product, Review
+from .forms import (
+    ReviewForm, ProductForm, CategoryForm,
+    ProductImageFormSet, ProductVariantFormSet,
+)
+from .models import Category, Product, ProductImage, ProductVariant, Review
+
 
 
 def product_list(request, category_slug=None):
@@ -131,7 +136,7 @@ def add_review(request, product_slug):
     real experience with the product, not just an opinion formed
     from browsing the listing. The one-review-per-user-per-product
     rule is enforced in the database via Review's unique_together,
-    this check just gives a friendlier message than a 500 error. """
+    this check just gives a friendlier message. """
 
     product = get_object_or_404(Product, slug=product_slug, is_active=True)
 
@@ -143,7 +148,7 @@ def add_review(request, product_slug):
         return redirect("products:product_detail", product_slug=product_slug)
 
     if Review.objects.filter(product=product, user=request.user).exists():
-        messages.error(request, "You've already reviewed this product — edit your review below instead.")
+        messages.error(request, "You've already reviewed this product - edit your review below instead.")
         return redirect("products:product_detail", product_slug=product_slug)
 
     form = ReviewForm(request.POST)
@@ -194,8 +199,7 @@ def delete_review(request, review_id):
 def review_moderation(request):
 
     """ Front-end moderation queue for staff, so approving reviews
-    doesn't require Django admin access — same pattern staff product
-    management (#29) will follow next. """
+    doesn't require Django admin access, same pattern for staff products management. """
 
     pending_reviews = Review.objects.filter(is_approved=False).select_related("product", "user")
     return render(request, "products/review_moderation.html", {"pending_reviews": pending_reviews})
@@ -218,3 +222,167 @@ def reject_review(request, review_id):
     messages.success(request, f"Rejected and removed the review for {review.product.name}.")
     review.delete()
     return redirect("products:review_moderation")
+
+
+@staff_required
+def staff_dashboard(request):
+    return render(request, "products/staff/dashboard.html")
+
+
+@staff_required
+def staff_product_list(request):
+
+    """ Every product, active or not - staff need to see inactive
+    ones too in order to reactivate them. """
+
+    products = Product.objects.select_related("category").order_by("-created_at")
+    query = request.GET.get("q", "")
+    if query:
+        products = products.filter(name__icontains=query)
+    return render(request, "products/staff/product_list.html", {"products": products, "query": query})
+
+
+@staff_required
+def staff_product_add(request):
+
+    """ The product has to exist before ProductImage/ProductVariant
+    rows can point at it, so the main form is validated and saved
+    first; only then are the formsets checked against that real
+    instance. If the formsets come back invalid, the product already
+    exists — sending staff to its edit page (rather than discarding
+    it) means the details they already entered aren't lost. """
+
+    if request.method == "POST":
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product = form.save()
+            image_formset = ProductImageFormSet(request.POST, request.FILES, instance=product)
+            variant_formset = ProductVariantFormSet(request.POST, instance=product)
+            if image_formset.is_valid() and variant_formset.is_valid():
+                with transaction.atomic():
+                    image_formset.save()
+                    variant_formset.save()
+                messages.success(request, f"{product.name} has been added.")
+                return redirect("products:staff_product_list")
+            messages.error(request, "Product created, but please fix the errors below.")
+            return redirect("products:staff_product_edit", slug=product.slug)
+        image_formset = ProductImageFormSet(request.POST, request.FILES)
+        variant_formset = ProductVariantFormSet(request.POST)
+    else:
+        form = ProductForm()
+        image_formset = ProductImageFormSet()
+        variant_formset = ProductVariantFormSet()
+
+    context = {
+        "form": form,
+        "image_formset": image_formset,
+        "variant_formset": variant_formset,
+    }
+    return render(request, "products/staff/product_form.html", context)
+
+
+@staff_required
+def staff_product_edit(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+
+    if request.method == "POST":
+        form = ProductForm(request.POST, instance=product)
+        image_formset = ProductImageFormSet(request.POST, request.FILES, instance=product)
+        variant_formset = ProductVariantFormSet(request.POST, instance=product)
+        if form.is_valid() and image_formset.is_valid() and variant_formset.is_valid():
+            with transaction.atomic():
+                form.save()
+                image_formset.save()
+                variant_formset.save()
+            messages.success(request, f"{product.name} has been updated.")
+            return redirect("products:staff_product_list")
+        messages.error(request, "Please fix the errors below.")
+    else:
+        form = ProductForm(instance=product)
+        image_formset = ProductImageFormSet(instance=product)
+        variant_formset = ProductVariantFormSet(instance=product)
+
+    context = {
+        "form": form,
+        "image_formset": image_formset,
+        "variant_formset": variant_formset,
+        "product": product,
+    }
+    return render(request, "products/staff/product_form.html", context)
+
+
+@staff_required
+@require_POST
+def staff_product_delete(request, slug):
+
+    """ A product that has ever been ordered can't be hard-deleted —
+    OrderLineItem.product cascades on delete, so removing it would
+    silently wipe real order history. Deactivating keeps the record
+    intact while taking it off the storefront. """
+
+    product = get_object_or_404(Product, slug=slug)
+    if OrderLineItem.objects.filter(product=product).exists():
+        messages.error(
+            request,
+            f"Can't delete {product.name} — it appears in past orders. Deactivate it instead.",
+        )
+        return redirect("products:staff_product_list")
+
+    name = product.name
+    product.delete()
+    messages.success(request, f"{name} has been deleted.")
+    return redirect("products:staff_product_list")
+
+
+@staff_required
+def staff_category_list(request):
+    categories = Category.objects.all().order_by("name")
+    return render(request, "products/staff/category_list.html", {"categories": categories})
+
+
+@staff_required
+def staff_category_add(request):
+    if request.method == "POST":
+        form = CategoryForm(request.POST, request.FILES)
+        if form.is_valid():
+            category = form.save()
+            messages.success(request, f"{category.name} has been added.")
+            return redirect("products:staff_category_list")
+    else:
+        form = CategoryForm()
+    return render(request, "products/staff/category_form.html", {"form": form})
+
+
+@staff_required
+def staff_category_edit(request, slug):
+    category = get_object_or_404(Category, slug=slug)
+    if request.method == "POST":
+        form = CategoryForm(request.POST, request.FILES, instance=category)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"{category.name} has been updated.")
+            return redirect("products:staff_category_list")
+    else:
+        form = CategoryForm(instance=category)
+    return render(request, "products/staff/category_form.html", {"form": form, "category": category})
+
+
+@staff_required
+@require_POST
+def staff_category_delete(request, slug):
+
+    """ Same safety principle as product deletion: a category still
+    holding products can't be deleted out from under them. """
+
+    category = get_object_or_404(Category, slug=slug)
+    if category.products.exists():
+        messages.error(
+            request,
+            f"Can't delete {category.name} - it still has products in it. Move or delete those first.",
+        )
+        return redirect("products:staff_category_list")
+
+    name = category.name
+    category.delete()
+    messages.success(request, f"{name} has been deleted.")
+    return redirect("products:staff_category_list")

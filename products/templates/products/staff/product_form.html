@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}{% if product %}Edit {{ product.name }}{% else %}Add Product{% endif %} | Faaji & Brew AfroMart{% endblock %}
+{% block meta_description %}Staff tools for {% if product %}editing{% else %}adding{% endif %} a product.{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">{% if product %}Edit {{ product.name }}{% else %}Add Product{% endif %}</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="card border-0 shadow-sm p-3 p-md-4 mb-4">
+            <h2 class="h5 mb-3">Product Details</h2>
+            {% for field in form %}
+            <div class="mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors|striptags }}</div>{% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="card border-0 shadow-sm p-3 p-md-4 mb-4">
+            <h2 class="h5 mb-3">Photos</h2>
+            {{ image_formset.management_form }}
+            {% for image_form in image_formset %}
+            <div class="row g-2 align-items-center border-bottom pb-3 mb-3">
+                {% for hidden in image_form.hidden_fields %}{{ hidden }}{% endfor %}
+                <div class="col-md-3">
+                    {% if image_form.instance.image %}
+                        <img src="{{ image_form.instance.image.url }}" alt="" style="width: 70px; height: 70px; object-fit: contain; background: #f5f2ea;" class="mb-2 d-block">
+                    {% endif %}
+                    {{ image_form.image }}
+                    {% if image_form.image.errors %}<div class="text-danger small">{{ image_form.image.errors|striptags }}</div>{% endif %}
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label small">Alt text</label>
+                    {{ image_form.alt_text }}
+                </div>
+                <div class="col-md-2">
+                    <div class="form-check">
+                        {{ image_form.is_primary }}
+                        <label class="form-check-label">Primary</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    {% if image_form.instance.pk %}
+                        <div class="form-check">
+                            {{ image_form.DELETE }}
+                            <label class="form-check-label text-danger">Remove</label>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="card border-0 shadow-sm p-3 p-md-4 mb-4">
+            <h2 class="h5 mb-3">Variants</h2>
+            <p class="text-muted small">Optional — leave blank if this product doesn't come in sizes or colours.</p>
+            {{ variant_formset.management_form }}
+            {% for variant_form in variant_formset %}
+            <div class="row g-2 align-items-center border-bottom pb-3 mb-3">
+                {% for hidden in variant_form.hidden_fields %}{{ hidden }}{% endfor %}
+                <div class="col-md-2">
+                    <label class="form-label small">Type</label>
+                    {{ variant_form.variant_type }}
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small">Value</label>
+                    {{ variant_form.value }}
+                    {% if variant_form.value.errors %}<div class="text-danger small">{{ variant_form.value.errors|striptags }}</div>{% endif %}
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small">Stock</label>
+                    {{ variant_form.stock_quantity }}
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small">Price adjustment</label>
+                    {{ variant_form.price_adjustment }}
+                </div>
+                <div class="col-md-2">
+                    {% if variant_form.instance.pk %}
+                        <div class="form-check">
+                            {{ variant_form.DELETE }}
+                            <label class="form-check-label text-danger">Remove</label>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% if variant_formset.non_form_errors %}
+                <div class="text-danger small">{{ variant_formset.non_form_errors|striptags }}</div>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-teal btn-lg">{% if product %}Save Changes{% else %}Add Product{% endif %}</button>
+        <a href="{% url 'products:staff_product_list' %}" class="btn btn-outline-dark btn-lg">Cancel</a>
+    </form>
+</div>
+{% endblock %}
