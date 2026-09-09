@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Faaji & Brew AfroMart{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/favicon-180.png' %}">
 
     <meta name="description" content="{% block meta_description %}Faaji & Brew AfroMart: authentic West African fabrics, spices, beads, and homeware, sourced directly from makers and shipped worldwide.{% endblock %}">
     <link rel="canonical" href="{{ request.build_absolute_uri }}">

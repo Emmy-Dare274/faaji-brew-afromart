@@ -19,7 +19,9 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.sitemaps.views import sitemap
+from django.views.generic.base import RedirectView
 from core.sitemaps import StaticViewSitemap, CategorySitemap, ProductSitemap
 
 sitemaps = {
@@ -32,6 +34,10 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
+    path(
+        "favicon.ico",
+        RedirectView.as_view(url=staticfiles_storage.url("favicon/favicon.ico"), permanent=True),
+    ),
     path("", include("core.urls")),
     path("products/", include("products.urls")),
     path("basket/", include("basket.urls")),
