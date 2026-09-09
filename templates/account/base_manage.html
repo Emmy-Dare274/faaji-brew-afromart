@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}My Account | Faaji & Brew AfroMart{% endblock %}
-{% block meta_description %}Manage your Faaji & Brew AfroMart account.{% endblock %}
+{% block title %}{% if request.resolver_match.url_name == "account_email" %}Manage Email Addresses{% elif request.resolver_match.url_name == "account_change_password" %}Change Your Password{% elif request.resolver_match.url_name == "account_set_password" %}Set a Password{% else %}My Account{% endif %} | Faaji & Brew AfroMart{% endblock %}
+{% block meta_description %}{% if request.resolver_match.url_name == "account_email" %}Manage the email addresses linked to your Faaji & Brew AfroMart account.{% elif request.resolver_match.url_name == "account_change_password" %}Change the password for your Faaji & Brew AfroMart account.{% elif request.resolver_match.url_name == "account_set_password" %}Set a password for your Faaji & Brew AfroMart account.{% else %}Manage your Faaji & Brew AfroMart account.{% endif %}{% endblock %}
 
 {% block content_before %}
 <div class="container py-5">
