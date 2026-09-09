@@ -13,11 +13,19 @@
         <div class="card border-0 shadow-sm p-3 p-md-4 mb-4">
             <h2 class="h5 mb-3">Product Details</h2>
             {% for field in form %}
-            <div class="mb-3">
-                <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{ field.label }}</label>
-                {{ field }}
-                {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors|striptags }}</div>{% endif %}
-            </div>
+            {% if field.field.widget.input_type == "checkbox" %}
+                <div class="form-check mb-3">
+                    {{ field }}
+                    <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                    {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors|striptags }}</div>{% endif %}
+                </div>
+            {% else %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors|striptags }}</div>{% endif %}
+                </div>
+            {% endif %}
             {% endfor %}
         </div>
 

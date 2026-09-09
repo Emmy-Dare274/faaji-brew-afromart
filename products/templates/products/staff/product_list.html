@@ -52,6 +52,12 @@
                     </td>
                     <td class="text-end">
                         <a href="{% url 'products:staff_product_edit' product.slug %}" class="btn btn-sm btn-outline-dark">Edit</a>
+                        <form method="post" action="{% url 'products:staff_product_toggle_active' product.slug %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-{% if product.is_active %}secondary{% else %}success{% endif %}">
+                                {% if product.is_active %}Deactivate{% else %}Activate{% endif %}
+                            </button>
+                        </form>
                         <form method="post" action="{% url 'products:staff_product_delete' product.slug %}" class="d-inline" onsubmit="return confirm('Delete {{ product.name|escapejs }}? This can\'t be undone.');">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>

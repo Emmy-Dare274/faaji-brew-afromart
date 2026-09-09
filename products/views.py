@@ -313,9 +313,25 @@ def staff_product_edit(request, slug):
 
 @staff_required
 @require_POST
+def staff_product_toggle_active(request, slug):
+
+    """ A direct on/off switch for the list page, since deactivating
+    is the everyday alternative to deletion, it shouldn't require
+    opening the full edit form just to flip one checkbox. """
+
+    product = get_object_or_404(Product, slug=slug)
+    product.is_active = not product.is_active
+    product.save(update_fields=["is_active"])
+    status = "activated" if product.is_active else "deactivated"
+    messages.success(request, f"{product.name} has been {status}.")
+    return redirect("products:staff_product_list")
+
+
+@staff_required
+@require_POST
 def staff_product_delete(request, slug):
 
-    """ A product that has ever been ordered can't be hard-deleted —
+    """ A product that has ever been ordered can't be hard-deleted -
     OrderLineItem.product cascades on delete, so removing it would
     silently wipe real order history. Deactivating keeps the record
     intact while taking it off the storefront. """
@@ -324,7 +340,7 @@ def staff_product_delete(request, slug):
     if OrderLineItem.objects.filter(product=product).exists():
         messages.error(
             request,
-            f"Can't delete {product.name} — it appears in past orders. Deactivate it instead.",
+            f"Can't delete {product.name} - it appears in past orders. Deactivate it instead.",
         )
         return redirect("products:staff_product_list")
 
