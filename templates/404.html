@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found | Faaji & Brew AfroMart{% endblock %}
+{% block meta_description %}The page you're looking for couldn't be found.{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center text-center">
+        <div class="col-lg-7">
+            <p class="fw-bold mb-2" style="font-size: 5rem; color: var(--teal); line-height: 1;">404</p>
+            <h1 class="mb-3">This page wandered off the market stalls</h1>
+            <p class="text-muted mb-4">We couldn't find the page you were looking for. It may have moved, or the link might be a little off. Try searching for what you need, or use one of the links below.</p>
+
+            <form action="{% url 'products:product_list' %}" method="get" class="mb-4 mx-auto" style="max-width: 420px;">
+                <div class="input-group">
+                    <input type="search" name="q" class="form-control" placeholder="Search for fabrics, spices, beads...">
+                    <button type="submit" class="btn btn-teal" aria-label="Search">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+
+            <div class="d-flex flex-wrap gap-2 justify-content-center">
+                <a href="{% url 'core:home' %}" class="btn btn-teal">Back to Home</a>
+                <a href="{% url 'products:product_list' %}" class="btn btn-outline-dark">Shop All Products</a>
+                <a href="{% url 'products:category_overview' %}" class="btn btn-outline-dark">Browse Categories</a>
+                <a href="{% url 'core:contact_us' %}" class="btn btn-outline-dark">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
