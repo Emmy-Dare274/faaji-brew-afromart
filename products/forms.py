@@ -102,3 +102,23 @@ ProductVariantFormSet = inlineformset_factory(
     fields=["variant_type", "value", "stock_quantity", "price_adjustment"],
     extra=1, can_delete=True,
 )
+
+
+def build_image_formset(*args, **kwargs):
+
+    """ Always instantiate ProductImageFormSet through this helper,
+    never the class directly. Two formsets rendered on the same page
+    default to the identical prefix ("form") unless told otherwise,
+    which makes their hidden management-form fields collide in the
+    submitted data the moment they hold a different number of rows -
+    one formset silently loses whichever rows sit past the other's
+    row count, with no error at all. A fixed, distinct prefix per
+    formset rules that out completely. """
+
+    kwargs.setdefault("prefix", "images")
+    return ProductImageFormSet(*args, **kwargs)
+
+
+def build_variant_formset(*args, **kwargs):
+    kwargs.setdefault("prefix", "variants")
+    return ProductVariantFormSet(*args, **kwargs)

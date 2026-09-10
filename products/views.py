@@ -8,7 +8,7 @@ from checkout.models import Order, OrderLineItem
 from core.decorators import staff_required
 from .forms import (
     ReviewForm, ProductForm, CategoryForm,
-    ProductImageFormSet, ProductVariantFormSet,
+    build_image_formset, build_variant_formset,
 )
 from .models import Category, Product, ProductImage, ProductVariant, Review
 
@@ -256,8 +256,8 @@ def staff_product_add(request):
         form = ProductForm(request.POST)
         if form.is_valid():
             product = form.save()
-            image_formset = ProductImageFormSet(request.POST, request.FILES, instance=product)
-            variant_formset = ProductVariantFormSet(request.POST, instance=product)
+            image_formset = build_image_formset(request.POST, request.FILES, instance=product)
+            variant_formset = build_variant_formset(request.POST, instance=product)
             if image_formset.is_valid() and variant_formset.is_valid():
                 with transaction.atomic():
                     image_formset.save()
@@ -266,12 +266,12 @@ def staff_product_add(request):
                 return redirect("products:staff_product_list")
             messages.error(request, "Product created, but please fix the errors below.")
             return redirect("products:staff_product_edit", slug=product.slug)
-        image_formset = ProductImageFormSet(request.POST, request.FILES)
-        variant_formset = ProductVariantFormSet(request.POST)
+        image_formset = build_image_formset(request.POST, request.FILES)
+        variant_formset = build_variant_formset(request.POST)
     else:
         form = ProductForm()
-        image_formset = ProductImageFormSet()
-        variant_formset = ProductVariantFormSet()
+        image_formset = build_image_formset()
+        variant_formset = build_variant_formset()
 
     context = {
         "form": form,
@@ -287,8 +287,8 @@ def staff_product_edit(request, slug):
 
     if request.method == "POST":
         form = ProductForm(request.POST, instance=product)
-        image_formset = ProductImageFormSet(request.POST, request.FILES, instance=product)
-        variant_formset = ProductVariantFormSet(request.POST, instance=product)
+        image_formset = build_image_formset(request.POST, request.FILES, instance=product)
+        variant_formset = build_variant_formset(request.POST, instance=product)
         if form.is_valid() and image_formset.is_valid() and variant_formset.is_valid():
             with transaction.atomic():
                 form.save()
@@ -299,8 +299,8 @@ def staff_product_edit(request, slug):
         messages.error(request, "Please fix the errors below.")
     else:
         form = ProductForm(instance=product)
-        image_formset = ProductImageFormSet(instance=product)
-        variant_formset = ProductVariantFormSet(instance=product)
+        image_formset = build_image_formset(instance=product)
+        variant_formset = build_variant_formset(instance=product)
 
     context = {
         "form": form,
