@@ -226,8 +226,8 @@ $ flake8
 $
 ```
 
+![flake8 output](docs/testing/pep8/flake8-output.png)
 
-Screenshot of the terminal output (or lack of output, which is the point) saved as `docs/testing/pep8/flake8-output.png`.
 
 ### JavaScript
 
