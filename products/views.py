@@ -10,8 +10,7 @@ from .forms import (
     ReviewForm, ProductForm, CategoryForm,
     build_image_formset, build_variant_formset,
 )
-from .models import Category, Product, ProductImage, ProductVariant, Review
-
+from .models import Category, Product, Review
 
 
 def product_list(request, category_slug=None):
@@ -108,8 +107,11 @@ def special_offers(request):
     """A shuffled, discovery-style listing rather than a fixed
     curated one. Narrowing to a category (from the navbar dropdown)
     keeps the same random order, just scoped to that category."""
-    
-    products = Product.objects.filter(is_active=True).with_rating().prefetch_related("images").order_by("?")
+
+    products = (
+        Product.objects.filter(is_active=True).with_rating()
+        .prefetch_related("images").order_by("?")
+    )
     selected_category = None
     category_slug = request.GET.get("category")
     if category_slug:
@@ -122,7 +124,9 @@ def special_offers(request):
         "all_categories": Category.objects.active(),
         "query": "", "min_price": "", "max_price": "", "current_sort": "",
         "product_count": products.count(),
-        "page_title": f"{selected_category.name} Special Offers" if selected_category else "Special Offers",
+        "page_title": (
+            f"{selected_category.name} Special Offers" if selected_category else "Special Offers"
+        ),
     }
     return render(request, "products/product_list.html", context)
 
@@ -148,7 +152,9 @@ def add_review(request, product_slug):
         return redirect("products:product_detail", product_slug=product_slug)
 
     if Review.objects.filter(product=product, user=request.user).exists():
-        messages.error(request, "You've already reviewed this product - edit your review below instead.")
+        messages.error(
+            request, "You've already reviewed this product - edit your review below instead."
+        )
         return redirect("products:product_detail", product_slug=product_slug)
 
     form = ReviewForm(request.POST)
@@ -157,7 +163,9 @@ def add_review(request, product_slug):
         review.product = product
         review.user = request.user
         review.save()
-        messages.success(request, "Thanks! Your review has been submitted and is awaiting approval.")
+        messages.success(
+            request, "Thanks! Your review has been submitted and is awaiting approval."
+        )
     else:
         messages.error(request, "Please fix the errors in your review and try again.")
 
@@ -235,11 +243,16 @@ def staff_product_list(request):
     """ Every product, active or not - staff need to see inactive
     ones too in order to reactivate them. """
 
-    products = Product.objects.select_related("category").prefetch_related("images").order_by("-created_at")
+    products = (
+        Product.objects.select_related("category")
+        .prefetch_related("images").order_by("-created_at")
+    )
     query = request.GET.get("q", "")
     if query:
         products = products.filter(name__icontains=query)
-    return render(request, "products/staff/product_list.html", {"products": products, "query": query})
+    return render(
+        request, "products/staff/product_list.html", {"products": products, "query": query}
+    )
 
 
 @staff_required
@@ -380,7 +393,9 @@ def staff_category_edit(request, slug):
             return redirect("products:staff_category_list")
     else:
         form = CategoryForm(instance=category)
-    return render(request, "products/staff/category_form.html", {"form": form, "category": category})
+    return render(
+        request, "products/staff/category_form.html", {"form": form, "category": category}
+    )
 
 
 @staff_required
@@ -394,7 +409,8 @@ def staff_category_delete(request, slug):
     if category.products.exists():
         messages.error(
             request,
-            f"Can't delete {category.name} - it still has products in it. Move or delete those first.",
+            f"Can't delete {category.name} - it still has products in it. "
+            "Move or delete those first.",
         )
         return redirect("products:staff_category_list")
 

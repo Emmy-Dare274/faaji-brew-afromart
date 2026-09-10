@@ -34,14 +34,18 @@ class BasketModelTests(TestCase):
 
     def test_basket_item_line_total_includes_variant_price_adjustment(self):
         variant = ProductVariant.objects.create(
-            product=self.product, variant_type="size", value="Large", price_adjustment=Decimal("2.50"),
+            product=self.product, variant_type="size", value="Large",
+            price_adjustment=Decimal("2.50"),
         )
-        item = BasketItem.objects.create(basket=self.basket, product=self.product, variant=variant, quantity=2)
+        item = BasketItem.objects.create(
+            basket=self.basket, product=self.product, variant=variant, quantity=2,
+        )
         self.assertEqual(item.unit_price, Decimal("12.50"))
         self.assertEqual(item.line_total, Decimal("25.00"))
 
     def test_basket_qualifies_for_free_delivery_at_the_threshold(self):
-        BasketItem.objects.create(basket=self.basket, product=self.product, quantity=6)  # 6 x 10.00 = 60.00
+        # 6 x 10.00 = 60.00
+        BasketItem.objects.create(basket=self.basket, product=self.product, quantity=6)
         self.assertTrue(self.basket.qualifies_for_free_delivery)
         self.assertEqual(self.basket.amount_to_free_delivery, Decimal("0.00"))
 
@@ -60,7 +64,8 @@ class BasketServiceTests(TestCase):
     def setUp(self):
         self.category = Category.objects.create(name="Homeware")
         self.product = Product.objects.create(
-            category=self.category, name="Cushion", description="x", price=Decimal("15.00"), stock_quantity=10,
+            category=self.category, name="Cushion", description="x",
+            price=Decimal("15.00"), stock_quantity=10,
         )
         self.factory = RequestFactory()
 
@@ -107,7 +112,9 @@ class BasketServiceTests(TestCase):
 
         user_basket = Basket.objects.get(user=user)
         self.assertEqual(user_basket.items.first().quantity, 2)
-        self.assertFalse(Basket.objects.filter(session_key=request.session.session_key, user=None).exists())
+        self.assertFalse(
+            Basket.objects.filter(session_key=request.session.session_key, user=None).exists()
+        )
 
 
 class BasketViewTests(TestCase):
@@ -137,27 +144,41 @@ class BasketViewTests(TestCase):
         self.assertEqual(BasketItem.objects.count(), 0)
 
     def test_update_basket_item_changes_the_quantity(self):
-        self.client.post(reverse("basket:add_to_basket", args=[self.product.slug]), {"quantity": 1})
+        self.client.post(
+            reverse("basket:add_to_basket", args=[self.product.slug]), {"quantity": 1}
+        )
         item = BasketItem.objects.first()
-        self.client.post(reverse("basket:update_basket_item", args=[item.id]), {"quantity": 4})
+        self.client.post(
+            reverse("basket:update_basket_item", args=[item.id]), {"quantity": 4}
+        )
         item.refresh_from_db()
         self.assertEqual(item.quantity, 4)
 
     def test_setting_quantity_to_zero_removes_the_item(self):
-        self.client.post(reverse("basket:add_to_basket", args=[self.product.slug]), {"quantity": 1})
+        self.client.post(
+            reverse("basket:add_to_basket", args=[self.product.slug]), {"quantity": 1}
+        )
         item = BasketItem.objects.first()
-        self.client.post(reverse("basket:update_basket_item", args=[item.id]), {"quantity": 0})
+        self.client.post(
+            reverse("basket:update_basket_item", args=[item.id]), {"quantity": 0}
+        )
         self.assertEqual(BasketItem.objects.count(), 0)
 
     def test_remove_basket_item_deletes_it(self):
-        self.client.post(reverse("basket:add_to_basket", args=[self.product.slug]), {"quantity": 1})
+        self.client.post(
+            reverse("basket:add_to_basket", args=[self.product.slug]), {"quantity": 1}
+        )
         item = BasketItem.objects.first()
         self.client.post(reverse("basket:remove_basket_item", args=[item.id]))
         self.assertEqual(BasketItem.objects.count(), 0)
 
     def test_a_different_session_cannot_modify_someone_elses_basket_item(self):
-        self.client.post(reverse("basket:add_to_basket", args=[self.product.slug]), {"quantity": 1})
+        self.client.post(
+            reverse("basket:add_to_basket", args=[self.product.slug]), {"quantity": 1}
+        )
         item = BasketItem.objects.first()
         self.client.cookies.clear()  # simulates a brand new, unrelated visitor
-        response = self.client.post(reverse("basket:update_basket_item", args=[item.id]), {"quantity": 9})
+        response = self.client.post(
+            reverse("basket:update_basket_item", args=[item.id]), {"quantity": 9}
+        )
         self.assertEqual(response.status_code, 404)

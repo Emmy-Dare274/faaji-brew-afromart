@@ -59,14 +59,18 @@ class Order(models.Model):
         """The one place order totals get calculated. Both the
         checkout view (when the order is first created) and the
         Stripe webhook (once payment is confirmed) call this same
-        method. Decimal is used throughout, deliberately not float, since 
-        mixing the two in real money calculations risks the kind of silent 
+        method. Decimal is used throughout, deliberately not float, since
+        mixing the two in real money calculations risks the kind of silent
         rounding errors floats are known for."""
 
         self.order_total = sum(
             (item.lineitem_total for item in self.lineitems.all()), Decimal("0.00")
         )
-        self.delivery_cost = Decimal("0.00") if self.order_total >= FREE_DELIVERY_THRESHOLD else STANDARD_DELIVERY_COST
+        self.delivery_cost = (
+            Decimal("0.00")
+            if self.order_total >= FREE_DELIVERY_THRESHOLD
+            else STANDARD_DELIVERY_COST
+        )
         self.grand_total = self.order_total + self.delivery_cost
         self.save(update_fields=["order_total", "delivery_cost", "grand_total"])
 

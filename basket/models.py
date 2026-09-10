@@ -48,7 +48,7 @@ class Basket(models.Model):
 class BasketItem(models.Model):
 
     """ One product, and optional variant, sitting in a basket with a
-    quantity. A database model which gives us a genuine front end 
+    quantity. A database model which gives us a genuine front end
     delete action later without touching the admin panel. """
 
     basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name="items")

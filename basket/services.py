@@ -45,7 +45,7 @@ def merge_guest_basket_into_user(request, user):
     """ Runs the moment someone logs in. Folds whatever they added
     while browsing anonymously into their real account basket, so
     nothing gets lost the moment they log in at checkout. """
-    
+
     session_key = request.session.session_key
     if not session_key:
         return

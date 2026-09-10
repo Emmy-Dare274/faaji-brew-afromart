@@ -95,7 +95,9 @@ def checkout_success(request, order_number):
     basket = get_or_create_basket(request)
     basket.items.all().delete()
 
-    messages.success(request, f"Order successfully placed. Your order number is {order.order_number}.")
+    messages.success(
+        request, f"Order successfully placed. Your order number is {order.order_number}."
+    )
     return render(request, "checkout/checkout_success.html", {"order": order})
 
 

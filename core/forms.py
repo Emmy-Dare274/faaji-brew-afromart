@@ -10,5 +10,7 @@ class ContactForm(forms.Form):
         widget=forms.EmailInput(attrs={"class": "form-control", "placeholder": "you@example.com"}),
     )
     message = forms.CharField(
-        widget=forms.Textarea(attrs={"class": "form-control", "rows": 5, "placeholder": "How can we help?"}),
+        widget=forms.Textarea(
+            attrs={"class": "form-control", "rows": 5, "placeholder": "How can we help?"}
+        ),
     )

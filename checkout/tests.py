@@ -159,7 +159,9 @@ class CheckoutViewTests(TestCase):
 
     def test_logged_in_user_with_items_sees_the_checkout_form(self):
         self.client.login(username="buyer", password="testpass123")
-        self.client.post(reverse("basket:add_to_basket", args=[self.product.slug]), {"quantity": 1})
+        self.client.post(
+            reverse("basket:add_to_basket", args=[self.product.slug]), {"quantity": 1}
+        )
         response = self.client.get(reverse("checkout:checkout"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Anklet")
@@ -168,7 +170,9 @@ class CheckoutViewTests(TestCase):
     def test_valid_submission_creates_an_order_and_shows_the_payment_page(self, mock_create):
         mock_create.return_value = MagicMock(id="pi_test123", client_secret="secret_test123")
         self.client.login(username="buyer", password="testpass123")
-        self.client.post(reverse("basket:add_to_basket", args=[self.product.slug]), {"quantity": 1})
+        self.client.post(
+            reverse("basket:add_to_basket", args=[self.product.slug]), {"quantity": 1}
+        )
         response = self.client.post(reverse("checkout:checkout"), {
             "full_name": "Jane Shopper", "email": "jane@example.com", "phone_number": "1234567890",
             "address_line1": "1 Test Street", "address_line2": "", "town_or_city": "Testville",
@@ -192,12 +196,16 @@ class CheckoutSuccessViewTests(TestCase):
 
     def test_owner_can_view_their_own_success_page(self):
         self.client.login(username="owner", password="testpass123")
-        response = self.client.get(reverse("checkout:checkout_success", args=[self.order.order_number]))
+        response = self.client.get(
+            reverse("checkout:checkout_success", args=[self.order.order_number])
+        )
         self.assertEqual(response.status_code, 200)
 
     def test_another_user_cannot_view_someone_elses_order(self):
         self.client.login(username="intruder", password="testpass123")
-        response = self.client.get(reverse("checkout:checkout_success", args=[self.order.order_number]))
+        response = self.client.get(
+            reverse("checkout:checkout_success", args=[self.order.order_number])
+        )
         self.assertEqual(response.status_code, 404)
 
 
@@ -227,7 +235,9 @@ class WebhookHandlerTests(TestCase):
     def _succeeded_event(self):
         return {
             "type": "payment_intent.succeeded",
-            "data": {"object": FakeStripeObject({"metadata": {"order_number": self.order.order_number}})},
+            "data": {
+                "object": FakeStripeObject({"metadata": {"order_number": self.order.order_number}})
+            },
         }
 
     def test_confirmed_payment_moves_the_order_to_processing_and_sends_an_email(self):
@@ -263,4 +273,3 @@ class WebhookHandlerTests(TestCase):
         response = handler.handle_payment_intent_succeeded(event)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(mail.outbox), 0)
-        

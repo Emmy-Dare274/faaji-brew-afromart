@@ -21,7 +21,6 @@ def wishlist_detail(request):
     return render(request, "profiles/wishlist_detail.html", {"products": products})
 
 
-
 @require_POST
 def toggle_wishlist(request, product_slug):
     is_ajax = request.headers.get("x-requested-with") == "XMLHttpRequest"
@@ -49,9 +48,11 @@ def toggle_wishlist(request, product_slug):
 
     messages.success(
         request,
-        f"Added {product.name} to your favourites." if wishlisted else f"Removed {product.name} from your favourites.",
+        f"Added {product.name} to your favourites." if wishlisted
+        else f"Removed {product.name} from your favourites.",
     )
     return redirect(request.POST.get("next") or "core:home")
+
 
 @login_required
 def my_account(request):
@@ -72,12 +73,16 @@ def my_account(request):
         form = ProfileForm(instance=profile)
 
     recent_orders = request.user.orders.all()[:3]
-    return render(request, "profiles/my_account.html", {"form": form, "recent_orders": recent_orders})
+    return render(
+        request, "profiles/my_account.html", {"form": form, "recent_orders": recent_orders}
+    )
 
 
 @login_required
 def order_history(request):
-    orders = request.user.orders.all().prefetch_related("lineitems__product__images", "lineitems__variant")
+    orders = request.user.orders.all().prefetch_related(
+        "lineitems__product__images", "lineitems__variant"
+    )
     return render(request, "profiles/order_history.html", {"orders": orders})
 
 
@@ -104,7 +109,8 @@ def reorder(request, order_number):
     if added:
         messages.success(
             request,
-            f"Added {added} item{'s' if added != 1 else ''} from order {order.order_number} to your basket.",
+            f"Added {added} item{'s' if added != 1 else ''} from order "
+            f"{order.order_number} to your basket.",
         )
     if skipped:
         messages.warning(request, f"Couldn't add (no longer available): {', '.join(skipped)}.")

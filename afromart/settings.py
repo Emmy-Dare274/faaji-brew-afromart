@@ -15,7 +15,7 @@ import os
 import dj_database_url
 
 if os.path.exists("env.py"):
-    import env
+    import env  # noqa: F401
 
 from pathlib import Path
 
@@ -266,4 +266,3 @@ LOGGING = {
         },
     },
 }
-

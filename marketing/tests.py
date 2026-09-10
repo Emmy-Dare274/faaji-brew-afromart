@@ -30,7 +30,9 @@ class NewsletterSignupViewTests(TestCase):
     email rather than an immediate, unverified subscription. """
 
     def test_valid_email_creates_an_unconfirmed_subscriber_and_sends_an_email(self):
-        response = self.client.post(reverse("marketing:newsletter_signup"), {"email": "jane@example.com"})
+        response = self.client.post(
+            reverse("marketing:newsletter_signup"), {"email": "jane@example.com"}
+        )
         subscriber = NewsletterSubscriber.objects.get(email="jane@example.com")
         self.assertFalse(subscriber.confirmed)
         self.assertEqual(len(mail.outbox), 1)
@@ -65,12 +67,17 @@ class ConfirmSubscriptionViewTests(TestCase):
 
     def test_a_valid_token_confirms_the_subscription(self):
         subscriber = NewsletterSubscriber.objects.create(email="jane@example.com")
-        self.client.get(reverse("marketing:confirm_subscription", args=[subscriber.confirmation_token]))
+        self.client.get(
+            reverse("marketing:confirm_subscription", args=[subscriber.confirmation_token])
+        )
         subscriber.refresh_from_db()
         self.assertTrue(subscriber.confirmed)
 
     def test_an_unknown_token_returns_404(self):
         response = self.client.get(
-            reverse("marketing:confirm_subscription", args=["11111111-1111-1111-1111-111111111111"])
+            reverse(
+                "marketing:confirm_subscription",
+                args=["11111111-1111-1111-1111-111111111111"],
+            )
         )
         self.assertEqual(response.status_code, 404)

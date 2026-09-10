@@ -24,5 +24,7 @@ class ProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for name, field in self.fields.items():
-            field.widget.attrs["class"] = "form-select" if name == "default_country" else "form-control"
+            field.widget.attrs["class"] = (
+                "form-select" if name == "default_country" else "form-control"
+            )
             field.required = False

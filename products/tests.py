@@ -67,15 +67,19 @@ class ProductModelTests(TestCase):
 
     def test_primary_image_prefers_the_image_marked_primary(self):
         product = Product.objects.create(
-            category=self.category, name="Multi Image Product", description="x", price=Decimal("5.00"),
+            category=self.category, name="Multi Image Product",
+            description="x", price=Decimal("5.00"),
         )
         ProductImage.objects.create(product=product, image="products/first.jpg")
-        second = ProductImage.objects.create(product=product, image="products/second.jpg", is_primary=True)
+        second = ProductImage.objects.create(
+            product=product, image="products/second.jpg", is_primary=True
+        )
         self.assertEqual(product.primary_image, second)
 
     def test_primary_image_falls_back_to_first_uploaded_when_none_marked_primary(self):
         product = Product.objects.create(
-            category=self.category, name="No Primary Marked", description="x", price=Decimal("5.00"),
+            category=self.category, name="No Primary Marked",
+            description="x", price=Decimal("5.00"),
         )
         first = ProductImage.objects.create(product=product, image="products/first.jpg")
         ProductImage.objects.create(product=product, image="products/second.jpg")
@@ -95,14 +99,16 @@ class ProductQuerySetTests(TestCase):
 
     def test_search_matches_name_and_description(self):
         Product.objects.create(
-            category=self.category, name="Beaded Anklet", description="Handmade.", price=Decimal("10.00"),
+            category=self.category, name="Beaded Anklet",
+            description="Handmade.", price=Decimal("10.00"),
         )
         Product.objects.create(
             category=self.category, name="Woven Bracelet", description="Features colourful beads.",
             price=Decimal("8.00"),
         )
         Product.objects.create(
-            category=self.category, name="Plain Ring", description="Simple silver band.", price=Decimal("15.00"),
+            category=self.category, name="Plain Ring",
+            description="Simple silver band.", price=Decimal("15.00"),
         )
         results = Product.objects.search("bead")
         self.assertEqual(results.count(), 2)
@@ -175,7 +181,9 @@ class CategoryFormTests(TestCase):
 
     def test_duplicate_name_is_rejected(self):
         Category.objects.create(name="Existing Category")
-        form = CategoryForm(data={"name": "Existing Category", "is_active": True, "show_in_main_nav": True})
+        form = CategoryForm(data={
+            "name": "Existing Category", "is_active": True, "show_in_main_nav": True,
+        })
         self.assertFalse(form.is_valid())
 
 
@@ -285,7 +293,9 @@ class ReviewWorkflowTests(TestCase):
 
     def test_purchaser_cannot_submit_a_second_review_for_the_same_product(self):
         self.client.login(username="buyer", password="testpass123")
-        Review.objects.create(product=self.product, user=self.buyer, rating=4, title="First", body="Ok.")
+        Review.objects.create(
+            product=self.product, user=self.buyer, rating=4, title="First", body="Ok."
+        )
         self.client.post(
             reverse("products:add_review", args=[self.product.slug]),
             {"rating": 5, "title": "Second", "body": "Better."},
@@ -295,7 +305,8 @@ class ReviewWorkflowTests(TestCase):
     def test_editing_a_review_resets_it_to_unapproved(self):
         self.client.login(username="buyer", password="testpass123")
         review = Review.objects.create(
-            product=self.product, user=self.buyer, rating=4, title="Original", body="Ok.", is_approved=True,
+            product=self.product, user=self.buyer, rating=4,
+            title="Original", body="Ok.", is_approved=True,
         )
         self.client.post(
             reverse("products:edit_review", args=[review.id]),
@@ -320,7 +331,9 @@ class ReviewWorkflowTests(TestCase):
 
     def test_owner_can_delete_their_own_review(self):
         self.client.login(username="buyer", password="testpass123")
-        review = Review.objects.create(product=self.product, user=self.buyer, rating=4, title="x", body="x")
+        review = Review.objects.create(
+            product=self.product, user=self.buyer, rating=4, title="x", body="x"
+        )
         self.client.post(reverse("products:delete_review", args=[review.id]))
         self.assertEqual(Review.objects.count(), 0)
 
@@ -333,10 +346,13 @@ class ReviewModerationViewTests(TestCase):
             category=self.category, name="Rug", description="x", price=Decimal("30.00"),
         )
         self.reviewer = User.objects.create_user(username="reviewer", password="testpass123")
-        self.staff_user = User.objects.create_user(username="staffer", password="testpass123", is_staff=True)
+        self.staff_user = User.objects.create_user(
+            username="staffer", password="testpass123", is_staff=True
+        )
         self.regular_user = User.objects.create_user(username="regular", password="testpass123")
         self.review = Review.objects.create(
-            product=self.product, user=self.reviewer, rating=3, title="Pending", body="Awaiting approval.",
+            product=self.product, user=self.reviewer, rating=3,
+            title="Pending", body="Awaiting approval.",
         )
 
     def test_non_staff_user_gets_403(self):
@@ -378,7 +394,9 @@ class StaffProductManagementTests(TestCase):
         self.product = Product.objects.create(
             category=self.category, name="Test Print", description="x", price=Decimal("20.00"),
         )
-        self.staff_user = User.objects.create_user(username="staffer", password="testpass123", is_staff=True)
+        self.staff_user = User.objects.create_user(
+            username="staffer", password="testpass123", is_staff=True
+        )
         self.regular_user = User.objects.create_user(username="shopper", password="testpass123")
 
     def test_non_staff_cannot_reach_the_product_list(self):
@@ -427,7 +445,8 @@ class StaffProductManagementTests(TestCase):
             "price": "22.00", "stock_quantity": 5, "is_featured": False, "is_active": True,
             "images-TOTAL_FORMS": "2", "images-INITIAL_FORMS": "0",
             "images-MIN_NUM_FORMS": "0", "images-MAX_NUM_FORMS": "1000",
-            "images-0-image": image_one, "images-0-alt_text": "Front view", "images-0-is_primary": "on",
+            "images-0-image": image_one, "images-0-alt_text": "Front view",
+            "images-0-is_primary": "on",
             "images-1-image": image_two, "images-1-alt_text": "Back view",
             "variants-TOTAL_FORMS": "1", "variants-INITIAL_FORMS": "0",
             "variants-MIN_NUM_FORMS": "0", "variants-MAX_NUM_FORMS": "1000",

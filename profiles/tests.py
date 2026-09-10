@@ -52,7 +52,8 @@ class ProfileFormTests(TestCase):
         form = ProfileForm(data={
             "default_full_name": "Jane Shopper", "default_phone_number": "1234567890",
             "default_address_line1": "1 Test Street", "default_address_line2": "",
-            "default_town_or_city": "Testville", "default_postcode": "12345", "default_country": "IE",
+            "default_town_or_city": "Testville", "default_postcode": "12345",
+            "default_country": "IE",
         })
         self.assertTrue(form.is_valid())
 
@@ -136,7 +137,8 @@ class MyAccountViewTests(TestCase):
         self.client.post(reverse("profiles:my_account"), {
             "default_full_name": "Jane Shopper", "default_phone_number": "1234567890",
             "default_address_line1": "1 Test Street", "default_address_line2": "",
-            "default_town_or_city": "Testville", "default_postcode": "12345", "default_country": "IE",
+            "default_town_or_city": "Testville", "default_postcode": "12345",
+            "default_country": "IE",
         })
         profile = UserProfile.objects.get(user=self.user)
         self.assertEqual(profile.default_full_name, "Jane Shopper")
@@ -192,9 +194,11 @@ class ReorderViewTests(TestCase):
         self.user = User.objects.create_user(username="shopper", password="testpass123")
         self.order = Order.objects.create(
             user=self.user, full_name="Shopper", email="shopper@example.com", phone_number="123",
-            address_line1="1 Test St", town_or_city="Testville", postcode="12345", country="IE",
+            address_line1="1 Test St", town_or_city="Testville", postcode="12345",
+            country="IE",
         )
-        for product in [self.available_product, self.discontinued_product, self.out_of_stock_product]:
+        available = [self.available_product, self.discontinued_product, self.out_of_stock_product]
+        for product in available:
             OrderLineItem.objects.create(
                 order=self.order, product=product, quantity=1, price_at_purchase=product.price,
             )
@@ -206,7 +210,7 @@ class ReorderViewTests(TestCase):
         self.assertEqual(BasketItem.objects.first().product, self.available_product)
 
     def test_cannot_reorder_someone_elses_order(self):
-        other_user = User.objects.create_user(username="other", password="testpass123")
+        User.objects.create_user(username="other", password="testpass123")
         self.client.login(username="other", password="testpass123")
         response = self.client.post(reverse("profiles:reorder", args=[self.order.order_number]))
         self.assertEqual(response.status_code, 404)

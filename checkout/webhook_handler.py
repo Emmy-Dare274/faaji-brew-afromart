@@ -54,7 +54,8 @@ class StripeWH_Handler:
             f"Delivery: ${order.delivery_cost:.2f}",
             f"Grand total: ${order.grand_total:.2f}",
             "",
-            f"Delivering to: {order.address_line1}, {order.town_or_city}, {order.postcode}, {order.country.name}",
+            f"Delivering to: {order.address_line1}, {order.town_or_city}, "
+            f"{order.postcode}, {order.country.name}",
         ]
         send_mail(
             subject=f"Your Faaji & Brew AfroMart Shopping order {order.order_number}",

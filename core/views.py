@@ -52,6 +52,7 @@ def robots_txt(request):
     )
     return HttpResponse(content, content_type="text/plain")
 
+
 def delivery_returns(request):
     return render(request, "core/delivery_returns.html")
 
@@ -62,8 +63,8 @@ def faq(request):
 
 def contact_us(request):
 
-    """ A real contact form, it sends an actual email through the same 
-    SMTP backend that already sends order confirmations and newsletter 
+    """ A real contact form, it sends an actual email through the same
+    SMTP backend that already sends order confirmations and newsletter
     emails, straight to the business inbox. """
 
     if request.method == "POST":

@@ -27,12 +27,14 @@ class UserProfile(models.Model):
 
 
 class WishList(models.Model):
-    
+
     """One favourites list per registered user. Saving requires
     being logged in, unlike the basket, since a favourites list tied
     only to a browser session would not be very useful."""
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="wishlist")
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="wishlist"
+    )
 
     def __str__(self):
         return f"Wishlist for {self.user.username}"

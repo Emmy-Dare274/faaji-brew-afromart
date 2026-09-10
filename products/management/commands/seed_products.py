@@ -77,7 +77,9 @@ class Command(BaseCommand):
                     )
                 self.stdout.write(self.style.SUCCESS(f"Created product: {product.name}"))
             else:
-                self.stdout.write(f"Product already exists, checking for missing seed data: {product.name}")
+                self.stdout.write(
+                    f"Product already exists, checking for missing seed data: {product.name}"
+                )
 
             # Backfilled here rather than only in defaults, so products
             # created before this field existed still get a value when

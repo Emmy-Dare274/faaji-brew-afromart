@@ -23,7 +23,10 @@ class Category(models.Model):
     is_active = models.BooleanField(default=True)
     show_in_main_nav = models.BooleanField(
         default=True,
-        help_text="Checked: shows directly in the main nav. Unchecked: only appears in the Special Offers dropdown.",
+        help_text=(
+            "Checked: shows directly in the main nav. "
+            "Unchecked: only appears in the Special Offers dropdown."
+        ),
     )
     objects = CategoryQuerySet.as_manager()
 
@@ -43,7 +46,7 @@ class Category(models.Model):
 
 
 class ProductQuerySet(models.QuerySet):
-    
+
     """Queries used in more than one place across the site live here,
     once, instead of being repeated in every view that needs them. """
 
@@ -76,13 +79,13 @@ class ProductQuerySet(models.QuerySet):
         # gets its review count alongside it.
 
         return self.annotate(
-        average_rating=models.Avg(
-            "reviews__rating", filter=models.Q(reviews__is_approved=True)
-        ),
-        review_count=models.Count(
-            "reviews", filter=models.Q(reviews__is_approved=True), distinct=True
-        ),
-    )
+            average_rating=models.Avg(
+                "reviews__rating", filter=models.Q(reviews__is_approved=True)
+            ),
+            review_count=models.Count(
+                "reviews", filter=models.Q(reviews__is_approved=True), distinct=True
+            ),
+        )
 
 
 class Product(models.Model):
@@ -121,7 +124,7 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
     def _generate_sku(self):
-        
+
         """ Builds a SKU: a short category prefix plus a
         random code. The while loop is a defensive check against the
         extremely unlikely case of a collision, so a duplicate SKU error
@@ -132,7 +135,6 @@ class Product(models.Model):
             candidate = f"{prefix}-{uuid.uuid4().hex[:6].upper()}"
             if not Product.objects.filter(sku=candidate).exists():
                 return candidate
-    
 
     @property
     def in_stock(self):

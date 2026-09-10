@@ -74,7 +74,7 @@ def add_to_basket(request, product_slug):
             "amount_to_free_delivery": f"{basket.amount_to_free_delivery:.2f}",
             "qualifies_for_free_delivery": basket.qualifies_for_free_delivery,
         })
-    
+
     messages.success(request, f"Added {product.name} to your basket.")
     return redirect("basket:basket_detail")
 

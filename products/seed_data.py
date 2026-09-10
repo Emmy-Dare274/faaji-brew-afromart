@@ -88,7 +88,7 @@ PRODUCTS = [
         "stock_quantity": 22,
         "images": ["spices-sauces-kit-09-a.jpg", "spices-sauces-kit-09-b.jpg", "spices-sauces-kit-09-c.jpg"],
     },
-        # ===== Ankara Fabrics =====
+    # ===== Ankara Fabrics =====
     {
         "name": "Kente-Inspired Ankara Bundle",
         "category": "Ankara Fabrics",
@@ -352,7 +352,7 @@ PRODUCTS = [
         "price": 29.50, "stock_quantity": 19,
         "images": ["ankara-fabric-luxury-75.png"],
     },
-        # ===== Beads & Jewellery =====
+    # ===== Beads & Jewellery =====
     {
         "name": "Layered Beaded Necklace",
         "category": "Beads & Jewellery",
@@ -507,7 +507,7 @@ PRODUCTS = [
         "price": 23.00, "stock_quantity": 18, "is_featured": True,
         "images": ["women-jewelry-beads-01-a.jpg", "women-jewelry-beads-01-b.jpg", "women-jewelry-beads-01-c.jpg"],
     },
-        # ===== Accessories =====
+    # ===== Accessories =====
     {
         "name": "African Print Accent Handbag",
         "category": "Accessories",
@@ -599,7 +599,7 @@ PRODUCTS = [
         "price": 21.00, "stock_quantity": 20,
         "images": ["styled-flip-flops-african-sandal-02.a.png", "styled-flip-flops-african-sandal-02.b.png"],
     },
-        # ===== Homeware =====
+    # ===== Homeware =====
     {
         "name": "Mahogany Wood Rolling Pin",
         "category": "Homeware",
@@ -761,7 +761,7 @@ PRODUCTS = [
         "price": 26.00, "stock_quantity": 20,
         "images": ["thickened-super-towel-set-4pieces-a.png", "thickened-super-towel-set-4pieces-b.png"],
     },
-        # ===== Traditional Wear =====
+    # ===== Traditional Wear =====
     {
         "name": "African Print Fabric Cap, Style One",
         "category": "Traditional Wear",
