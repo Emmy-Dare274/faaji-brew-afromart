@@ -207,7 +207,7 @@ class WebhookHandlerTests(TestCase):
     moving a paid order out of pending and sending the confirmation
     email, including the idempotency guard that stops a customer
     getting two confirmation emails if Stripe redelivers the same
-    event, which it is explicitly allowed to do. """
+    event, which it is explicitly allowed to do."""
 
     def setUp(self):
         self.category = Category.objects.create(name="Ankara Fabrics")
@@ -263,3 +263,4 @@ class WebhookHandlerTests(TestCase):
         response = handler.handle_payment_intent_succeeded(event)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(mail.outbox), 0)
+        
