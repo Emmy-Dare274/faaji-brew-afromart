@@ -8,15 +8,20 @@ from products.models import Product, ProductVariant
 from .services import get_or_create_basket, add_item, update_quantity
 
 
-def _safe_quantity(raw_value, default=1):
-    
+def _safe_quantity(raw_value, default=1, allow_zero=False):
+
     """Never lets a malformed quantity value reach further into the
     view. Anything that isn't a positive whole number quietly falls
-    back to the default instead of crashing the request."""
+    back to the default instead of crashing the request. Set
+    allow_zero=True for the one place a deliberate 0 is meaningful:
+    updating a basket line to remove it, rather than adding a new
+    one, where 0 never makes sense."""
     try:
         value = int(raw_value)
     except (TypeError, ValueError):
         return default
+    if allow_zero and value == 0:
+        return 0
     return value if value > 0 else default
 
 
@@ -81,7 +86,7 @@ def update_basket_item(request, item_id):
     # directly, stops someone editing a basket that isn't theirs
     # just by guessing an item id in the URL.
     item = get_object_or_404(basket.items, id=item_id)
-    quantity = _safe_quantity(request.POST.get("quantity"))
+    quantity = _safe_quantity(request.POST.get("quantity"), allow_zero=True)
     update_quantity(item, quantity)
     return redirect("basket:basket_detail")
 

@@ -115,7 +115,7 @@ class CreateOrderFromBasketTests(TestCase):
         )
         self.user = User.objects.create_user(username="buyer", password="testpass123")
         self.basket = Basket.objects.create(user=self.user)
-        BasketItem.objects.create(basket=self.basket, product=self.product, quantity=2)
+        BasketItem.objects.create(basket=self.basket, product=self.product, quantity=1)
 
     def _address_data(self):
         return {
@@ -127,7 +127,7 @@ class CreateOrderFromBasketTests(TestCase):
     def test_creates_an_order_with_matching_line_items(self):
         order = create_order_from_basket(self.user, self.basket, self._address_data())
         self.assertEqual(order.lineitems.count(), 1)
-        self.assertEqual(order.grand_total, Decimal("64.99"))  # 60.00 + 4.99 delivery
+        self.assertEqual(order.grand_total, Decimal("34.99"))  # 30.00 + 4.99 delivery
 
     def test_price_at_purchase_is_locked_in_even_if_the_product_price_changes_later(self):
         order = create_order_from_basket(self.user, self.basket, self._address_data())
@@ -143,6 +143,7 @@ class CheckoutViewTests(TestCase):
         self.category = Category.objects.create(name="Beads & Jewellery")
         self.product = Product.objects.create(
             category=self.category, name="Anklet", description="x", price=Decimal("12.00"),
+            stock_quantity=10,
         )
         self.user = User.objects.create_user(username="buyer", password="testpass123")
 
