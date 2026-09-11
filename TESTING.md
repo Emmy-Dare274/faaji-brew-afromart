@@ -193,7 +193,7 @@ Every page template was checked using the [W3C Markup Validation Service](https:
 | Category overview | Pass |
 ![Categories overview](docs/testing/html-validation/categories-overview.png)
 | Basket | Pass |
-![Basket]()
+![Basket](docs/testing/html-validation/basket.png)
 | Checkout | Pass |
 ![Checkout]()
 | Order confirmation | Pass |
@@ -203,14 +203,17 @@ Every page template was checked using the [W3C Markup Validation Service](https:
 | Order History | Pass |
 ![Order History]()
 | Login / Signup | Pass |
-![Login]()
-![Signup]()
+![Login](docs/testing/html-validation/login.png)
+
+![Signup](docs/testing/html-validation/signup.png)
 | Contact Us | Pass |
 ![Contact Us](docs/testing/html-validation/contact-us.png)
+| Contact Us | Pass |
+![Password reset](docs/testing/html-validation/password-reset.png)
 | FAQ | Pass |
 ![FAQ](docs/testing/html-validation/faq.png)
 | 404 page | Pass |
-![404 page]()
+![404 page](docs/testing/html-validation/404.png)
 
 
 
