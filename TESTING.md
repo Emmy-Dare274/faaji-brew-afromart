@@ -207,8 +207,7 @@ Checked using the [W3C CSS Validation Service](https://jigsaw.w3.org/css-validat
 | File | Result |
 |---|---|
 | style.css | Pass |
-
-Screenshot saved as `docs/testing/css-validation/style-css.png`.
+![CSS check](docs/testing/css-validation/style-css.png)
 
 
 ### Python (PEP8)

@@ -1,3 +1,4 @@
+{% load product_extras %}
 <div class="card h-100 border-0 shadow-sm position-relative">
     <div class="position-absolute top-0 end-0 p-2" style="z-index: 2;">
         {% include "products/_wishlist_heart.html" with product=product %}
@@ -16,7 +17,10 @@
                 <p class="small text-muted mb-2">{{ product.description|truncatewords:12 }}</p>
             {% endif %}
             {% if product.average_rating %}
-                <p class="small mb-2" style="color: var(--teal);">{% include "products/_star_rating.html" with product=product %} ({{ product.review_count }})</p>
+                <p class="small mb-2" style="color: var(--teal);">
+                    {% for _ in product.average_rating|star_range %}<i class="bi bi-star-fill"></i>{% endfor %}{% for _ in product.average_rating|empty_star_range %}<i class="bi bi-star" style="color: #ccc;"></i>{% endfor %}
+                    ({{ product.review_count }})
+                </p>
             {% else %}
                 <p class="small text-muted mb-2">No reviews yet</p>
             {% endif %}

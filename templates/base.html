@@ -135,6 +135,7 @@
     </main>
 
 <footer class="footer-legal">
+    <h2 class="visually-hidden">Site Footer</h2>
     <div class="container">
         <div class="row g-4 mb-3 pt-4">
             <div class="col-12 col-lg-3">
@@ -152,7 +153,7 @@
                 </div>
             </div>
             <div class="col-6 col-lg-3">
-                <h6 class="text-white text-uppercase small fw-bold mb-3">Shop</h6>
+                <h3 class="text-white text-uppercase small fw-bold mb-3 footer-heading">Shop</h3>
                 <ul class="list-unstyled">
                     {% for cat in nav_categories %}
                     <li class="mb-2"><a href="{% url 'products:product_list_by_category' cat.slug %}" class="footer-link">{{ cat.name }}</a></li>
@@ -160,7 +161,7 @@
                 </ul>
             </div>
             <div class="col-6 col-lg-3">
-                <h6 class="text-white text-uppercase small fw-bold mb-3">Customer Service</h6>
+                <h3 class="text-white text-uppercase small fw-bold mb-3 footer-heading">Customer Service</h3>
                 <ul class="list-unstyled">
                     <li class="mb-2"><a href="{% url 'core:delivery_returns' %}" class="footer-link">Delivery &amp; Returns</a></li>
                     <li class="mb-2"><a href="{% url 'profiles:order_history' %}" class="footer-link">Track My Order</a></li>
@@ -169,7 +170,7 @@
                 </ul>
             </div>
             <div class="col-6 col-lg-3">
-                <h6 class="text-white text-uppercase small fw-bold mb-3">Company</h6>
+                <h3 class="text-white text-uppercase small fw-bold mb-3 footer-heading">Company</h3>
                 <ul class="list-unstyled">
                     <li class="mb-2"><a href="{% url 'core:our_story' %}" class="footer-link">Our Story</a></li>
                     <li class="mb-2"><a href="{% url 'core:terms_of_use' %}" class="footer-link">Terms of Use</a></li>

@@ -26,6 +26,11 @@ h1, h2, h3 {
     font-weight: 600;
 }
 
+.footer-heading {
+    font-family: inherit;
+    font-weight: 700;
+}
+
 /* 3D logo */
 .brand-monogram {
     width: 42px;
