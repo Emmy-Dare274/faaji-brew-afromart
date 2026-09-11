@@ -202,9 +202,9 @@ Every page template was checked using the [W3C Markup Validation Service](https:
 ![My Account](docs/testing/html-validation/my-account.png)
 | Order History | Pass |
 ![Order History](docs/testing/html-validation/order-history.png)
-| Login / Signup | Pass |
+| Login | Pass |
 ![Login](docs/testing/html-validation/login.png)
-
+| Signup | Pass |
 ![Signup](docs/testing/html-validation/signup.png)
 | Contact Us | Pass |
 ![Contact Us](docs/testing/html-validation/contact-us.png)
@@ -272,8 +272,4 @@ $
 | Product list | ![Product list lighthouse]()|
 | Basket | ![Basket lighthouse]()|
 | Checkout | ![Checkout lighthouse]()|
-
-
-
-
 
