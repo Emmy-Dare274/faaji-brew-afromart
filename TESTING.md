@@ -185,18 +185,32 @@ Every page template was checked using the [W3C Markup Validation Service](https:
 | Page | Result |
 |---|---|
 | Home | Pass |
+![Home ](docs/testing/html-validation/home.png)
 | Product list | Pass |
+![Product list](docs/testing/html-validation/product-list.png)
 | Product detail | Pass |
+![Product detail](docs/testing/html-validation/product-detail.png)
 | Category overview | Pass |
+![Categories overview](docs/testing/html-validation/categories-overview.png)
 | Basket | Pass |
+![Basket]()
 | Checkout | Pass |
+![Checkout]()
 | Order confirmation | Pass |
+![Order confirmation]()
 | My Account | Pass |
-| Order history | Pass |
+![My Account]()
+| Order History | Pass |
+![Order History]()
 | Login / Signup | Pass |
+![Login]()
+![Signup]()
 | Contact Us | Pass |
+![Contact Us](docs/testing/html-validation/contact-us.png)
 | FAQ | Pass |
+![FAQ](docs/testing/html-validation/faq.png)
 | 404 page | Pass |
+![404 page]()
 
 
 
