@@ -180,7 +180,7 @@ Every feature below was tested by hand in a real browser against the live Heroku
 
 ### HTML
 
-Every page template was checked using the [W3C Markup Validation Service](https://validator.w3.org/). Since most pages require a login, an active basket, or real data to render properly, the "Validate by Direct Input" option was used: view page source in the browser (Ctrl+U or Cmd+Option+U), copy the full rendered HTML, and paste it into the validator rather than trying to validate by URL alone.
+Every page template was checked using the [W3C Markup Validation Service](https://validator.w3.org/).
 
 | Page | Result |
 |---|---|
@@ -258,29 +258,22 @@ $
 | cookie-consent.js | Pass ||
 ![cookie-consent JS](docs/testing/js-validation/cookie-consent.js.png)
 
-## Lighthouse Performance Audit
+## Lighthouse Performance Desktop Audit
+| Home | Desktop | ![Home lighthouse](docs/testing/lighthouse/home-desk.png) |
+| Product Detail | Desktop | ![Product detail lighthouse](docs/testing/lighthouse/prod-detail-desk.png) |
+| Product list | Desktop | ![Product list lighthouse](docs/testing/lighthouse/productlist-desk.png) |
+| Basket | Desktop | ![Basket lighthouse](docs/testing/lighthouse/basket-desk.png)|
+| Checkout | Desktop | ![Checkout lighthouse](docs/testing/lighthouse/checkout-desk.png)|
 
 
+## Lighthouse Performance Mobile Audit
+| Home | ![Home lighthouse]()|
+| Product detail | ![Product detail lighthouse]()|
+| Product list | ![Product list lighthouse]()|
+| Basket | ![Basket lighthouse]()|
+| Checkout | ![Checkout lighthouse]()|
 
-### How to run it
 
-1. Open the live site in Chrome: `https://faaji-brew-afromart-0cba904df962.herokuapp.com/`
-2. Open DevTools (F12 or right-click → Inspect)
-3. Click the **Lighthouse** tab (if it's not visible, click the `>>` overflow arrow in the DevTools tab bar)
-4. Under **Device**, run it once as **Mobile** and once as **Desktop** for each page tested, since scores genuinely differ between the two
-5. Under **Categories**, leave all four ticked: Performance, Accessibility, Best Practices, SEO
-6. Click **Analyze page load** and wait for the report
-7. Once it finishes, click the **three-dot menu** in the top right of the report panel → **Save as HTML**, or simply take a screenshot of the four score circles at the top plus the full report below them
-
-### Pages to test
-
-Run it on both Mobile and Desktop for each of these:
-
-- Home page
-- Product detail page (pick any real product)
-- Product list / category page
-- Basket page
-- Checkout page (while logged in, with an item in the basket)
 
 
 
