@@ -231,16 +231,16 @@ $
 
 ### JavaScript
 
-Each custom JS file (`static/js/site.js`, `static/js/basket.js`, `static/js/wishlist.js`, `static/js/cookie-consent.js`) was checked using [JSHint](https://jshint.com/) by pasting the file contents directly into the online tool.
-
 | File | Result |
 |---|---|
-| site.js | Pass |
-| basket.js | Pass |
-| wishlist.js | Pass |
-| cookie-consent.js | Pass |
-
-Screenshots saved in `docs/testing/js-validation/`, named to match each file.
+| site.js | Pass  (2 expected warnings: `showToast`, `bootstrap` flagged as undefined, since it's defined in site.js and JSHint checks each file in isolation - confirmed working correctly in the browser, where all scripts share one scope) ||
+![site JS](docs/testing/js-validation/site.js.png)
+| basket.js | Pass  (1 expected warning: `showToast` flagged as undefined, since it's defined in site.js and JSHint checks each file in isolation - confirmed working correctly in the browser, where all scripts share one scope) ||
+![basket JS](docs/testing/js-validation/basket.js.png)
+| wishlist.js | Pass  (1 expected warning: `showToast` flagged as undefined, since it's defined in site.js and JSHint checks each file in isolation - confirmed working correctly in the browser, where all scripts share one scope) ||
+![wishlist JS](docs/testing/js-validation/wishlist.js.png)
+| cookie-consent.js | Pass ||
+![cookie-consent JS](docs/testing/js-validation/cookie-consent.js.png)
 
 ## Lighthouse Performance Audit
 
