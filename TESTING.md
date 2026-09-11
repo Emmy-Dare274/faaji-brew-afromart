@@ -195,13 +195,13 @@ Every page template was checked using the [W3C Markup Validation Service](https:
 | Basket | Pass |
 ![Basket](docs/testing/html-validation/basket.png)
 | Checkout | Pass |
-![Checkout]()
+![Checkout](docs/testing/html-validation/checkout.png)
 | Order confirmation | Pass |
-![Order confirmation]()
+![Order confirmation](docs/testing/html-validation/order-confirmation.png)
 | My Account | Pass |
-![My Account]()
+![My Account](docs/testing/html-validation/my-account.png)
 | Order History | Pass |
-![Order History]()
+![Order History](docs/testing/html-validation/order-history.png)
 | Login / Signup | Pass |
 ![Login](docs/testing/html-validation/login.png)
 
@@ -260,7 +260,7 @@ $
 
 ## Lighthouse Performance Audit
 
-Lighthouse is built directly into Chrome DevTools, so no separate installation is needed.
+
 
 ### How to run it
 
@@ -282,6 +282,5 @@ Run it on both Mobile and Desktop for each of these:
 - Basket page
 - Checkout page (while logged in, with an item in the basket)
 
-That's 5 pages times 2 device modes, 10 screenshots total.
 
 
