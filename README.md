@@ -320,4 +320,341 @@ Documented honestly as deliberate scope decisions, not oversights:
 - **A richer staff analytics dashboard** — sales trends and stock alerts, beyond the current product/category management tools
 
 ---
+<a name="database-schema"></a>
+## 🗄️ Database Schema
 
+The database uses PostgreSQL in production (hosted on Neon) and falls back to SQLite for local development when no `DATABASE_URL` is set, keeping local testing completely separate from real customer data.
+
+```mermaid
+erDiagram
+    CATEGORY ||--o{ PRODUCT : contains
+    PRODUCT ||--o{ PRODUCTIMAGE : has
+    PRODUCT ||--o{ PRODUCTVARIANT : has
+    PRODUCT ||--o{ REVIEW : has
+    PRODUCT ||--o{ BASKETITEM : "added to"
+    PRODUCT ||--o{ ORDERLINEITEM : "sold as"
+    PRODUCT ||--o{ WISHLISTITEM : "saved as"
+    PRODUCTVARIANT ||--o{ BASKETITEM : "chosen in"
+    PRODUCTVARIANT ||--o{ ORDERLINEITEM : "chosen in"
+
+    USER ||--o| USERPROFILE : has
+    USER ||--o{ BASKET : owns
+    USER ||--o| WISHLIST : owns
+    USER ||--o{ ORDER : places
+    USER ||--o{ REVIEW : writes
+
+    BASKET ||--o{ BASKETITEM : contains
+    ORDER ||--o{ ORDERLINEITEM : contains
+    WISHLIST ||--o{ WISHLISTITEM : contains
+
+    CATEGORY {
+        string name
+        string slug
+        text description
+        image image
+        bool is_active
+        bool show_in_main_nav
+    }
+    PRODUCT {
+        string name
+        string slug
+        string sku
+        text description
+        decimal price
+        int stock_quantity
+        bool is_featured
+        bool is_active
+    }
+    PRODUCTIMAGE {
+        image image
+        string alt_text
+        bool is_primary
+    }
+    PRODUCTVARIANT {
+        string variant_type
+        string value
+        int stock_quantity
+        decimal price_adjustment
+    }
+    REVIEW {
+        int rating
+        string title
+        text body
+        bool is_approved
+        bool is_featured
+    }
+    USER {
+        string username
+        string email
+        string password
+    }
+    USERPROFILE {
+        string default_full_name
+        string default_phone_number
+        string default_address_line1
+        string default_town_or_city
+        string default_postcode
+        string default_country
+    }
+    BASKET {
+        string session_key
+    }
+    BASKETITEM {
+        int quantity
+    }
+    ORDER {
+        string order_number
+        string full_name
+        string email
+        string status
+        decimal order_total
+        decimal delivery_cost
+        decimal grand_total
+    }
+    ORDERLINEITEM {
+        int quantity
+        decimal price_at_purchase
+    }
+    WISHLIST {
+        datetime created_at
+    }
+    WISHLISTITEM {
+        datetime added_at
+    }
+```
+
+**A note on reading the diagram:** `||` means "exactly one," `o{` means "zero or many," and `o|` means "zero or one." So `USER ||--o{ BASKET : owns` reads as "one User owns zero or many Baskets" — reflecting that `Basket.user` is a plain foreign key, not a strict one-to-one link, and that guest baskets exist with no user attached at all.
+
+**Relationship types**
+
+| Relationship | Type | Meaning |
+|---|---|---|
+| Category → Product | One-to-Many | One category holds many products; each product belongs to exactly one category |
+| Product → ProductImage | One-to-Many | One product can have many photos |
+| Product → ProductVariant | One-to-Many | One product can have many variants (sizes, colours) |
+| Product → Review | One-to-Many | One product can receive many reviews |
+| User → Review | One-to-Many | One user can write many reviews (one per product, enforced separately) |
+| User → UserProfile | **One-to-One** | Each user has exactly one profile, and each profile belongs to exactly one user |
+| User → WishList | **One-to-One** | Each user has exactly one wishlist |
+| User → Basket | One-to-Many | A user can have more than one basket row over time; application logic keeps only one active at a time |
+| User → Order | One-to-Many | One user can place many orders over time |
+| Basket → BasketItem | One-to-Many | One basket holds many line items |
+| Order → OrderLineItem | One-to-Many | One order holds many line items |
+| WishList → WishListItem | One-to-Many | One wishlist holds many saved products |
+| Product → BasketItem / OrderLineItem / WishListItem | One-to-Many | One product can appear in many baskets, orders, and wishlists across different users |
+
+Every relationship in this schema is either one-to-one or one-to-many — there are no many-to-many fields anywhere in the data model. Where something might look like a many-to-many relationship at first glance, such as products appearing in many baskets while baskets hold many products, it's actually implemented as two separate one-to-many relationships meeting at a middle table (`BasketItem`, `OrderLineItem`, `WishListItem`), which is what lets each of those middle tables carry its own extra data — a basket item's quantity, an order line's locked-in purchase price, and so on — something a true many-to-many field couldn't do on its own.
+
+| Model | Key Fields | Relationships |
+|---|---|---|
+| **Category** | name, slug, description, image, is_active, show_in_main_nav | Has many Products |
+| **Product** | category, name, slug, sku, description, price, stock_quantity, is_featured, is_active | Belongs to Category · Has many ProductImages, ProductVariants, Reviews |
+| **ProductImage** | product, image, alt_text, is_primary | Belongs to Product |
+| **ProductVariant** | product, variant_type, value, stock_quantity, price_adjustment | Belongs to Product |
+| **Review** | product, user, rating, title, body, is_approved, is_featured | Belongs to Product and User · one review per user per product |
+| **Basket** | user (nullable), session_key | Has many BasketItems |
+| **BasketItem** | basket, product, variant (nullable), quantity | Belongs to Basket and Product |
+| **Order** | user, order_number, full_name, address fields, status, order_total, delivery_cost, grand_total | Belongs to User · Has many OrderLineItems |
+| **OrderLineItem** | order, product, variant (nullable), quantity, price_at_purchase | Belongs to Order and Product |
+| **UserProfile** | user, default full name/phone/address fields | One-to-one with User |
+| **WishList** | user | One-to-one with User · Has many WishListItems |
+| **WishListItem** | wishlist, product | Belongs to WishList and Product · one entry per product per wishlist |
+| **NewsletterSubscriber** | email, confirmed, confirmation_token | Standalone |
+
+A deliberate design decision worth calling out: `OrderLineItem.price_at_purchase` stores a frozen copy of the price at the moment of sale, independent of `Product.price`. If a product's price changes later, every past order correctly keeps showing what the customer actually paid, not today's price.
+
+---
+
+
+<a name="marketing"></a>
+## 📣 Marketing
+
+### Facebook Business Page
+
+A real Facebook Business Page was created for Faaji & Brew AfroMart as part of the site's marketing strategy, linking back to the live store from the page's intro, about section, and posts.
+
+[View the Facebook Business Page](https://www.facebook.com/share/17QgB9TWdd/)
+
+![Facebook Business Page](docs/marketing/facebook-business-page.jpg)
+
+The page is linked from the site's footer, under both the social icons and the Company column, opening in a new tab.
+
+### Other Social Platforms
+
+Instagram, TikTok, X, and YouTube icons are also present in the footer. Since dedicated business accounts haven't been created on those platforms yet, each currently links to that platform's own homepage rather than a dead or placeholder link, so every icon in the footer does something genuinely useful. These will be updated to point to real business accounts as they're created.
+
+### Newsletter
+
+A working email newsletter signup sits on the homepage. A new subscriber receives a genuine confirmation email and is only added as an active subscriber once they click the link inside it, avoiding fake or mistyped signups.
+
+---
+
+<a name="technologies-used"></a>
+## 🛠️ Technologies Used
+
+**Languages**
+
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+
+**Backend**
+
+- **[Django](https://www.djangoproject.com/)** — the core web framework
+- **[django-allauth](https://docs.allauth.org/)** — registration, login, email verification, password reset
+- **[django-countries](https://pypi.org/project/django-countries/)** — country selection at checkout
+- **PostgreSQL** (via **[Neon](https://neon.tech/)**) — production database
+- **[Stripe](https://stripe.com/)** — payment processing and webhooks
+- **[Cloudinary](https://cloudinary.com/)** via `django-cloudinary-storage` — image hosting and delivery
+- **[Gunicorn](https://gunicorn.org/)** — the production web server
+- **[WhiteNoise](https://whitenoise.readthedocs.io/)** — static file serving
+
+**Frontend**
+
+- **Bootstrap 5** — layout, grid, and component styling
+- **Bootstrap Icons** — every icon across the site
+- **Vanilla JavaScript** — basket updates, wishlist toggling, cookie consent, toast notifications, no framework or build step
+
+**Tools & Platforms**
+
+![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)
+![Heroku](https://img.shields.io/badge/Heroku-430098?style=flat-square&logo=heroku&logoColor=white)
+![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white)
+
+- **GitHub Projects** — Kanban board and issue tracking
+- **GitHub Codespaces** — primary development environment
+- **W3C Markup Validation Service** and **W3C CSS Validation Service** — HTML/CSS validation
+- **JSHint** — JavaScript linting
+- **flake8** — Python PEP8 compliance
+- **Google Lighthouse** — performance, accessibility, best practice, and SEO auditing
+
+---
+
+<a name="testing"></a>
+## 🧪 Testing
+
+Testing is documented in full detail in **[TESTING.md](TESTING.md)**, including a complete traceability table mapping every automated test back to the specific user story it verifies. Summary:
+
+- **116 automated tests** across all six apps, covering models, forms, and views, run with Django's own test runner (`python manage.py test`) — currently passing in full
+- **PEP8 compliant** — a clean `flake8` run across the entire codebase, with zero warnings
+- **HTML validated** — every unique page template checked against the W3C Markup Validation Service
+- **CSS validated** — the full stylesheet checked against the W3C CSS Validation Service
+- **JavaScript linted** — all four custom JS files checked with JSHint
+- **Lighthouse audited** — Performance, Accessibility, Best Practices, and SEO scored on mobile and desktop across five key pages
+- **A full manual test pass** — real click-through testing of every feature in a real browser, including genuine Stripe test-card purchases (standard, 3D Secure, and declined cards), documented with real results
+
+See [TESTING.md](TESTING.md) for the complete breakdown, every test case, and every validator screenshot.
+
+---
+
+<a name="bugs-found-and-fixed"></a>
+## 🐛 Bugs Found and Fixed
+
+Real problems, found and fixed during development, rather than a suspiciously bug-free story:
+
+| Bug | Cause | Fix |
+|---|---|---|
+| Heroku build failing | `.python-version` was pinned to a Python release Heroku's buildpack didn't yet support | Pinned to Python 3.12 |
+| `collectstatic` crashing on deploy | A third-party package's bundled CSS referenced an image file that didn't exist, and Django's strict static storage treated that as fatal | Added a custom static storage class that fails gracefully instead of crashing the whole build |
+| Order confirmation emails never sending | `DEFAULT_FROM_EMAIL` was missing its closing `>` bracket, an invalid email header the SMTP library correctly rejected | Corrected the config value |
+| A customer's own approved review invisible to themselves | A queryset filter meant to prevent something else accidentally excluded the logged-in user's own review from the public list | Removed the incorrect filter |
+| Setting basket quantity to exactly 0 didn't remove the item | A quantity-sanitising function treated 0 as invalid input and silently reset it to 1, even though the update view specifically used 0 as the signal to remove an item | Added an explicit "zero is allowed here" flag for the one place it's meant to be valid |
+| Product listing pages loading slowly (3+ seconds) | Every product's image lookup ran extra, unbatched database queries — a classic N+1 query problem, invisible on SQLite but very visible against a real remote Postgres database | Rewrote the image lookup to work with Django's `prefetch_related`, cutting dozens of queries per page down to one |
+| Invalid HTML on every page showing a star rating | A `<p>` tag included a separate template that itself opened its own `<p>`, illegally nesting one paragraph inside another | Restructured the markup so no paragraph is ever nested inside another |
+| Skipped heading levels flagged by the HTML validator | The footer's column headings jumped straight from `<h2>` to `<h6>`, skipping three heading levels that screen readers rely on for navigation | Added a hidden anchor heading and corrected the footer headings to `<h3>`, with a CSS override so the visual design didn't change |
+| Anonymous wishlist clicks failing with no feedback | The wishlist toggle endpoint had no handling at all for a logged-out visitor | Added an explicit check that returns a proper prompt to log in |
+| Staff could add a product's photos, but rows silently vanished past a certain count | Two separate inline forms on the same page defaulted to an identical internal form-field prefix, so the browser confused one form's fields with the other's | Gave each form its own explicit, distinct prefix |
+| The site occasionally showed Chrome's "Dangerous site" warning | Heroku's shared `*.herokuapp.com` domain occasionally inherits a reputation flag from unrelated apps hosted on the same domain space — confirmed via server logs showing the flagged requests never even reached the application | Reported as a false positive to Google Safe Browsing; not a defect in the application itself |
+
+---
+
+<a name="deployment"></a>
+## 🚀 Deployment
+
+<a name="local-development"></a>
+### Local Development
+
+**Prerequisites:** Python 3.12, Git, and a code editor.
+
+```bash
+git clone https://github.com/Emmy-Dare274/faaji-brew-afromart.git
+cd faaji-brew-afromart
+python -m venv .venv
+source .venv/Scripts/activate    # Windows Git Bash
+# or: .venv\Scripts\Activate.ps1  # Windows PowerShell
+pip install -r requirements.txt
+```
+
+Create an `env.py` file in the project root (this file is git-ignored and never committed) containing:
+
+```python
+import os
+
+os.environ.setdefault("SECRET_KEY", "your-django-secret-key")
+os.environ.setdefault("DEBUG", "True")
+
+os.environ.setdefault("CLOUDINARY_CLOUD_NAME", "your-cloudinary-cloud-name")
+os.environ.setdefault("CLOUDINARY_API_KEY", "your-cloudinary-api-key")
+os.environ.setdefault("CLOUDINARY_API_SECRET", "your-cloudinary-api-secret")
+
+os.environ.setdefault("STRIPE_PUBLIC_KEY", "your-stripe-publishable-key")
+os.environ.setdefault("STRIPE_SECRET_KEY", "your-stripe-secret-key")
+os.environ.setdefault("STRIPE_WEBHOOK_SECRET", "your-stripe-webhook-signing-secret")
+
+os.environ.setdefault("EMAIL_HOST_USER", "your-gmail-address")
+os.environ.setdefault("EMAIL_HOST_PASS", "your-gmail-app-password")
+os.environ.setdefault("DEFAULT_FROM_EMAIL", "AfroMart <your-gmail-address>")
+```
+
+`DATABASE_URL` is deliberately left unset for local development, so the project automatically falls back to a local SQLite database, keeping local testing completely separate from the live Neon Postgres database.
+
+```bash
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py seed_products
+python manage.py runserver
+```
+
+To test Stripe payments locally, run the Stripe CLI in a second terminal so webhook events reach your machine:
+
+```bash
+stripe login
+stripe listen --forward-to localhost:8000/checkout/wh/
+```
+
+<a name="heroku-deployment"></a>
+### Heroku Deployment
+
+1. Create a new Heroku app
+2. Under **Settings → Config Vars**, add every variable listed in the `env.py` example above, plus `DATABASE_URL` pointing to a real Neon Postgres connection string, and set `DEBUG` to `False`
+3. Connect the app to this GitHub repository, or add the Heroku git remote manually:
+```bash
+   heroku git:remote -a your-app-name
+```
+4. Push to deploy:
+```bash
+   git push heroku main
+```
+5. Heroku automatically runs `python manage.py migrate` on every release (defined in the `Procfile`), and `collectstatic` runs automatically during the build
+6. In the Stripe Dashboard, add a live webhook endpoint pointing to `https://your-app-name.herokuapp.com/checkout/wh/`, and copy its signing secret into the `STRIPE_WEBHOOK_SECRET` config var
+
+The live version of this project is deployed exactly this way, at [faaji-brew-afromart-0cba904df962.herokuapp.com](https://faaji-brew-afromart-0cba904df962.herokuapp.com/).
+
+---
+
+<a name="credits"></a>
+## 🙏 Credits
+
+**Content:** All product descriptions, page copy, and the brand story were written specifically for this project.
+
+**Code:** Every line of application code was written specifically for this project. Django, Bootstrap, Stripe, Cloudinary, and django-allauth were used strictly according to their own official documentation.
+
+**A personal note:** this project grew far beyond its original scope, from a simple product catalogue into a full storefront with staff tooling, verified reviews, and a genuine automated test suite. Every bug listed above was a real one, found by actually testing the site rather than assuming it worked, and every fix was verified before moving on. That process, more than any single feature, is what this project is really about.
+
+<div align="center">
+
+**[⬆ Back to Top](#-faaji--brew-afromart)**
+
+</div>
