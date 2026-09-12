@@ -231,8 +231,8 @@ This mattered in practice, not just on paper — several stories (particularly a
 - A footer present on every page, with quick links to every static page, every category, the social media presence, and a working newsletter signup
 - A homepage category rail that scrolls smoothly on touch devices, with scroll-snap so cards settle neatly into place, and a subtle edge fade hinting there's more to see
 
-![Homepage](docs/screenshots/home.png)
-![Homepage on mobile](docs/screenshots/home-mobile.png)
+![Homepage](docs/screenshots/home.jpg)
+![Homepage on mobile](docs/screenshots/home-mobile.jpg)
 ![Footer](docs/screenshots/footer.png)
 
 <a name="product-discovery"></a>
@@ -243,9 +243,9 @@ This mattered in practice, not just on paper — several stories (particularly a
 - A detailed product page with a full photo carousel, thumbnail navigation, live stock status, and support for product variants (size, colour) where applicable
 - A **Special Offers** page surfacing discounted products, filterable by category
 
-![Category overview](docs/screenshots/category-overview.png)
-![Product listing with filters](docs/screenshots/product-list.png)
-![Product detail page](docs/screenshots/product-detail.png)
+![Category overview](docs/screenshots/category-overview.jpg)
+![Product listing with filters](docs/screenshots/product-list.jpg)
+![Product detail page](docs/screenshots/product-detail.jpg)
 
 <a name="reviews"></a>
 ### Reviews
@@ -256,7 +256,7 @@ This mattered in practice, not just on paper — several stories (particularly a
 - Approved, featured reviews are pulled onto the homepage automatically as customer testimonials
 
 ![Product reviews](docs/screenshots/product-reviews.png)
-![Staff review moderation queue](docs/screenshots/review-moderation.png)
+![Staff review moderation queue](docs/screenshots/review-moderation.jpg)
 
 <a name="basket--checkout"></a>
 ### Basket & Checkout
@@ -266,8 +266,8 @@ This mattered in practice, not just on paper — several stories (particularly a
 - Secure checkout handled entirely by Stripe, supporting standard cards, 3D Secure authentication, and correctly handling declined payments without creating a broken order
 - A genuine order confirmation page and email, generated only once Stripe has actually confirmed payment server-side via a webhook, not merely because the customer's browser reached a "success" URL
 
-![Basket](docs/screenshots/basket.png)
-![Checkout](docs/screenshots/checkout.png)
+![Basket](docs/screenshots/basket.jpg)
+![Checkout](docs/screenshots/checkout.jpg)
 ![Order confirmation](docs/screenshots/checkout-success.jpg)
 
 <a name="user-accounts"></a>
@@ -277,12 +277,14 @@ This mattered in practice, not just on paper — several stories (particularly a
 - A My Account page for managing saved delivery details, so returning customers never have to retype their address
 - A complete order history, with a one-click **Reorder** button that adds every available item from a past order back into the basket, automatically skipping anything since discontinued or sold out rather than failing the whole action
 - A personal wishlist, addable and removable from any product card, with logged-out visitors prompted to log in rather than the action failing silently
+- A customer service contact us page, users and visitors can visit through the footer and make enquiries or complaint.
 
-![Login](docs/screenshots/login.png)
-![Sign up](docs/screenshots/signup.png)
-![My Account](docs/screenshots/my-account.png)
-![Order history](docs/screenshots/order-history.png)
-![Wishlist](docs/screenshots/wishlist.png)
+![Login](docs/screenshots/login.jpg)
+![Sign up](docs/screenshots/signup.jpg)
+![Contact Us](docs/screenshots/contact-us.jpg)
+![My Account](docs/screenshots/my-account.jpg)
+![Order history](docs/screenshots/order-history.jpg)
+![Wishlist](docs/screenshots/wishlist.jpg)
 
 <a name="staff-tools"></a>
 ### Staff Tools
@@ -292,9 +294,9 @@ This mattered in practice, not just on paper — several stories (particularly a
 - Full category management, including add, edit, and delete
 - A genuine safety rule, not just a convenience: a product or category that has ever appeared in a real customer order **cannot** be permanently deleted, only deactivated, so order history can never be silently destroyed by an accidental click
 
-![Staff dashboard](docs/screenshots/staff-dashboard.png)
-![Staff product list](docs/screenshots/staff-product-list.png)
-![Staff product add/edit form](docs/screenshots/staff-product-form.png)
+![Staff dashboard](docs/screenshots/staff-dashboard.jpg)
+![Staff product list](docs/screenshots/staff-product-list.jpg)
+![Staff product add/edit form](docs/screenshots/staff-product-form.jpg)
 
 <a name="marketing--seo"></a>
 ### Marketing & SEO
@@ -306,7 +308,7 @@ This mattered in practice, not just on paper — several stories (particularly a
 - A cookie consent banner, remembered across visits once dismissed
 - A real newsletter signup with double confirmation: a genuine email is sent, and the subscription only activates once the link inside it is clicked
 
-![Custom 404 page](docs/screenshots/404-page.png)
+![Custom 404 page](docs/screenshots/404-page.jpg)
 
 <a name="future-features"></a>
 ### Future Features
