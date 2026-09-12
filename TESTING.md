@@ -267,9 +267,9 @@ $
 
 
 ## Lighthouse Performance Mobile Audit
-| Home | ![Home lighthouse]()|
-| Product detail | ![Product detail lighthouse]()|
-| Product list | ![Product list lighthouse]()|
-| Basket | ![Basket lighthouse]()|
-| Checkout | ![Checkout lighthouse]()|
+| Home | ![Home lighthouse](docs/testing/lighthouse/home-mobile.png)|
+| Product detail | ![Product detail lighthouse](docs/testing/lighthouse/product-detail-mobile.png)|
+| Product list | ![Product list lighthouse](docs/testing/lighthouse/product-list-mobile.png)|
+| Basket | ![Basket lighthouse](docs/testing/lighthouse/basket-mobile.png)|
+| Checkout | ![Checkout lighthouse](docs/testing/lighthouse/checkout-mobile.png)|
 
