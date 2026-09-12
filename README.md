@@ -268,7 +268,7 @@ This mattered in practice, not just on paper — several stories (particularly a
 
 ![Basket](docs/screenshots/basket.png)
 ![Checkout](docs/screenshots/checkout.png)
-![Order confirmation](docs/screenshots/checkout-success.png)
+![Order confirmation](docs/screenshots/checkout-success.jpg)
 
 <a name="user-accounts"></a>
 ### User Accounts
@@ -652,6 +652,30 @@ The live version of this project is deployed exactly this way, at [faaji-brew-af
 **Code:** Every line of application code was written specifically for this project. Django, Bootstrap, Stripe, Cloudinary, and django-allauth were used strictly according to their own official documentation.
 
 **A personal note:** this project grew far beyond its original scope, from a simple product catalogue into a full storefront with staff tooling, verified reviews, and a genuine automated test suite. Every bug listed above was a real one, found by actually testing the site rather than assuming it worked, and every fix was verified before moving on. That process, more than any single feature, is what this project is really about.
+
+### Code and Learning Resources
+
+- **[John Elder — Codemy.com](https://codemy.com/)** — John's Django and Python courses provided invaluable guidance for me throughout this project. His teaching style made Django's MVT pattern, authentication flows, and database design approachable and practical. The depth of his Full-Stack Django course content shaped how this project was structured and built.
+
+- **[Code Institute](https://codeinstitute.net/)** — The LMS course material, walkthrough projects (especially Boutique Ado walkthrough), and the structured curriculum for Portfolio Project 5 provided me with the foundation for this build.
+
+
+### Media
+
+All photography used on the Faaji & Brew AfroMart website was sourced from **[pinterest](https://www.pinterest.com/) and [pixabay](https://pixabay.com/)**, a platform offering high-quality, freely usable images under the [Unsplash License](https://unsplash.com/license).
+
+
+### Acknowledgements
+
+This project was completed as part of my **Level British 5 Diploma in Full-Stack Software Development** at **Code Institute, Dublin**. The support of the Code Institute tutors, mentors, account department, and student community throughout this diploma has been outstanding.
+
+* I thank God Almighty for giving me the strength to stay awake all night to code and debug, even though it was so difficult for me, but all praises to God for supporting and giving me the right frame of mind to learn, collaborate with others in different learning communities and platforms to ensure the completion of this portfolio project five (5). 
+
+---
+
+*Faaji & Brew AfroMart — An authentic West African lifestyle e-commerce platform*
+
+*by: Emmanuel Oluwatosin Oluwadare — Code Institute final Portfolio Project 5 — 2026*
 
 <div align="center">
 
